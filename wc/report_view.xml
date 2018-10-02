@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <!-- Add custom css -->
+  <template id="report_css" name="report_css" inherit_id="report.assets_common">
+    <xpath expr="." position="inside">
+      <link rel="stylesheet" href="/wc/static/src/css/report.css"/>
+    </xpath>
+  </template>
+
+  <!-- paper sizes -->
+  <record id="letter_landscape" model="report.paperformat">
+    <field name="name" >Letter Landscape</field>
+    <field name="orientation">Landscape</field>
+    <field name="margin_top">10</field>
+    <field name="margin_bottom">10</field>
+  </record>
+
+  <record id="letter_portrait" model="report.paperformat">
+    <field name="name" >Letter Portrait</field>
+    <field name="orientation">Portrait</field>
+    <field name="margin_top">20</field>
+    <field name="margin_bottom">20</field>
+    <field name="margin_left">20</field>
+    <field name="margin_right">20</field>
+  </record>
+
+  <record id="long13_landscape" model="report.paperformat">
+    <field name="name">Long 13inch landscape</field>
+    <field name="format">custom</field>
+    <field name="page_height">330</field>
+    <field name="page_width">215</field>
+    <field name="orientation">Landscape</field>
+    <field name="margin_top">7</field>
+    <field name="margin_bottom">7</field>
+    <field name="margin_left">7</field>
+    <field name="margin_right">7</field>
+    <field name="header_line" eval="False"/>
+    <field name="header_spacing">35</field>
+    <field name="dpi">90</field>
+  </record>
+
+</odoo>

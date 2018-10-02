@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <!-- members -->
+  <record id="form_members_inherit" model="ir.ui.view">
+    <field name="name">form_members_inherit</field>
+    <field name="model">wc.member</field>
+    <field name="inherit_id" ref="wc_member.form_members"/>
+    <field name="arch" type="xml">
+
+      <page name="info" position="after">
+
+        <page name="insurance" string="Microinsurance Enrolled">
+          <field name="insurance_ids">
+            <tree class="wc_tree">
+              <field name="insurance_id"/>
+              <field name="type_id"/>
+              <field name="date_start"/>
+              <field name="date_end"/>
+              <field name="amount"/>
+              <field name="amount_paid"/>
+              <field name="paid"/>
+              <field name="current"/>
+              <field name="note"/>
+            </tree>
+            <form>
+              <group>
+                <group>
+                  <field name="insurance_id"/>
+                  <field name="type_id"/>
+                  <field name="date_start"/>
+                  <field name="date_end"/>
+                </group>
+                <group>
+                  <field name="amount"/>
+                  <field name="amount_paid"/>
+                  <field name="paid"/>
+                  <field name="current"/>
+                </group>
+              </group>
+              <separator string="Notes"/>
+              <field name="note"/>
+            </form>
+          </field>
+        </page>
+
+      </page>
+
+    </field>
+  </record>
+
+</odoo>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+  <data noupdate="1">
+
+    <!-- branch 1 -->
+
+    <record id="loan_demo1" model="wc.loan">
+      <field name="company_id" ref="wc.branch1"/>
+      <field name="member_id" ref="wc_member.member1"/>
+      <field name="amount" eval="20000"/>
+      <field name="maturity" eval="12"/>
+      <field name="interest_rate" eval="10"/>
+      <field name="date" eval="time.strftime('%Y-%m-02')"/>
+      <field name="loan_type_id" ref="wc_loan.lt_1"/>
+    </record>
+
+    <record id="loan_demo2" model="wc.loan">
+      <field name="company_id" ref="wc.branch1"/>
+      <field name="member_id" ref="wc_member.member2"/>
+      <field name="comaker_ids" eval="[(4,ref('wc_member.member1')),(4,ref('wc_member.member3'))]"/>
+      <field name="amount" eval="100000"/>
+      <field name="maturity" eval="12"/>
+      <field name="interest_rate" eval="10"/>
+      <field name="date" eval="time.strftime('%Y-05-05')"/>
+      <field name="loan_type_id" ref="wc_loan.lt_2"/>
+    </record>
+
+    <record id="loan_demo3" model="wc.loan">
+      <field name="company_id" ref="wc.branch1"/>
+      <field name="member_id" ref="wc_member.member2"/>
+      <field name="amount" eval="150000"/>
+      <field name="maturity" eval="12"/>
+      <field name="interest_rate" eval="10"/>
+      <field name="date" eval="time.strftime('%Y-04-04')"/>
+      <field name="loan_type_id" ref="wc_loan.lt_3"/>
+    </record>
+
+    <record id="loan_demo4" model="wc.loan">
+      <field name="company_id" ref="wc.branch1"/>
+      <field name="member_id" ref="wc_member.member3"/>
+      <field name="amount" eval="150000"/>
+      <field name="maturity" eval="12"/>
+      <field name="interest_rate" eval="10"/>
+      <field name="date" eval="time.strftime('%Y-03-03')"/>
+      <field name="loan_type_id" ref="wc_loan.lt_3"/>
+    </record>
+
+    <!-- branch 2 -->
+
+    <record id="loan_demo5" model="wc.loan">
+      <field name="company_id" ref="wc.branch2"/>
+      <field name="member_id" ref="wc_member.member4"/>
+      <field name="amount" eval="100000"/>
+      <field name="maturity" eval="12"/>
+      <field name="interest_rate" eval="10"/>
+      <field name="date" eval="time.strftime('%Y-03-03')"/>
+      <field name="loan_type_id" ref="wc_loan.lt_3"/>
+    </record>
+
+    <record id="loan_demo6" model="wc.loan">
+      <field name="company_id" ref="wc.branch2"/>
+      <field name="member_id" ref="wc_member.member5"/>
+      <field name="amount" eval="100000"/>
+      <field name="maturity" eval="12"/>
+      <field name="interest_rate" eval="10"/>
+      <field name="date" eval="time.strftime('%Y-03-03')"/>
+      <field name="loan_type_id" ref="wc_loan.lt_1"/>
+    </record>
+
+    <!-- branch 3 -->
+
+    <record id="loan_demo7" model="wc.loan">
+      <field name="company_id" ref="wc.branch3"/>
+      <field name="member_id" ref="wc_member.member9"/>
+      <field name="amount" eval="200000"/>
+      <field name="maturity" eval="12"/>
+      <field name="interest_rate" eval="10"/>
+      <field name="date" eval="time.strftime('%Y-05-03')"/>
+      <field name="loan_type_id" ref="wc_loan.lt_1"/>
+    </record>
+
+    <record id="loan_demo8" model="wc.loan">
+      <field name="company_id" ref="wc.branch3"/>
+      <field name="member_id" ref="wc_member.member10"/>
+      <field name="amount" eval="100000"/>
+      <field name="maturity" eval="12"/>
+      <field name="interest_rate" eval="10"/>
+      <field name="date" eval="time.strftime('%Y-03-01')"/>
+      <field name="loan_type_id" ref="wc_loan.lt_2"/>
+    </record>
+
+    <function id="fn0" model="wc.loan" name="oc_loan_type_id"
+      eval="[[ ref('wc_loan.loan_demo%d' % i) for i in range(1,9)] ]"/>
+
+    <function id="approve_loan1" model="wc.loan" name="move_to_approved"
+      eval="[[ ref('wc_loan.loan_demo%d' % i) for i in range(1,9)] ]"/>
+
+  </data>
+</odoo>

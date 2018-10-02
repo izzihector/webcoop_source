@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <record id="form_account_ctd_inherit" model="ir.ui.view">
+    <field name="name">form_account_ctd_inherit</field>
+    <field name="model">wc.account</field>
+    <field name="inherit_id" ref="wc_account.form_account"/>
+    <field name="arch" type="xml">
+
+      <field name="state" position="before">
+        <button name="print_ctd_front" string="Print Certificate Front"
+          attrs="{'invisible':['|',('state','!=','open'),('account_type','!=','td')]}"
+          class="oe_read_only"
+          type="object" />
+          
+        <button name="print_ctd_back" string="Print Certificate Back"
+          attrs="{'invisible':['|',('state','!=','open'),('account_type','!=','td')]}"
+          class="oe_read_only"
+          type="object" />
+      </field>
+
+    </field>
+  </record>
+
+</odoo>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <record id="view_loan_inherit" model="ir.ui.view">
+    <field name="name">view_loan_inherit</field>
+    <field name="model">wc.loan</field>
+    <field name="inherit_id" ref="wc_loan.view_loan"/>
+    <field name="arch" type="xml">
+
+      <button name="move_to_cancelled" position="after">
+        <field name="posting_id" invisible="1"/>
+        <field name="editable_date" invisible="1"/>
+        <button name="back_to_draft2"
+          groups="wc_loan.group_loan_manager,wc.group_manager"
+          confirm="Are you sure you to force this loan back to draft?"
+          attrs="{'invisible':['|',('state','not in',['approved','past-due']),('posting_id','!=',False)]}"
+          string="Force Draft" type="object" class="oe_read_only"/>
+      </button>
+
+      <field name="comaker_ids" position="after">
+        <field name="gl_posted"/>
+      </field>
+
+      <field name="date" position="attributes">
+        <attribute name="attrs">{
+          'readonly':[
+            '|',
+            ('editable_date','=',False),
+            ('state','!=','draft'),
+          ]
+        }</attribute>
+      </field>
+
+    </field>
+
+  </record>
+
+  <!--
+  <record id="form_loan_type_deduction_inherit" model="ir.ui.view">
+    <field name="name">form_loan_type_deduction_inherit</field>
+    <field name="model">wc.loan.type.deduction</field>
+    <field name="inherit_id" ref="wc_loan.form_loan_type_deduction"/>
+    <field name="arch" type="xml">
+      <field name="note" position="before">
+        <field name="gl_account_id"/>
+      </field>
+    </field>
+  </record>
+
+  <record id="tree_loan_type_deduction_inherit" model="ir.ui.view">
+    <field name="name">tree_loan_type_deduction_inherit</field>
+    <field name="model">wc.loan.type.deduction</field>
+    <field name="inherit_id" ref="wc_loan.tree_loan_type_deduction"/>
+    <field name="arch" type="xml">
+      <field name="note" position="before">
+        <field name="gl_account_id"/>
+      </field>
+    </field>
+  </record>
+
+-->
+
+</odoo>

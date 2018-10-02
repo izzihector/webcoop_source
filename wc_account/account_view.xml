@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <menuitem id="menu_account"
+    name="Accounts"
+    sequence="20"
+    parent="wc.menu_root"
+    groups="wc.group_teller"
+  />
+
+  <!-- account -->
+
+  <record id="form_account" model="ir.ui.view">
+    <field name="name">form_account</field>
+    <field name="model">wc.account</field>
+    <field name="arch" type="xml">
+
+      <form string="Account">
+
+        <header>
+          <field name="account_type" invisible="1"/>
+          <button name="approve_account" string="Approve"
+            confirm="Are you sure you want to approve this account?"
+            attrs="{'invisible':['|',('state','!=','draft'),('account_type','=','cbu')]}"
+            groups="wc.group_manager"
+            class="oe_highlight oe_read_only"
+            type="object"/>
+          <button name="activate_account" string="Activate"
+            confirm="Are you sure you want to activate this account?"
+            states="dormant"
+            groups="wc.group_manager"
+            class="oe_highlight oe_read_only"
+            type="object" />
+          <button name="create_transaction" type="object"
+            states="open" string="Create Transaction"
+            class="oe_highlight oe_read_only"/>
+          <button name="close_account" string="Close Account"
+            confirm="Are you sure you want to close this account?"
+            attrs="{'invisible':['|','|',('balance','&gt;',0.0),('account_type','=','cbu'),('state','not in',['open','dormant'])]}"
+            groups="wc.group_manager"
+            class="oe_read_only"
+            type="object" />
+          <button name="open_account" string="Re-open Account"
+            confirm="Are you sure you want to re-open this account?"
+            states="closed"
+            groups="wc.group_manager"
+            class="oe_read_only"
+            type="object" />
+          <field name="state" widget="statusbar" readonly="1"/>
+        </header>
+
+        <sheet>
+
+          <div class="oe_button_box wc_button_box" name="button_box">
+            <button name="toggle_active" type="object" states="closed"
+                class="oe_stat_button" icon="fa-archive">
+              <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+            </button>
+          </div>
+
+          <field name="image" widget='image' class="oe_avatar" options='{"preview_image":"image_medium"}'/>
+          <div class="oe_title wc_title">
+            <h1>
+              <field name="name" readonly="1"/>
+            </h1>
+            <div class="o_row">
+              <div class="wc_info">
+                Deposit: <field name="total_deposit"/>
+              </div>
+              <div class="wc_info">
+                Withdrawal: <field name="total_withdrawal"/>
+              </div>
+              <div class="wc_info">
+                Unavailable: <field name="total_onclearing"/>
+              </div>
+              <div class="wc_info">
+                Balance: <field name="balance"/>
+              </div>
+            </div>
+          </div>
+
+          <notebook>
+            <page name="transactions" string="Transactions"
+                attrs="{'invisible': [('state','=','draft')]}">
+
+              <group>
+                <!--
+                <button name="create_transaction" type="object" colspan="2"
+                  states="open" string="Create Transaction" icon="fa-plus-circle"/>
+                -->
+
+                <field name="transaction_ids" nolabel="1">
+                  <tree class="wc_tree" delete="0" create="0"
+                      colors="red:state=='draft';green:state=='clearing';blue:state=='for-approval';brown:state=='cancelled';">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="reference"/>
+                    <field name="trcode_id"/>
+                    <field name="deposit"/>
+                    <field name="withdrawal"/>
+                    <field name="check_number"/>
+                    <!--
+                    <field name="collection_id"/>
+                  -->
+                    <field name="from_loan" invisible="1"/>
+                    <field name="teller_id"/>
+                    <field name="is_printed"/>
+                    <field name="state"/>
+                  </tree>
+                </field>
+              </group>
+
+            </page>
+            <page name="account" string="Account Information">
+              <group>
+                <group>
+                  <field name="company_id"
+                    options="{'no_create':True, 'no_edit':True, 'no_open':True}"
+                    attrs="{'invisible':[('member_id','=',False)]}"/>
+                  <field name="code"/>
+                  <field name="account_type_id" domain="[('category','=',account_type_category)]"
+                    options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+
+                  <field name="date_start" attrs="{'invisible': [('account_type','!=','td')]}"/>
+
+                  <label for="custom_months" attrs="{'invisible': [('account_type','!=','td')]}"/>
+                  <div class="o_row" attrs="{'invisible': [('account_type','!=','td')]}">
+                    <field name="custom_months"/> months
+                  </div>
+                  <field name="date_maturity" attrs="{'invisible': [('account_type','!=','td')]}"/>
+                  <field name="interest_rate"/>
+                  <field name="maintaining_balance" attrs="{'invisible': [('account_type','!=','sa')],'readonly':[('state','!=','draft')]}"/>
+                  <field name="member_type" invisible="1"/>
+                </group>
+                <group>
+                  <field name="account_type"/>
+                  <label for="member_id"/>
+                  <div class="o_row">
+                    <field name="member_id" options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+                      -
+                    <field name="member_code"/>
+                  </div>
+                  <field name="other_member_ids"
+                    options="{'no_create':True, 'no_edit':True, 'no_open':True}"
+                    invisible="context.get('is_cbu',False)"
+                    widget="many2many_widget">
+                    <tree edit="0">
+                       <field name="name"/>
+                       <field name="code"/>
+                    </tree>
+                    <form>
+                      <group>
+                        <field name="company_id" groups="base.group_multi_company"
+                          readonly="1"
+                          options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+                        <field name="code" readonly="1"/>
+                        <field name="name" readonly="1"/>
+                        <field name="center_id" readonly="1" options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+                        <field name="comment" readonly="1"/>
+                      </group>
+                    </form>
+                  </field>
+                </group>
+              </group>
+              <separator string="Notes"/>
+              <field name="note" nolabel="1"/>
+            </page>
+          </notebook>
+
+        </sheet>
+
+        <div class="oe_chatter">
+          <field name="message_follower_ids" widget="mail_followers"/>
+          <field name="message_ids" widget="mail_thread"/>
+        </div>
+
+      </form>
+
+    </field>
+  </record>
+
+  <record id="tree_account" model="ir.ui.view">
+    <field name="name">tree_account</field>
+    <field name="model">wc.account</field>
+    <field name="arch" type="xml">
+      <tree create="1" delete="0" class="wc_tree">
+        <field name="code" invisible="1"/>
+        <field name="state" invisible="1"/>
+        <field name="member_type" invisible="1"/>
+        <field name="company_id" groups="base.group_multi_company"/>
+        <field name="name"/>
+        <field name="account_type_id"/>
+        <field name="total_deposit" sum="Total Deposit"/>
+        <field name="total_withdrawal" sum="Total Withdrawal"/>
+        <field name="total_onclearing" sum="Total Unavailable"/>
+        <field name="balance" sum="Total Balance"/>
+        <field name="state"/>
+        <!--
+        <field name="address"/>
+        <field name="center_id"/>
+      -->
+      </tree>
+    </field>
+  </record>
+
+  <record id="kanban_account" model="ir.ui.view">
+      <field name="name">kanban_account</field>
+      <field name="model">wc.account</field>
+      <field name="arch" type="xml">
+          <kanban create="1">
+              <field name="code"/>
+              <field name="member_id"/>
+              <field name="member_type"/>
+              <field name="total_deposit"/>
+              <field name="total_withdrawal"/>
+              <field name="total_onclearing"/>
+              <field name="balance"/>
+              <field name="state"/>
+              <field name="account_type_id"/>
+              <templates>
+                <t t-name="kanban-box">
+                  <div class="oe_kanban_global_click">
+                    <div class="o_kanban_image">
+                      <img t-att-src="kanban_image('wc.account', 'image_medium', record.id.value)"/>
+                    </div>
+                    <div class="oe_kanban_details">
+                      <table class="wc_table">
+                        <tr>
+                          <th colspan="2">
+                            <span>
+                              <field name="code"/>
+                            </span>
+                            <span t-if="record.state.raw_value=='closed'">
+                              (CLOSED)
+                            </span>
+                            <span t-if="record.state.raw_value=='draft'">
+                              (DRAFT)
+                            </span>
+                            <span t-if="record.state.raw_value=='dormant'">
+                              (DORMANT)
+                            </span>
+                          </th>
+                        </tr>
+                        <tr>
+                          <th colspan="2">
+                            <field name="name_no_code"/>
+                          </th>
+                        </tr>
+
+                        <tr>
+                          <th colspan="2" class="wc_hline">
+                            <field name="account_type_description"/>
+                          </th>
+                        </tr>
+                        <tr>
+                          <td>Total Deposit:</td>
+                          <td class="wc_right">
+                            <field name="total_deposit"/>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>Total Withdrawal:</td>
+                          <td class="wc_right">
+                            <field name="total_withdrawal"/>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="wc_hline">Total Unavailable:</td>
+                          <td class="wc_right wc_hline">
+                            <field name="total_onclearing"/>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th>Balance:</th>
+                          <th class="wc_right">
+                            <field name="balance"/>
+                          </th>
+                        </tr>
+                      </table>
+
+                    </div>
+                  </div>
+                </t>
+              </templates>
+          </kanban>
+      </field>
+  </record>
+
+
+  <record id="search_account" model="ir.ui.view">
+    <field name="name">search_account</field>
+    <field name="model">wc.account</field>
+    <field name="arch" type="xml">
+      <search class="wc_tree">
+        <field name="state" invisible="1"/>
+        <field name="name"/>
+        <field name="code"/>
+        <field name="other_member_ids"/>
+        <field name="account_type_id"/>
+        <!--
+        <field name="member_id"/>
+      -->
+        <filter name="gacct_type" string="Account type" context="{'group_by': 'account_type_id'}"/>
+        <separator/>
+        <filter name="for_approval" string="For Approval" domain="[('state','=','draft')]"/>
+        <filter name="open" string="Open" domain="[('state','=','open')]"/>
+        <filter name="dormant" string="Dormant" domain="[('state','=','dormant')]"/>
+        <filter name="closed" string="Closed" domain="[('state','=','closed')]"/>
+        <separator/>
+        <filter name="cbu" string="CBU Account" domain="[('account_type','=','cbu'),('member_type','=','regular')]"/>
+        <filter name="sa" string="Savings Account" domain="[('account_type','=','sa')]"/>
+        <filter name="td" string="Time Deposit" domain="[('account_type','=','td')]"/>
+        <separator/>
+        <filter name="small-balance" string="Balance &lt; 1000" domain="[('balance','&lt;',1000)]"/>
+      </search>
+    </field>
+  </record>
+
+
+  <!-- actions sa  -->
+
+  <record id="action_sa" model="ir.actions.act_window">
+    <field name="name">Savings Accounts</field>
+    <field name="res_model">wc.account</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">kanban,tree,form</field>
+    <field name="search_view_id" ref="search_account"/>
+    <field name="context">{
+      'search_default_open':1,
+      'search_default_dormant':1,
+      'search_default_sa':1,
+      'account_type_category':'sa',
+      'with_create': 1,
+    }</field>
+  </record>
+
+  <menuitem id="menu_sa"
+    sequence="20"
+    action="action_sa"
+    parent="menu_account"
+    groups="wc.group_teller"
+  />
+
+  <!-- actions td  -->
+
+  <record id="action_td" model="ir.actions.act_window">
+    <field name="name">Time Deposit Accounts</field>
+    <field name="res_model">wc.account</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">kanban,tree,form</field>
+    <field name="search_view_id" ref="search_account"/>
+    <field name="context">{
+      'search_default_open':1,
+      'search_default_dormant':1,
+      'search_default_td':1,
+      'account_type_category':'td',
+      'with_create': 1,
+    }</field>
+  </record>
+
+  <menuitem id="menu_td"
+    sequence="30"
+    action="action_td"
+    parent="menu_account"
+    groups="wc.group_teller"
+  />
+
+</odoo>

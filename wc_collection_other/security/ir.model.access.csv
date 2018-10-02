@@ -1,0 +1,4 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+acc_wc_oc_payment_type,acc_wc_oc_payment_type,model_wc_oc_payment_type,,1,0,0,0
+acc_wc_oc_payment_type1,acc_wc_oc_payment_type1,model_wc_oc_payment_type,wc.group_manager,1,1,1,1
+acc_wc_oc_payment_type2,acc_wc_oc_payment_type2,model_wc_oc_payment_type,wc.group_sys_manager,1,1,1,1

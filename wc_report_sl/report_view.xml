@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <record id="view_account_report_sl" model="ir.ui.view">
+    <field name="name">Subsidiary Ledger</field>
+    <field name="model">account.report.sl</field>
+    <field name="arch" type="xml">
+      <form>
+          <field name="company_id" invisible="1"/>
+          <group>
+            <group>
+              <field name="date_from"/>
+              <field name="date_to"/>
+            </group>
+            <group>
+              <field name="partner_ids"
+                options="{'no_create':True, 'no_edit':True, 'no_open':True}"
+                widget="many2many_tags"/>
+            </group>
+          </group>
+          <footer>
+            <button name="print_report" string="Print Preview" type="object" default_focus="1" class="oe_highlight"/>
+            or
+            <button string="Cancel" class="oe_link" special="cancel" />
+          </footer>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_account_sl_menu" model="ir.actions.act_window">
+    <field name="name">Subsidiary Ledger</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">account.report.sl</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">form</field>
+    <field name="view_id" ref="view_account_report_sl"/>
+    <field name="target">new</field>
+  </record>
+
+  <record id="action_account_sl_values" model="ir.values">
+    <field name="model_id" ref="account.model_account_account" />
+    <field name="name">Subsidiary Ledger</field>
+    <field name="key2">client_print_multi</field>
+    <field name="value" eval="'ir.actions.act_window,' +str(ref('action_account_sl_menu'))" />
+    <field name="key">action</field>
+    <field name="model">account.account</field>
+  </record>
+
+  <menuitem id="menu_sl_report"
+    sequence="400000"
+    action="action_account_sl_menu"
+    parent="account.menu_finance_reports"
+    groups="account.group_account_manager,account.group_account_user"/>
+
+  <!--- ======================================================== -->
+
+  <report
+    id="action_report_sl"
+    model="account.report.sl"
+    string="Subsidiary Ledger"
+    report_type="qweb-html"
+    name="account.report_sl"
+    file="account.report_sl"
+  />
+
+   <template id="account.report_sl">
+       <t t-call="report.html_container">
+         <t t-set="data_report_margin_top" t-value="12"/>
+         <t t-set="data_report_header_spacing" t-value="9"/>
+         <t t-set="data_report_dpi" t-value="110"/>
+
+           <t t-call="report.internal_layout">
+           <div class="page">
+
+               <h2>Subsidiary Ledger Report</h2>
+
+               <div class="row">
+                 <div class="col-xs-8">
+                   <strong>Company:</strong>
+                   <p t-esc="res_company.name"/>
+                 </div>
+                 <div class="col-xs-4">
+                   <t t-if="data['form']['date_from']"><strong>Date from :</strong> <span t-esc="data['form']['date_from']"/><br/></t>
+                   <t t-if="data['form']['date_to']"><strong>Date to :</strong> <span t-esc="data['form']['date_to']"/></t>
+                 </div>
+               </div>
+
+               <table class="table table-condensed">
+
+                  <thead>
+                   <tr>
+                     <th>Date</th>
+                     <th>Number</th>
+                     <th>Particulars</th>
+                     <th class="text-right">Debit</th>
+                     <th class="text-right">Credit</th>
+                     <th class="text-right">Balance</th>
+                   </tr>
+                 </thead>
+
+                 <tbody>
+
+                   <t t-foreach="docs" t-as="o">
+
+                   <tr>
+                     <td colspan="6"><strong t-esc="o.name or '/'"/></td>
+                   </tr>
+
+                   <t t-foreach="get_accounts(o.id, partner_accounts)" t-as="a">
+                     <t t-set="account_id" t-value="a['account_id'] or -1"/>
+                     <t t-set="tdebit" t-value="a['tdebit'] or 0.0"/>
+                     <t t-set="tcredit" t-value="a['tcredit'] or 0.0"/>
+                     <t t-set="balance" t-value="tcredit - tdebit"/>
+                     <tr>
+                       <td colspan="2">
+                         <t t-esc="a.get('code','')"/> - <t t-esc="a.get('name','')"/>
+                       </td>
+                       <td>Beginning Balance</td>
+                       <td class="text-right no-wrap">
+                         <span t-esc="nfmt(tdebit)"/>
+                       </td>
+                       <td class="text-right no-wrap">
+                         <span t-esc="nfmt(tcredit)"/>
+                       </td>
+                       <td class="text-right no-wrap">
+                         <span t-esc="nfmt(balance)"/>
+                       </td>
+                     </tr>
+
+                     <t t-set="with_trans" t-value="False"/>
+                     <tr t-foreach="get_account_lines(o.id, account_id, account_lines)" t-as="line">
+                       <t t-set="with_trans" t-value="True"/>
+                       <t t-set="balance" t-value="balance + line['credit'] - line['debit']"/>
+                       <t t-set="tdebit" t-value="tdebit + line['debit']"/>
+                       <t t-set="tcredit" t-value="tcredit + line['credit']"/>
+                       <td><span t-esc="line['date']"/></td>
+                       <td><span t-esc="line['move_name']"/></td>
+                       <td><span t-esc="line['particulars']"/></td>
+                       <td class="text-right no-wrap">
+                         <span t-esc="nfmt(line['debit'])"/>
+                       </td>
+                       <td class="text-right no-wrap">
+                         <span t-esc="nfmt(line['credit'])"/>
+                       </td>
+                       <td class="text-right no-wrap">
+                         <span t-esc="nfmt(balance)"/>
+                       </td>
+                     </tr>
+                     <t t-if="with_trans">
+                       <tr>
+                         <td colspan="2"></td>
+                         <td>Ending Balance</td>
+                         <td class="text-right no-wrap">
+                           <span t-esc="nfmt(tdebit)"/>
+                         </td>
+                         <td class="text-right no-wrap">
+                           <span t-esc="nfmt(tcredit)"/>
+                         </td>
+                         <td class="text-right no-wrap">
+                           <span t-esc="nfmt(balance)"/>
+                         </td>
+                       </tr>
+                     </t>
+                     <td colspan="6" style="color:white">EzTech Software</td>
+                   </t>
+
+                   </t> <!-- foreach docs -->
+
+                 </tbody>
+
+               </table>
+
+             </div>
+           </t>
+       </t>
+   </template>
+
+</odoo>

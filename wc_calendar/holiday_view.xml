@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+    <menuitem
+      id="menu_ez_holiday_main"
+      name="Holiday Setup"
+      sequence="10000"
+      parent="wc.menu_config"
+    />
+
+    <record id="view_ez_holiday_tree" model="ir.ui.view">
+      <field name="name">ez.holiday.tree</field>
+      <field name="model">ez.holiday</field>
+      <field name="arch" type="xml">
+        <tree string="Holidays" editable="bottom">
+          <field name="year"/>
+          <field name="name" />
+          <field name="date" />
+          <field name="type" />
+          <field name="note" />
+        </tree>
+      </field>
+    </record>
+
+    <record id="view_ez_holiday_form" model="ir.ui.view">
+      <field name="name">ez.holiday.form</field>
+      <field name="model">ez.holiday</field>
+      <field name="arch" type="xml">
+        <form string="Holiday">
+          <group>
+              <group>
+                <field name="name" />
+                <field name="date" />
+                <field name="year"/>
+              </group>
+              <group>
+                <field name="type" />
+                <field name="note" />
+              </group>
+          </group>
+        </form>
+      </field>
+    </record>
+
+    <record id="view_ez_holiday_calendar" model="ir.ui.view">
+      <field name="name">ez.holiday.calendar</field>
+      <field name="model">ez.holiday</field>
+      <field name="arch" type="xml">
+        <calendar string="Holidays" day_length="24" date_start="date" date_stop="date" color="type" mode="month">
+          <field name="name"/>
+          <field name="note" />
+        </calendar>
+      </field>
+    </record>
+
+    <record id="search_ez_holiday" model="ir.ui.view">
+      <field name="name">ez.holiday.search</field>
+      <field name="model">ez.holiday</field>
+      <field name="arch" type="xml">
+        <search string="Holiday">
+          <group expand="0" string="Group By...">
+            <filter name="group_ym" string="Date" context="{'group_by':'date'}" />
+          </group>
+          <filter name="legal" string="Regular Holiday" domain="[('type','=','lh')]" />
+          <filter name="special" string="Special Holiday" domain="[('type','=','sh')]" />
+          <field name="name"/>
+          <field name="date"/>
+          <field name="year"/>
+        </search>
+      </field>
+    </record>
+
+    <record id="open_ez_holiday" model="ir.actions.act_window">
+      <field name="name">Holiday Calendar</field>
+      <field name="res_model">ez.holiday</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,calendar</field>
+      <field name="context">{}</field>
+      <field name="search_view_id" ref="search_ez_holiday"/>
+      <field name="view_id" ref="view_ez_holiday_calendar"/>
+      <field name="help" type="html">
+        <p class="oe_view_nocontent_create">
+          Click to create a legal and special holiday.
+        </p>
+      </field>
+    </record>
+
+    <menuitem
+      id="menu_ez_holiday"
+      action="open_ez_holiday"
+      sequence="10"
+      parent="menu_ez_holiday_main"
+    />
+
+    <!-- =============================================================== -->
+
+    <record id="view_wizard_holiday" model="ir.ui.view">
+      <field name="name">view_wizard_holiday</field>
+      <field name="model">ez.create.holiday.wizard</field>
+      <field name="priority" eval="100"/>
+      <field name="arch" type="xml">
+        <form string="Create Holidays">
+          <group>
+            <group>
+              <field name="year"/>
+            </group>
+          </group>
+          <footer>
+            <button name="create_holidays" string="Create Holidays" type="object" class="btn-primary"/>
+            <button string="Cancel" class="btn-default" special="cancel"/>
+          </footer>
+        </form>
+      </field>
+    </record>
+
+    <record id="open_wizard_holiday" model="ir.actions.act_window">
+      <field name="name">Create Holidays</field>
+      <field name="res_model">ez.create.holiday.wizard</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">form</field>
+      <field name="view_id" ref="view_wizard_holiday"/>
+      <field name="target">new</field>
+    </record>
+
+    <menuitem
+      id="menu_wizard_holiday"
+      action="open_wizard_holiday"
+      sequence="20"
+      parent="menu_ez_holiday_main"
+      groups="wc.group_sys_manager,wc.group_manager"
+    />
+
+</odoo>

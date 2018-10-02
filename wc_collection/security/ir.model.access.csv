@@ -1,0 +1,10 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+acc_collection_user,acc_collection_user,model_wc_collection,group_collection_officer,1,1,1,0
+acc_collection_bmgr,acc_collection_bmgr,model_wc_collection,wc.group_manager,1,1,1,0
+acc_coll_line_user,acc_coll_line_user,model_wc_collection_line,group_collection_officer,1,1,1,1
+acc_coll_line_bmgr,acc_coll_line_bmgr,model_wc_collection_line,wc.group_manager,1,1,1,1
+
+acc_member,acc_member,wc_member.model_wc_member,group_collection_officer,1,0,0,0
+acc_coll_line_user2,acc_coll_line_user2,model_wc_collection_line,,1,0,0,0
+acc_insurance_user2,acc_insurance_user2,wc_microinsurance.model_wc_insurance,wc_collection.group_collection_officer,1,0,0,0
+acc_coll_line,acc_coll_line,model_wc_collection_line,wc_microinsurance.group_insurance_user,1,0,0,0

@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+  <data noupdate="1">
+
+    <!-- province -->
+    <record model="wc.province" id="prov_negros_occ">
+      <field name="name">Negros Occidental</field>
+    </record>
+    <record model="wc.province" id="prov_cebu">
+      <field name="name">Cebu</field>
+    </record>
+    <record model="wc.province" id="prov_bohol">
+      <field name="name">Bohol</field>
+    </record>
+
+    <!-- municipal -->
+    <record model="wc.municipal" id="mun_bacolod">
+      <field name="name">Bacolod City</field>
+      <field name="province_id" ref="prov_negros_occ"/>
+    </record>
+    <record model="wc.municipal" id="mun_talisay">
+      <field name="name">Talisay City</field>
+      <field name="province_id" ref="prov_negros_occ"/>
+    </record>
+    <record model="wc.municipal" id="mun_cordova">
+      <field name="name">Cordova</field>
+      <field name="province_id" ref="prov_cebu"/>
+    </record>
+    <record model="wc.municipal" id="mun_talisay">
+      <field name="name">Talisay City</field>
+      <field name="province_id" ref="prov_cebu"/>
+    </record>
+    <record model="wc.municipal" id="mun_lapu2">
+      <field name="name">Lapu-Lapu City</field>
+      <field name="province_id" ref="prov_cebu"/>
+    </record>
+    <record model="wc.municipal" id="mun_mandaue">
+      <field name="name">Mandaue City</field>
+      <field name="province_id" ref="prov_cebu"/>
+    </record>
+    <record model="wc.municipal" id="mun_tagbilarn">
+      <field name="name">Tagbilaran City</field>
+      <field name="province_id" ref="prov_bohol"/>
+    </record>
+    <record model="wc.municipal" id="mun_cebucity">
+      <field name="name">Cebu City</field>
+      <field name="province_id" ref="prov_cebu"/>
+    </record>
+
+    <!-- barangay -->
+    <record model="wc.barangay" id="bgy_basak_llc">
+      <field name="name">Basak</field>
+      <field name="municipal_id" ref="mun_lapu2"/>
+    </record>
+    <record model="wc.barangay" id="bgy_basak_cc">
+      <field name="name">Basak</field>
+      <field name="municipal_id" ref="mun_cebucity"/>
+    </record>
+    <record model="wc.barangay" id="bgy_granada">
+      <field name="name">Granada</field>
+      <field name="municipal_id" ref="mun_bacolod"/>
+    </record>
+    <record model="wc.barangay" id="bgy_gunob">
+      <field name="name">Gun-ob</field>
+      <field name="municipal_id" ref="mun_lapu2"/>
+    </record>
+    <record model="wc.barangay" id="bgy_poblacion_talisay">
+      <field name="name">Poblacion</field>
+      <field name="municipal_id" ref="mun_talisay"/>
+    </record>
+    <record model="wc.barangay" id="bgy_poblacion_llc">
+      <field name="name">Poblacion</field>
+      <field name="municipal_id" ref="mun_lapu2"/>
+    </record>
+    <record model="wc.barangay" id="bgy_poblacion_bcd">
+      <field name="name">Poblacion</field>
+      <field name="municipal_id" ref="mun_bacolod"/>
+    </record>
+
+    <!-- center -->
+    <record model="wc.center" id="cen_ampalaya">
+      <field name="name">Ampalaya Center</field>
+      <field name="barangay_id" ref="bgy_gunob"/>
+    </record>
+    <record model="wc.center" id="cen_basak_llc">
+      <field name="name">Basak Center</field>
+      <field name="barangay_id" ref="bgy_basak_llc"/>
+    </record>
+    <record model="wc.center" id="cen_basak_ccc">
+      <field name="name">Basak Center</field>
+      <field name="barangay_id" ref="bgy_basak_cc"/>
+    </record>
+    <record model="wc.center" id="cen_poblacion_llc">
+      <field name="name">Poblacion Center</field>
+      <field name="barangay_id" ref="bgy_poblacion_llc"/>
+    </record>
+    <record model="wc.center" id="cen_poblacion_talisay">
+      <field name="name">Poblacion Center</field>
+      <field name="barangay_id" ref="bgy_poblacion_talisay"/>
+    </record>
+    <record model="wc.center" id="cen_poblacion_bcd">
+      <field name="name">Poblacion Center</field>
+      <field name="barangay_id" ref="bgy_poblacion_bcd"/>
+    </record>
+    <record model="wc.center" id="cen_granada">
+      <field name="name">Grananda Center</field>
+      <field name="barangay_id" ref="bgy_granada"/>
+    </record>
+
+    <!-- member -->
+    <record model="wc.member" id="member1">
+      <field name="company_id" ref="wc.branch1"/>
+      <field name="title">Mr.</field>
+      <field name="image" type="base64" file="wc_member/static/img/member1.jpg"/>
+      <field name="center_id" ref="cen_poblacion_llc"/>
+      <field name="firstname">Juan</field>
+      <field name="middlename">Carpio</field>
+      <field name="lastname">dela Cruz</field>
+      <field name="gender">male</field>
+      <field name="civil_status">single</field>
+      <field name="address1">123 J.P Rizal Street</field>
+      <field name="address2">Poblacion, Lapu-lapu City</field>
+      <field name="address3">Philippines</field>
+      <field name="zip">6015</field>
+      <field name="center_id" ref="cen_poblacion_llc"/>
+      <field name="spouse">Juana Change</field>
+      <field name="birthplace">Cebu City</field>
+      <field name="birthday">1990-01-02</field>
+      <field name="profession">Doctor</field>
+      <field name="telephone">555-5555</field>
+      <field name="mobile">0920-3354455</field>
+    </record>
+
+    <record model="wc.member" id="member2">
+      <field name="company_id" ref="wc.branch1"/>
+      <field name="title">Mr.</field>
+      <field name="is_approved" eval="False"/>
+      <field name="image" type="base64" file="wc_member/static/img/member2.jpg"/>
+      <field name="center_id" ref="cen_poblacion_llc"/>
+      <field name="firstname">John</field>
+      <field name="middlename">Deere</field>
+      <field name="lastname">Doe</field>
+      <field name="gender">male</field>
+      <field name="civil_status">married</field>
+      <field name="address1">456 Quezon Ave.</field>
+      <field name="address2">Poblacion, Lapu-lapu City</field>
+      <field name="address3">Philippines</field>
+      <field name="zip">6015</field>
+      <field name="center_id" ref="cen_poblacion_llc"/>
+      <field name="spouse">Riahna Doe</field>
+      <field name="birthplace">Lapulapu City</field>
+      <field name="birthday">1963-12-02</field>
+      <field name="profession">Lawyer</field>
+      <field name="telephone">455-5555</field>
+      <field name="mobile">0922-1111111</field>
+    </record>
+
+    <record model="wc.member" id="member3">
+      <field name="company_id" ref="wc.branch1"/>
+      <field name="title">Mr.</field>
+      <field name="is_approved" eval="False"/>
+      <field name="image" type="base64" file="wc_member/static/img/member3.png"/>
+      <field name="center_id" ref="cen_poblacion_llc"/>
+      <field name="firstname">Arthur</field>
+      <field name="middlename">Queene</field>
+      <field name="lastname">King</field>
+      <field name="gender">male</field>
+      <field name="civil_status">married</field>
+      <field name="address1">555 Lacson St.</field>
+      <field name="address2">Bacolod City</field>
+      <field name="address3">Philippines</field>
+      <field name="zip">6789</field>
+      <field name="center_id" ref="cen_poblacion_bcd"/>
+      <field name="spouse">Princess King</field>
+      <field name="birthplace">Iloilo City</field>
+      <field name="birthday">1995-10-10</field>
+      <field name="profession">Businessman</field>
+      <field name="telephone">340-1234</field>
+      <field name="mobile">09227777777</field>
+    </record>
+
+    <record model="wc.member" id="member4">
+      <field name="company_id" ref="wc.branch2"/>
+      <field name="title">Mr.</field>
+      <field name="center_id" ref="cen_basak_llc"/>
+      <field name="firstname">Mario</field>
+      <field name="middlename"></field>
+      <field name="lastname">Speedwagon</field>
+      <field name="center_id" ref="cen_poblacion_llc"/>
+    </record>
+
+    <record model="wc.member" id="member5">
+      <field name="company_id" ref="wc.branch2"/>
+      <field name="title">Mr.</field>
+      <field name="center_id" ref="cen_basak_llc"/>
+      <field name="firstname">Petey</field>
+      <field name="middlename"></field>
+      <field name="lastname">Cruiser</field>
+      <field name="center_id" ref="cen_poblacion_llc"/>
+    </record>
+
+    <record model="wc.member" id="member6">
+      <field name="company_id" ref="wc.branch2"/>
+      <field name="title">Mrs.</field>
+      <field name="center_id" ref="cen_basak_llc"/>
+      <field name="firstname">Gail</field>
+      <field name="middlename"></field>
+      <field name="lastname">Forcewind</field>
+      <field name="center_id" ref="cen_poblacion_llc"/>
+    </record>
+
+    <record model="wc.member" id="member7">
+      <field name="company_id" ref="wc.branch2"/>
+      <field name="title">Ms.</field>
+      <field name="center_id" ref="cen_basak_llc"/>
+      <field name="firstname">Turner</field>
+      <field name="lastname">Headbutt</field>
+      <field name="center_id" ref="cen_poblacion_llc"/>
+    </record>
+
+    <record model="wc.member" id="member8">
+      <field name="company_id" ref="wc.branch2"/>
+      <field name="title">Mr.</field>
+      <field name="center_id" ref="cen_basak_llc"/>
+      <field name="firstname">Bob</field>
+      <field name="lastname">Frapples</field>
+      <field name="center_id" ref="cen_poblacion_llc"/>
+    </record>
+
+    <record model="wc.member" id="member9">
+      <field name="company_id" ref="wc.branch3"/>
+      <field name="title">Ms.</field>
+      <field name="center_id" ref="cen_ampalaya"/>
+      <field name="firstname">Walter</field>
+      <field name="lastname">Melon</field>
+      <field name="center_id" ref="cen_basak_llc"/>
+    </record>
+
+    <record model="wc.member" id="member10">
+      <field name="company_id" ref="wc.branch3"/>
+      <field name="title">Ms.</field>
+      <field name="center_id" ref="cen_ampalaya"/>
+      <field name="firstname">Demetrius</field>
+      <field name="lastname">Levenworth</field>
+      <field name="center_id" ref="cen_basak_llc"/>
+    </record>
+
+    <function id="onchange_center" model="wc.member" name="oc_center_id"
+      eval="[[ ref('wc_member.member%d' % x) for x in range(1,11) ]]"/>
+
+    <function id="approve_members" model="wc.member" name="approve_member"
+      eval="[[ ref('wc_member.member%d' % x) for x in range(1,11) ]]"/>
+
+    <!-- dependents -->
+    <record model="wc.member.dependent" id="dep0">
+      <field name="member_id" ref="wc_member.member1"/>
+      <field name="name">Juana dela Cruz</field>
+      <field name="relationship">Wife</field>
+      <field name="birthday">1970/01/02</field>
+      <field name="contact">09123456789</field>
+      <field name="address">Lapulapu City</field>
+    </record>
+    <record model="wc.member.dependent" id="dep1">
+      <field name="member_id" ref="wc_member.member1"/>
+      <field name="name">Juanita dela Cruz</field>
+      <field name="relationship">Daughter</field>
+      <field name="birthday">1980/02/03</field>
+      <field name="contact">3456789</field>
+      <field name="address">Lapulapu City</field>
+    </record>
+    <record model="wc.member.dependent" id="dep2">
+      <field name="member_id" ref="wc_member.member2"/>
+      <field name="name">Jane Deere Doe</field>
+      <field name="relationship">Wife</field>
+      <field name="birthday">1975/12/31</field>
+      <field name="contact">09111111111</field>
+      <field name="address">Lapulapu City</field>
+    </record>
+    <record model="wc.member.dependent" id="dep3">
+      <field name="member_id" ref="wc_member.member3"/>
+      <field name="name">Anne King</field>
+      <field name="relationship">Wife</field>
+      <field name="birthday">1974/2/13</field>
+      <field name="contact">0922-222-2222</field>
+      <field name="address">Bacolod City</field>
+    </record>
+
+  </data>
+</odoo>

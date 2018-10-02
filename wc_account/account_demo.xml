@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+  <data noupdate="1">
+
+    <!-- accounts -->
+
+    <record model="wc.account" id="acct_1">
+      <field name="member_id" ref="wc_member.member1"/>
+      <field name="account_type_id" ref="acct_type_regular_savings"/>
+    </record>
+
+    <record model="wc.account" id="acct_2">
+      <field name="member_id" ref="wc_member.member1"/>
+      <field name="account_type_id" ref="acct_type_time_deposit"/>
+    </record>
+
+    <record model="wc.account" id="acct_3">
+      <field name="member_id" ref="wc_member.member1"/>
+      <field name="other_member_ids" eval="[(4,ref('wc_member.member2')),(4,ref('wc_member.member3'))]"/>
+      <field name="account_type_id" ref="acct_type_regular_savings"/>
+    </record>
+
+    <record model="wc.account" id="acct_4">
+      <field name="member_id" ref="wc_member.member2"/>
+      <field name="account_type_id" ref="acct_type_regular_savings"/>
+    </record>
+
+    <record model="wc.account" id="acct_5">
+      <field name="member_id" ref="wc_member.member2"/>
+      <field name="account_type_id" ref="acct_type_time_deposit"/>
+    </record>
+
+    <record model="wc.account" id="acct_6">
+      <field name="member_id" ref="wc_member.member3"/>
+      <field name="account_type_id" ref="acct_type_time_deposit"/>
+    </record>
+
+    <record model="wc.account" id="acct_7">
+      <field name="member_id" ref="wc_member.member3"/>
+      <field name="account_type_id" ref="acct_type_regular_savings"/>
+    </record>
+
+    <record model="wc.account" id="acct_8">
+      <field name="member_id" ref="wc_member.member3"/>
+      <field name="account_type_id" ref="acct_type_regular_savings"/>
+      <field name="other_member_ids" eval="[(4,ref('wc_member.member2')),(4,ref('wc_member.member1'))]"/>
+    </record>
+
+    <record model="wc.account" id="acct_9">
+      <field name="member_id" ref="wc_member.member1"/>
+      <field name="account_type_id" ref="acct_type_regular_savings"/>
+    </record>
+
+    <record model="wc.account" id="acct_10">
+      <field name="member_id" ref="wc_member.member2"/>
+      <field name="account_type_id" ref="acct_type_regular_savings"/>
+    </record>
+
+    <!-- transactions -->
+
+    <record model="wc.account.transaction" id="trans_1">
+      <field name="account_id" ref="acct_1"/>
+      <field name="trcode_id" ref="tr_csd"/>
+      <field name="deposit" eval="12345.67"/>
+    </record>
+
+    <record model="wc.account.transaction" id="trans_2">
+      <field name="account_id" ref="acct_1"/>
+      <field name="trcode_id" ref="tr_csw"/>
+      <field name="withdrawal" eval="305.07"/>
+    </record>
+
+    <record model="wc.account.transaction" id="trans_3">
+      <field name="account_id" ref="acct_1"/>
+      <field name="trcode_id" ref="tr_csw"/>
+      <field name="withdrawal" eval="1.11"/>
+    </record>
+
+    <record model="wc.account.transaction" id="trans_4">
+      <field name="account_id" ref="acct_2"/>
+      <field name="trcode_id" ref="tr_csd"/>
+      <field name="deposit" eval="55555.55"/>
+    </record>
+
+    <record model="wc.account.transaction" id="trans_5">
+      <field name="account_id" ref="acct_2"/>
+      <field name="trcode_id" ref="tr_csw"/>
+      <field name="withdrawal" eval="1000.00"/>
+    </record>
+
+    <record model="wc.account.transaction" id="trans_6">
+      <field name="account_id" ref="acct_2"/>
+      <field name="trcode_id" ref="tr_csd"/>
+      <field name="deposit" eval="22333.44"/>
+    </record>
+
+    <function id="approve_account1" model="wc.account" name="approve_account"
+      eval="[[ ref('wc_account.acct_%d' % i) for i in range(1,9)] ]"/>
+
+    <function id="approve_trans1" model="wc.account.transaction" name="confirm"
+      eval="[[ ref('wc_account.trans_%d' % i) for i in range(1,6)] ]"/>
+
+  </data>
+</odoo>

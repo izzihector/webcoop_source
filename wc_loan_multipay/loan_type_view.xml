@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <record id="form_loan_type_inherit" model="ir.ui.view">
+    <field name="name">form_loan_type_inherit</field>
+    <field name="model">wc.loan.type</field>
+    <field name="inherit_id" ref="wc_loan.form_loan_type"/>
+    <field name="arch" type="xml">
+
+      <field name="sequence_id" position="after">
+        <field name="priority"/>
+      </field>
+
+    </field>
+  </record>
+
+</odoo>

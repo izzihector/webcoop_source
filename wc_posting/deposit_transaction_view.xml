@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+    <record id="form_transaction_inherit" model="ir.ui.view">
+    <field name="name">form_transaction_inherit</field>
+    <field name="model">wc.account.transaction</field>
+    <field name="inherit_id" ref="wc_account.form_transaction"/>
+    <field name="arch" type="xml">
+
+      <field name="is_printed" position="before">
+        <field name="collection_id"/>
+        <field name="posting_id"/>
+      </field>
+
+    </field>
+  </record>
+
+</odoo>

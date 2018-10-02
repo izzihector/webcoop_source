@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <record id="form_posting_inherit" model="ir.ui.view">
+    <field name="name">form_posting_inherit</field>
+    <field name="model">wc.posting</field>
+    <field name="inherit_id" ref="wc_posting.form_posting"/>
+    <field name="arch" type="xml">
+
+      <field name="deposit_account_transaction_ids" position="after">
+        <separator string="Interbranch Transactions"/>
+        <field name="interbranch_account_transaction_ids">
+          <tree string="Transactions" class="wc_tree" colors="red:state=='draft'">
+            <field name="state" invisible="1"/>
+            <field name="other_company_id"/>
+            <field name="name"/>
+            <field name="account_id"/>
+            <field name="reference"/>
+            <field name="trcode_id"/>
+            <field name="deposit"/>
+            <field name="withdrawal"/>
+            <field name="teller_id"/>
+          </tree>
+        </field>
+      </field>
+
+    </field>
+  </record>
+
+</odoo>

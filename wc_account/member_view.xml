@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <record id="form_members_inherit" model="ir.ui.view">
+    <field name="name">form_members_inherit</field>
+    <field name="model">wc.member</field>
+    <field name="inherit_id" ref="wc_member.form_members"/>
+    <field name="arch" type="xml">
+
+<!--
+      <page name="info" position="after">
+        <page name="accounts" String="Accounts">
+          <field name="account_ids" mode="kanban"/>
+        </page>
+      </page>
+-->
+
+      <field name="account_officer_id" position="before">
+        <field name="total_cbu"/>
+        <field name="total_sa"/>
+      </field>
+
+      <xpath expr="//div[@name='button_box']" position="inside">
+        <button name="show_accounts" type="object" class="oe_stat_button"
+            icon="fa-university" groups="wc.group_teller">
+          <field string="Accounts" name="account_count" widget="statinfo"/>
+        </button>
+        <!--
+        <div class="btn btn-sm oe_stat_button" style="line-height:35px;">
+          <div class="fa fa-fw fa-university o_button_icon"/>
+          <div class="o_stat_info o_form_field">
+            <field name="total_cbu" nolabel="1" readonly="1"/>
+          </div>
+        </div>
+        -->
+      </xpath>
+
+    </field>
+  </record>
+
+
+  <record id="kanban_members_inherit" model="ir.ui.view">
+    <field name="name">kanban_members_inherit</field>
+    <field name="model">wc.member</field>
+    <field name="inherit_id" ref="wc_member.kanban_members"/>
+    <field name="arch" type="xml">
+
+      <xpath expr="//div[@class='o_kanban_image']" position="inside">
+        <div class="wc_kanban_status_icon">
+          <i class="fa fa-university" aria-hidden="true"></i>
+          <field name="account_count"/>
+        </div>
+      </xpath>
+
+    </field>
+  </record>
+
+
+</odoo>

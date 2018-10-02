@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <report
+    id="loan_declaration"
+    model="wc.loan"
+    string="Loan Disclosure"
+    report_type="qweb-pdf"
+    attachment_use="False"
+    name="wc_loan.report_declaration"
+    file="wc_loan.report_declaration"
+    paperformat="wc.letter_portrait"
+  />
+
+  <report
+    id="loan_soa"
+    model="wc.loan"
+    string="Statement of Account"
+    report_type="qweb-pdf"
+    attachment_use="False"
+    name="wc_loan.report_soa"
+    file="wc_loan.report_soa"
+    paperformat="wc.letter_landscape"
+  />
+
+  <report
+    id="loan_voucher"
+    model="wc.loan"
+    string="Loan Disbursement Voucher"
+    report_type="qweb-pdf"
+    attachment_use="False"
+    name="wc_loan.report_voucher"
+    file="wc_loan.report_voucher"
+    paperformat="wc.letter_portrait"
+  />
+
+  <report
+    id="id_report_release"
+    model="wc.loan"
+    string="Loan Releases"
+    report_type="qweb-pdf"
+    attachment_use="False"
+    name="wc_loan.report_release"
+    file="wc_loan.report_release"
+    paperformat="wc.long13_landscape"
+    menu="False"
+  />
+
+  <report
+    id="id_report_release_per_product"
+    model="wc.loan"
+    string="Loan Releases"
+    report_type="qweb-pdf"
+    attachment_use="False"
+    name="wc_loan.report_release_per_product"
+    file="wc_loan.report_release_per_product"
+    paperformat="wc.long13_landscape"
+    menu="False"
+  />
+
+  <report
+    id="id_report_consolidated_release_per_product"
+    model="wc.loan"
+    string="Consolidated Loan Releases"
+    report_type="qweb-pdf"
+    attachment_use="False"
+    name="wc_loan.report_consolidated_release_per_product"
+    file="wc_loan.report_consolidated_release_per_product"
+    paperformat="wc.letter_portrait"
+    menu="False"
+  />
+
+</odoo>

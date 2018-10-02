@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <report
+    id="voucher"
+    model="account.move"
+    string="Voucher"
+    report_type="qweb-pdf"
+    attachment_use="False"
+    name="wc_voucher_print.report_voucher"
+    file="wc_voucher_print.report_voucher"
+    paperformat="wc.letter_portrait"
+  />
+
+  <template id="voucher_page">
+    <div class="page">
+
+      <t t-set="vname" t-value="'VOUCHER'"/>
+      <t t-set="payee_label" t-value="'Payee:'"/>
+      <t t-set="received_by_label" t-value="'Received by:'"/>
+
+      <t t-set="is_cash_check" t-value="0"/>
+      <t t-if="o.journal_id.type=='cash'">
+        <t t-set="vname" t-value="'CASH VOUCHER'"/>
+        <t t-set="is_cash_check" t-value="1"/>
+        <t t-set="cash_amt" t-value="o.cash_amount"/>
+      </t>
+      <t t-if="o.journal_id.type=='bank'">
+        <t t-set="vname" t-value="'CHECK VOUCHER'"/>
+        <t t-set="is_cash_check" t-value="1"/>
+        <t t-set="cash_amt" t-value="o.cash_amount"/>
+      </t>
+      <t t-if="is_cash_check==1">
+        <t t-if="o.cash_amount&lt;0.0">
+          <t t-set="vname" t-value="'PAYMENT VOUCHER'"/>
+          <t t-set="cash_amt" t-value="-o.cash_amount"/>
+          <t t-set="payee_label" t-value="'Partner:'"/>
+          <t t-set="received_by_label" t-value="'Paid by:'"/>
+        </t>
+      </t>
+
+      <center>
+        <h4 class="voucher_header"><strong><span t-field="res_company.name"/></strong></h4>
+        <div class="voucher_address row"><span t-field="res_company.partner_id.address2"/></div>
+        <h4 class="mt32"><strong><t t-esc="vname"/></strong></h4>
+      </center>
+
+      <table width="100%" class="table_header mt32">
+
+        <t t-if="is_cash_check==0">
+          <tr>
+            <td width="180px">Journal:</td>
+            <td width="100%"><span t-field="o.journal_id"/></td>
+            <td>Date:</td>
+            <td class="no-wrap"><span t-field="o.date" t-field-options='{"format": "MMMM d, yyyy"}'/></td>
+          </tr>
+          <tr>
+            <td>Reference:</td>
+            <td><span t-field="o.ref"/></td>
+            <td>Number:</td>
+            <td class="no-wrap"><span t-field="o.name"/></td>
+          </tr>
+        </t>
+
+        <t t-if="is_cash_check==1">
+          <tr>
+            <td width="180px"><t t-esc="payee_label"/></td>
+            <td width="100%"><span t-esc="o.partner_id.name"/></td>
+            <td>Date:</td>
+            <td class="no-wrap"><span t-field="o.date" t-field-options='{"format": "MMMM d, yyyy"}'/></td>
+          </tr>
+
+          <tr>
+            <td>Amount:</td>
+            <td class="text-left">
+              <span t-att-style="style" t-esc="cash_amt" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+            </td>
+            <td>Number:</td>
+            <td class="no-wrap"><span t-field="o.name"/></td>
+          </tr>
+          <tr>
+            <td>Words:</td>
+            <td><span t-esc="o.num2amt(cash_amt).upper()"/></td>
+            <td>Journal:</td>
+            <td><span t-field="o.journal_id"/></td>
+          </tr>
+        </t>
+
+      </table>
+
+      <table class="table table-condensed mt16">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Account</th>
+            <th>Partner</th>
+            <th>Label</th>
+            <th class="text-right">Debit</th>
+            <th class="text-right">Credit</th>
+          </tr>
+        </thead>
+
+        <t t-set="tdebit" t-value="0.0"/>
+        <t t-set="tcredit" t-value="0.0"/>
+
+        <tbody>
+          <tr t-foreach="o.line_ids.sorted(key=lambda r: '%s %d' % (r.account_id.code, r.id))" t-as="line">
+            <td>
+              <span t-att-style="style" t-esc="line.account_id.code"/>
+            </td>
+            <td>
+              <span t-att-style="style" t-esc="line.account_id.name"/>
+            </td>
+            <td>
+              <span t-att-style="style" t-esc="line.partner_id.name"/>
+            </td>
+            <td>
+              <span t-att-style="style" t-esc="line.name"/>
+            </td>
+            <td class="text-right">
+              <t t-if="line.debit>0.0">
+                <span t-att-style="style" t-esc="line.debit" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+              </t>
+            </td>
+            <td class="text-right">
+              <t t-if="line.credit>0.0">
+                <span t-att-style="style" t-esc="line.credit" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+              </t>
+            </td>
+            <t t-set="tdebit" t-value="tdebit + line.debit"/>
+            <t t-set="tcredit" t-value="tcredit + line.credit"/>
+          </tr>
+          <tr class="border-t border-b">
+            <th colspan="4">TOTAL:</th>
+            <th class="text-right">
+              <span t-att-style="style" t-esc="tdebit" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+            </th>
+            <th class="text-right">
+              <span t-att-style="style" t-esc="tcredit" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+            </th>
+          </tr>
+        </tbody>
+
+      </table>
+
+      <t t-if="o.narration">
+        <strong>REMARKS:</strong><br/>
+        <p t-field="o.narration"/>
+      </t>
+
+      <!--
+      <div style="position:absolute;top:1150px; page-break-inside: avoid;" class="table">
+      -->
+      <div class="table mt32" style="page-break-inside: avoid;">
+        <div class="row">
+          <div class="col-xs-4">
+            Printed by:
+          </div>
+          <div class="col-xs-4">
+            Approved by:
+          </div>
+          <div class="col-xs-4">
+            <t t-esc="received_by_label"/>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-12">
+            <br/>
+            <br/>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-3 text-center" style="border-bottom: 1px solid black;">
+            <strong><span t-field="user.name"/></strong>
+          </div>
+          <div class="col-xs-1"/>
+          <div class="col-xs-3 text-center" style="border-bottom: 1px solid black;">
+            <span style="color: white;" t-esc="'..'"/>
+          </div>
+          <div class="col-xs-1"/>
+          <div class="col-xs-3 text-center" style="border-bottom: 1px solid black;">
+            <span style="color: white;" t-esc="'..'"/>
+          </div>
+          <div class="col-xs-1"/>
+        </div>
+
+      </div>
+
+    </div>
+
+  </template>
+
+  <template id="report_voucher">
+    <t t-call="report.html_container">
+      <t t-foreach="docs" t-as="o">
+        <t t-call="wc_voucher_print.voucher_page"/>
+      </t>
+    </t>
+  </template>
+
+  <template id="report_invoice_voucher">
+    <t t-call="report.html_container">
+      <t t-foreach="docs" t-as="inv">
+        <t t-set="o" t-value="inv.move_id"/>
+        <t t-call="wc_voucher_print.voucher_page"/>
+      </t>
+    </t>
+  </template>
+
+  <report
+    id="invoice_voucher"
+    model="account.invoice"
+    string="Voucher"
+    report_type="qweb-pdf"
+    attachment_use="False"
+    name="wc_voucher_print.report_invoice_voucher"
+    file="wc_voucher_print.report_invoice_voucher"
+    paperformat="wc.letter_portrait"
+  />
+
+
+</odoo>

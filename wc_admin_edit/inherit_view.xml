@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <record id="form_transaction_inh" model="ir.ui.view">
+    <field name="name">form_transaction_inh</field>
+    <field name="model">wc.account.transaction</field>
+    <field name="inherit_id" ref="wc_account.form_transaction"/>
+    <field name="groups_id" eval="[(6, 0, [ref('base.group_system') ])]"/>
+    <field name="arch" type="xml">
+
+      <field name="deposit" position="attributes">
+        <attribute name="attrs">{}</attribute>
+      </field>
+
+      <field name="withdrawal" position="attributes">
+        <attribute name="attrs">{}</attribute>
+      </field>
+
+    </field>
+  </record>
+
+  <record id="form_collection_inh" model="ir.ui.view">
+    <field name="name">form_collection_inh</field>
+    <field name="model">wc.collection</field>
+    <field name="inherit_id" ref="wc_collection.form_collection"/>
+    <field name="groups_id" eval="[(6, 0, [ref('base.group_system') ])]"/>
+    <field name="arch" type="xml">
+
+      <field name="line_ids" position="attributes">
+        <attribute name="attrs">{}</attribute>
+      </field>
+
+    </field>
+  </record>
+
+  <record id="form_collection_inh" model="ir.ui.view">
+    <field name="name">form_collection_inh</field>
+    <field name="model">wc.collection</field>
+    <field name="inherit_id" ref="wc_collection.form_collection"/>
+    <field name="groups_id" eval="[(6, 0, [ref('base.group_system') ])]"/>
+    <field name="arch" type="xml">
+
+      <field name="line_ids" position="attributes">
+        <attribute name="attrs">{}</attribute>
+      </field>
+
+    </field>
+  </record>
+
+  <record id="form_posting_inh" model="ir.ui.view">
+    <field name="name">form_posting_inh</field>
+    <field name="model">wc.posting</field>
+    <field name="inherit_id" ref="wc_posting.form_posting"/>
+    <field name="groups_id" eval="[(6, 0, [ref('base.group_system') ])]"/>
+    <field name="arch" type="xml">
+
+      <field name="state" position="before">
+        <button name="set_draft"
+          string="Back to Draft"
+          states="posted"
+          type="object" groups="base.group_no_one"/>
+      </field>
+
+      <field name="company_id" position="after">
+        <field name="interest_computed"/>
+      </field>
+
+    </field>
+  </record>
+
+  <record id="form_account_inh" model="ir.ui.view">
+    <field name="name">form_account_inh</field>
+    <field name="model">wc.account</field>
+    <field name="inherit_id" ref="wc_account.form_account"/>
+    <field name="groups_id" eval="[(6, 0, [ref('base.group_system') ])]"/>
+    <field name="arch" type="xml">
+      <field name="maintaining_balance" position="attributes">
+        <attribute name="attrs">{'invisible': [('account_type','!=','sa')]}</attribute>
+      </field>
+    </field>
+  </record>
+
+  <!-- collection -->
+  <record id="form_collection_inh1" model="ir.ui.view">
+    <field name="name">form_collection_inh1</field>
+    <field name="model">wc.collection</field>
+    <field name="priority" eval="16"/>
+    <field name="inherit_id" ref="wc_collection.form_collection"/>
+    <field name="arch" type="xml">
+      <field name="name" position="attributes">
+        <attribute name="attrs">{'readonly': [('state','!=','draft')]}</attribute>
+      </field>
+    </field>
+  </record>
+
+  <record id="form_collection_inh2" model="ir.ui.view">
+    <field name="name">form_collection_inh2</field>
+    <field name="model">wc.collection</field>
+    <field name="priority" eval="20"/>
+    <field name="inherit_id" ref="wc_collection.form_collection"/>
+    <field name="groups_id" eval="[(6, 0, [ref('base.group_system') ])]"/>
+    <field name="arch" type="xml">
+      <field name="name" position="attributes">
+        <attribute name="attrs">{}</attribute>
+      </field>
+    </field>
+  </record>
+
+  <record id="form_collection_inh3" model="ir.ui.view">
+    <field name="name">form_collection_inh3</field>
+    <field name="model">wc.collection</field>
+    <field name="inherit_id" ref="wc_posting.form_collection_inh"/>
+    <field name="groups_id" eval="[(6, 0, [ref('base.group_system') ])]"/>
+    <field name="arch" type="xml">
+      <field name="in_branch" position="attributes">
+        <attribute name="attrs">{}</attribute>
+      </field>
+      <field name="schedule" position="attributes">
+        <attribute name="attrs">{}</attribute>
+      </field>
+    </field>
+  </record>
+
+
+</odoo>

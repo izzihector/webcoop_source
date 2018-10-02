@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Chart template for en -->
+    <record id="ca_webcoop" model="account.chart.template">
+      <field name="cash_account_code_prefix">111</field>
+      <field name="bank_account_code_prefix">112</field>
+      <field name="property_account_receivable_id" ref="coa_ar"/>
+      <field name="property_account_payable_id" ref="coa_ap"/>
+      <field name="property_account_income_categ_id" ref="coa_income"/>
+      <field name="property_account_expense_categ_id" ref="coa_purchase"/>
+      <field name="property_stock_account_input_categ_id" ref="coa_stock_input"/>
+      <field name="property_stock_account_output_categ_id" ref="coa_stock_output"/>
+      <field name="property_stock_valuation_account_id" ref="cao_inventory"/>
+      <field name="income_currency_exchange_account_id" ref="coa_fx_gain_loss"/>
+      <field name="expense_currency_exchange_account_id" ref="coa_fx_gain_loss"/>
+    </record>
+</odoo>

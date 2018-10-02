@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+  <data noupdate="1">
+
+    <!-- insurance types -->
+    <record model="wc.insurance.type" id="ins_type0">
+      <field name="name">Damayan</field>
+      <field name="amount" eval="100"/>
+    </record>
+    <record model="wc.insurance.type" id="ins_type1">
+      <field name="name">Crop Insurance</field>
+      <field name="amount" eval="1500"/>
+    </record>
+    <record model="wc.insurance.type" id="ins_type2">
+      <field name="name">Accident Insurance</field>
+      <field name="amount" eval="150"/>
+    </record>
+    <record model="wc.insurance.type" id="ins_type3">
+      <field name="name">Loan Insurance</field>
+      <field name="amount" eval="250"/>
+    </record>
+
+    <!-- insurance -->
+    <record model="wc.insurance" id="insurance_1">
+      <field name="company_id" ref="wc.branch1"/>
+      <field name="name" eval="time.strftime('Damayan %Y')"></field>
+      <field name="type_id" ref="ins_type0"/>
+      <field name="date_start" eval="time.strftime('%Y-01-01')"></field>
+      <field name="date_end" eval="time.strftime('%Y-12-01')"></field>
+      <field name="member_ids" eval="[
+        (4,ref('wc_member.member1')),
+        (4,ref('wc_member.member2')),
+        (4,ref('wc_member.member3'))
+       ]"/>
+    </record>
+
+    <record model="wc.insurance" id="insurance_2">
+      <field name="company_id" ref="wc.branch1"/>
+      <field name="name" eval="time.strftime('Crop Insurance %Y-01')"></field>
+      <field name="type_id" ref="ins_type1"/>
+      <field name="date_start" eval="time.strftime('%Y-01-01')"></field>
+      <field name="date_end" eval="time.strftime('%Y-12-01')"></field>
+      <field name="member_ids" eval="[
+        (4,ref('wc_member.member1')),
+        (4,ref('wc_member.member2')),
+       ]"/>
+    </record>
+
+    <record model="wc.insurance" id="insurance_3">
+      <field name="company_id" ref="wc.branch2"/>
+      <field name="name" eval="time.strftime('Damayan %Y')"></field>
+      <field name="type_id" ref="ins_type0"/>
+      <field name="date_start" eval="time.strftime('%Y-01-01')"></field>
+      <field name="date_end" eval="time.strftime('%Y-12-01')"></field>
+      <field name="member_ids" eval="[
+        (4,ref('wc_member.member4')),
+        (4,ref('wc_member.member5')),
+        (4,ref('wc_member.member6')),
+        (4,ref('wc_member.member7')),
+        (4,ref('wc_member.member8')),
+       ]"/>
+    </record>
+
+    <record model="wc.insurance" id="insurance_4">
+      <field name="company_id" ref="wc.branch3"/>
+      <field name="name" eval="time.strftime('Damayan %Y')"></field>
+      <field name="type_id" ref="ins_type0"/>
+      <field name="date_start" eval="time.strftime('%Y-01-01')"></field>
+      <field name="date_end" eval="time.strftime('%Y-12-01')"></field>
+      <field name="member_ids" eval="[
+        (4,ref('wc_member.member9')),
+        (4,ref('wc_member.member10')),
+       ]"/>
+    </record>
+
+    <function id="onchange_type_id" model="wc.insurance" name="oc_type_id"
+      eval="[[ ref('insurance_%d' % x) for x in range(1,5) ]]"/>
+
+    <function id="onchange_type_id" model="wc.insurance" name="confirm"
+      eval="[[ ref('insurance_%d' % x) for x in range(1,5) ]]"/>
+
+  </data>
+</odoo>

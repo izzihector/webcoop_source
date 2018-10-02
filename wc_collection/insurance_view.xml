@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <menuitem id="wc_microinsurance.menu_insurance"
+    name="Microinsurance"
+    action="wc_microinsurance.action_insurance"
+    sequence="30"
+    parent="wc.menu_root"
+    groups="wc.group_manager,wc.group_teller,wc_collection.group_collection_officer"
+  />
+
+  <record id="view_insurance" model="ir.ui.view">
+    <field name="name">view_insurance</field>
+    <field name="model">wc.insurance</field>
+    <field name="inherit_id" ref="wc_microinsurance.view_insurance"/>
+    <field name="arch" type="xml">
+
+      <xpath expr="//notebook/page[@name='enrolled']" position="after">
+
+        <page name="collectibles" string="Collectible Premiums">
+          <field name="collectible_ids">
+            <tree class="wc_tree" delete="0" create="0" editable="bottom">
+              <field name="member_code"/>
+              <field name="member_id"/>
+              <field name="amount"/>
+              <field name="amount_paid"/>
+              <field name="paid"/>
+              <field name="note"/>
+            </tree>
+            <form>
+              <group>
+                <group>
+                  <field name="member_code"/>
+                  <field name="member_id"
+                    options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+                </group>
+                <group>
+                  <field name="amount"/>
+                  <field name="amount_paid"/>
+                  <field name="paid"/>
+                </group>
+              </group>
+              <separator string="Notes"/>
+              <field name="note"/>
+            </form>
+          </field>
+        </page>
+        <page name="payments" string="Payments">
+          <field name="payment_ids" domain="[('state','=','confirmed')]">
+            <tree class="wc_tree" delete="0" create="0" edit="0">
+              <field name="date"/>
+              <field name="member_code"/>
+              <field name="member_id"/>
+              <field name="collection_id"/>
+              <field name="amount"/>
+            </tree>
+            <form>
+              <group>
+                <field name="date"/>
+                <field name="member_code"/>
+                <field name="member_id"
+                  options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+                <field string="Payment Reference" name="collection_id"/>
+                <field name="amount"/>
+              </group>
+            </form>
+          </field>
+        </page>
+
+      </xpath>
+
+    </field>
+  </record>
+
+</odoo>

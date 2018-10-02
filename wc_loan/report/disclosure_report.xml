@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<!--  2018/4/19 modify (change static [Manager]'s place under [approved by] from [checked by] -->
+<!--  2018/4/19 modify (add static notification regarding penalty on line 239 -->
+<odoo>
+  <data noupdate="1">
+
+    <template id="report_declaration">
+      <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="o">
+          <div class="page">
+            <center>
+              <h4><strong><span t-field="res_company.name"/></strong></h4>
+              <div class="row"><span t-field="res_company.partner_id.address2"/></div>
+              <br/>
+              <h4><strong>LOAN DISCLOSURE</strong></h4>
+            </center>
+
+            <table class="table-loan-voucher mt32">
+              <tr>
+                <td width="18%">
+                  Loan No. :
+                </td>
+                <td width="39%" class="bborder" colspan="3">
+                  <span t-field="o.code"/>
+                </td>
+                <td class="text-right" width="18%">
+                  Date :
+                </td>
+                <td class="bborder" width="25%">
+                  <span t-field="o.date" t-field-options="{&quot;format&quot;: &quot;MMMM d, yyyy&quot;}"/>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  Name :
+                </td>
+                <td class="bborder" colspan="3">
+                  <span t-field="o.member_name"/>
+                </td>
+                <td class="text-right">
+                  Account No. :
+                </td>
+                <td class="bborder">
+                  <span t-field="o.member_id.code"/>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  Civil Status :
+                </td>
+                <td style="border-bottom: 1px solid black;">
+                  <span t-field="o.member_id.civil_status"/>
+                </td>
+                <td class="text-right">
+                  Age :
+                </td>
+                <td class="bborder">
+                  <span t-field="o.member_id.age"/>
+                </td>
+                <td class="text-right">
+                  CBU Balance :
+                </td>
+                <td class="bborder">
+                  <span t-field="o.member_id.total_cbu"/>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  Mobile No. :
+                </td>
+                <td class="bborder" colspan="3">
+                  <span t-field="o.member_id.mobile"/>
+                </td>
+                <td class="text-right">
+                  Telephone No. :
+                </td>
+                <td class="bborder">
+                  <span t-field="o.member_id.phone"/>
+                </td>
+              </tr>
+
+              <tr>
+                <td>Address :</td>
+                <td class="bborder" colspan="5"><span t-field="o.member_id.contact_address"/></td>
+              </tr>
+
+              <tr t-if="o.comaker_ids">
+                <td>Co-makers :</td>
+                <td class="bborder" colspan="5">
+                  <t t-foreach="o.comaker_ids" t-as="cm">
+                    <span t-field="cm.name"/> /
+                  </t>
+                </td>
+              </tr>
+
+              <tr>
+                <td>Type of Loan:</td>
+                <td class="bborder">
+                  <span t-field="o.loan_type_id.description"/>
+                </td>
+
+                <td class="text-right">
+                  Cycle :
+                </td>
+                <td class="bborder">
+                  <span t-field="o.cycle"/>
+                </td>
+
+                <td class="text-right no-border">
+                  Interest Rate :
+                </td>
+                <td class="bborder text-right">
+                  <span t-field="o.interest_rate"/>% per year
+                </td>
+              </tr>
+
+              <tr>
+                <td>Purpose of Loan:</td>
+                <td class="bborder" colspan="5">
+                  <span t-field="o.purpose"/>
+                </td>
+              </tr>
+
+            </table>
+
+            <div class="row mt16">
+              <div class="col-xs-10">A. LOAN AMOUNT:</div>
+              <div class="col-xs-2 text-right bborder">
+                <strong>
+                  P <span t-field="o.amount"/>
+                </strong>
+              </div>
+            </div>
+
+            <div class="row mt16">
+              <div class="col-xs-12">B. LESS Charges:</div>
+            </div>
+
+            <t t-set="i" t-value="1"/>
+            <div class="row" t-foreach="o.deduction_ids" t-as="d">
+              <t t-if="d.net_include and d.amount&gt;0.0">
+                <div class="col-xs-8" style="padding-left:30px;">
+                  <span t-esc="i"/>. <span t-field="d.name"/>
+                </div>
+                <div class="col-xs-2 text-right bborder">
+                  P <span t-field="d.amount"/>
+                </div>
+                <div class="col-xs-2"/>
+                <t t-set="i" t-value="i+1"/>
+              </t>
+            </div>
+
+            <div class="row">
+              <div class="col-xs-8" style="padding-left:30px;">
+                TOTAL DEDUCTIONS:
+              </div>
+              <div class="col-xs-2"/>
+              <div class="col-xs-2 text-right bborder">
+                <strong>
+                  P <span t-field="o.total_deduction"/>
+                </strong>
+              </div>
+            </div>
+
+            <div class="row mt16">
+              <div class="col-xs-10">C. NET AMOUNT:</div>
+              <div class="col-xs-2 text-right bborder">
+                <strong>
+                  P <span t-field="o.net_amount"/>
+                </strong>
+              </div>
+            </div>
+
+            <div class="row mt16">
+              <div class="col-xs-12">D. PAYMENT</div>
+            </div>
+            <div class="row">
+              <div class="col-xs-3" style="padding-left:30px;">
+                1. Loan Term:
+              </div>
+              <div class="col-xs-1 bborder text-center">
+                <span t-field="o.term_payments"/>
+              </div>
+
+              <div class="col-xs-2 text-right">
+                Date Start:
+              </div>
+              <div class="col-xs-2 bborder">
+                <span t-field="o.date_start"/>
+              </div>
+
+              <div class="col-xs-2 text-right">
+                Date End:
+              </div>
+              <div class="col-xs-2 bborder">
+                <span t-field="o.date_maturity"/>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-xs-12" style="padding-left:30px;">
+                2. Installment Amount :
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-xs-8" style="padding-left:100px;">
+                Principal
+              </div>
+              <div class="col-xs-2 text-right bborder">
+                P <span t-field="o.amount"/>
+              </div>
+              <div class="col-xs-2"/>
+            </div>
+
+            <div class="row">
+              <div class="col-xs-8" style="padding-left:100px;">
+                Interest
+              </div>
+              <div class="col-xs-2 text-right bborder">
+                P <span t-field="o.interest_total"/>
+              </div>
+              <div class="col-xs-2"/>
+            </div>
+
+            <div class="row">
+              <div class="col-xs-8" style="padding-left:100px;">
+                Others
+              </div>
+              <div class="col-xs-2 text-right bborder">
+                P <span t-field="o.others_total"/>
+              </div>
+              <div class="col-xs-2"/>
+            </div>
+
+            <div class="row mt16" style="text-align: justify">
+              <div class="col-xs-12">
+                We acknowledge receipt of a copy of this statement prior
+                to the consummation of this loan and that we understand and
+                fully agree to the terms and conditions thereof.
+                It is understood that the total amount due is subject
+                to charge/penalty of 5% per month if payment is made under the indicated due date.
+              </div>
+            </div>
+
+            <div class="row mt32">
+              <div class="col-xs-6 text-center">
+                <div class="row">
+                  <div class="col-xs-2"/>
+                  <div class="col-xs-8 text-center">
+                    <t t-esc="o.member_id.name"/>
+                  </div>
+                  <div class="col-xs-2"/>
+                </div>
+                <div class="row">
+                  <div class="col-xs-2"/>
+                  <div class="col-xs-8 text-center border-t">
+                    Borrower's Name &amp; Signature
+                  </div>
+                  <div class="col-xs-2"/>
+                </div>
+              </div>
+
+              <div class="col-xs-6 text-center">
+                <div class="row">
+                  <div class="col-xs-2"/>
+                  <div class="col-xs-8 text-center">
+                    <t t-esc="o.member_id.spouse or '(none)'"/>
+                  </div>
+                  <div class="col-xs-2"/>
+                </div>
+                <div class="row">
+                  <div class="col-xs-2"/>
+                  <div class="col-xs-8 text-center border-t">
+                    Spouse Name &amp; Signature
+                  </div>
+                  <div class="col-xs-2"/>
+                </div>
+              </div>
+
+            </div>
+
+            <t t-if="o.comaker_ids">
+              <div class="row">
+                <t t-foreach="o.comaker_ids" t-as="cm">
+                  <div class="col-xs-6 text-center mt32">
+                    <div class="row">
+                      <div class="col-xs-2"/>
+                      <div class="col-xs-8 text-center">
+                        <t t-esc="cm.name"/>
+                      </div>
+                      <div class="col-xs-2"/>
+                    </div>
+                    <div class="row">
+                      <div class="col-xs-2"/>
+                      <div class="col-xs-8 text-center border-t">
+                        Name &amp; Signature of Co-Maker
+                      </div>
+                      <div class="col-xs-2"/>
+                    </div>
+                  </div>
+                </t>
+              </div>
+            </t>
+
+            <table class="table-loan-voucher mt32">
+              <tr>
+                <td width="24%">
+                  Prepared By:
+                </td>
+                <td width="2%"/>
+                <td width="24%">
+                  Checked By:
+                </td>
+                <td width="2%"/>
+                <td width="23%">
+                  Approved By:
+                </td>
+                <td width="2%"/>
+                <td width="23%">
+                  Released By:
+                </td>
+              </tr>
+
+              <tr>
+                <td colspan="7">
+                  <br/><br/>
+                </td>
+              </tr>
+
+              <tr>
+                <td width="24%" class="text-center">
+                  <span t-field="o.prepared_by_id"/>
+                </td>
+                <td width="2%"/>
+                <td width="24%" class="text-center">
+                  <span t-field="o.checked_by_id"/>
+                </td>
+                <td width="2%"/>
+                <td width="23%" class="text-center">
+                  <span t-field="o.approved_by_id"/>
+                </td>
+                <td width="2%"/>
+                <td width="23%" class="text-center">
+                  <span t-field="o.released_by_id"/>
+                </td>
+              </tr>
+
+              <tr>
+                <td class="border-t text-center">
+                  Bookkeeper
+                </td>
+                <td/>
+                <td class="border-t"/>
+                <td/>
+                <td class="border-t text-center">
+                  Manager
+                </td>
+                <td/>
+                <td class="border-t"/>
+              </tr>
+
+            </table>
+
+            <p style="page-break-after:always"/>
+
+            <center>
+              <h4><strong>AMORTIZATION SCHEDULE</strong></h4>
+              <strong t-field="o.name"/>
+            </center>
+            <br/>
+
+            <table class="table table-condensed table-compressed">
+              <thead>
+                <tr>
+                  <th>Schedule</th>
+                  <th>Due Date</th>
+                  <th class="text-right">Principal</th>
+                  <th class="text-right">Interest</th>
+                  <th class="text-right">Others</th>
+                  <th class="text-right">Total Due</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <t t-set="tprincipal" t-value="0.0"/>
+                <t t-set="tinterest" t-value="0.0"/>
+                <t t-set="tothers" t-value="0.0"/>
+                <tr t-foreach="o.amortizations" t-as="a">
+                  <td><span t-field="a.name"/></td>
+                  <td><span t-field="a.date_due"/></td>
+                  <td class="text-right"><span t-field="a.principal_due"/></td>
+                  <td class="text-right"><span t-field="a.interest_due"/></td>
+                  <td class="text-right"><span t-field="a.others_due"/></td>
+                  <td class="text-right"><span t-field="a.total_due"/></td>
+                  <t t-set="tprincipal" t-value="tprincipal + a.principal_due"/>
+                  <t t-set="tinterest" t-value="tinterest + a.interest_due"/>
+                  <t t-set="tothers" t-value="tothers + a.others_due"/>
+                </tr>
+
+                <t t-set="gtotal" t-value="tprincipal + tinterest + tothers"/>
+                <tr class="border-t border-b">
+                  <th colspan="2">TOTAL AMOUNT:</th>
+                  <th class="text-right"><t t-esc="'{0:,.2f}'.format(tprincipal)"/></th>
+                  <th class="text-right"><t t-esc="'{0:,.2f}'.format(tinterest)"/></th>
+                  <th class="text-right"><t t-esc="'{0:,.2f}'.format(tothers)"/></th>
+                  <th class="text-right"><t t-esc="'{0:,.2f}'.format(gtotal)"/></th>
+                </tr>
+
+               </tbody>
+
+            </table>
+
+          </div>
+        </t>
+      </t>
+    </template>
+
+  </data>
+</odoo>

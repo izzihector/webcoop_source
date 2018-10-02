@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <record id="tree_transaction" model="ir.ui.view">
+    <field name="name">tree_transaction</field>
+    <field name="model">wc.account.transaction</field>
+    <field name="inherit_id" ref="wc_account.tree_transaction"/>
+    <field name="arch" type="xml">
+      <field name="teller_id" position="before">
+        <field name="loan_code"/>
+      </field>
+    </field>
+  </record>
+
+  <record id="form_transaction" model="ir.ui.view">
+    <field name="name">form_transaction</field>
+    <field name="model">wc.account.transaction</field>
+    <field name="inherit_id" ref="wc_account.form_transaction"/>
+    <field name="arch" type="xml">
+      <field name="teller_id" position="after">
+        <field name="loan_code"/>
+      </field>
+    </field>
+  </record>
+
+  <record id="form_account" model="ir.ui.view">
+    <field name="name">form_account</field>
+    <field name="model">wc.account</field>
+    <field name="inherit_id" ref="wc_account.form_account"/>
+    <field name="arch" type="xml">
+      <xpath expr='//notebook/page[@name="transactions"]/group/field[@name="transaction_ids"]/tree/field[@name="teller_id"]'
+        position='before'>
+        <field name="loan_code"/>
+      </xpath>
+    </field>
+  </record>
+
+</odoo>

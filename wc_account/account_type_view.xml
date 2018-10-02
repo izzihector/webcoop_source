@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <!-- savings product type -->
+
+  <record id="form_acc_type" model="ir.ui.view">
+    <field name="name">form_acc_type</field>
+    <field name="model">wc.account.type</field>
+    <field name="arch" type="xml">
+      <form string="Account Type" class="wc_tree">
+
+        <sheet>
+
+          <h1 class="o_row oe_read_only">
+            <field name="name"/>
+          </h1>
+          <div class="oe_title oe_edit_only">
+            <label for="code"/>
+            <h1>
+              <field name="code" placeholder="Code..."/>
+            </h1>
+            <label for="description"/>
+            <field name="description" placeholder="Description..."/>
+          </div>
+
+          <group>
+            <group>
+              <field name="company_id" groups="base.group_multi_company"/>
+              <field name="category"/>
+              <field name="posting_schedule"/>
+              <field name="interest_rate"
+                attrs="{'invisible':[('category','not in',['sa','td'])]}"/>
+
+              <field name="is_autorollover"
+                help="If checked, during maturity account balance and interest are rolled over automatically."
+                attrs="{'invisible':[('category','not in',['td'])]}"/>
+
+              <field name="ctd_signatory"
+                attrs="{'invisible':[('category','not in',['td'])]}"/>
+
+              <field name="maintaining_balance" string="Maint. Balance"
+                attrs="{'invisible':[('category','not in',['sa'])]}"/>
+              <label for="dormant_months" attrs="{'invisible':[('category','not in',['sa'])]}"/>
+              <div class="o_row" attrs="{'invisible':[('category','not in',['sa'])]}">
+                <field name="dormant_months"/> months
+              </div>
+              <field name="dormant_penalty"
+                attrs="{'invisible':[('category','not in',['sa'])]}"/>
+              <field name="interest_level"
+                attrs="{'invisible':[('category','not in',['sa'])]}"/>
+              <!--
+              <field name="is_no_interest_below_balance"
+                attrs="{'invisible':[('category','not in',['sa'])]}"/>
+              -->
+            </group>
+
+            <group>
+              <field name="deposit_limit"/>
+              <field name="withdrawal_limit"/>
+              <field name="sequence_id"
+                attrs="{'invisible':[('category','=','cbu')]}"/>
+              <field name="gl_account_id"/>
+              <field name="gl_withdraw_account_id"/>
+              <field name="gl_interest_account_id"/>
+            </group>
+
+          </group>
+          <separator string="Notes"/>
+          <field name="note" nolabel="1"/>
+        </sheet>
+
+        <div class="oe_chatter">
+          <field name="message_follower_ids" widget="mail_followers"/>
+          <field name="message_ids" widget="mail_thread"/>
+        </div>
+
+      </form>
+    </field>
+  </record>
+
+  <record id="tree_acc_type" model="ir.ui.view">
+    <field name="name">tree_acc_type</field>
+    <field name="model">wc.account.type</field>
+    <field name="arch" type="xml">
+      <tree string="Account Types" class="wc_tree">
+        <field name="company_id" groups="base.group_multi_company"/>
+        <field name="name" invisible="1"/>
+        <field name="code"/>
+        <field name="description"/>
+        <field name="category"/>
+        <field name="interest_rate"/>
+        <field name="posting_schedule"/>
+        <field name="note"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="action_acc_type" model="ir.actions.act_window">
+    <field name="name">Account Types</field>
+    <field name="res_model">wc.account.type</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <menuitem id="menu_acc_type"
+    name="Account Types"
+    action="action_acc_type"
+    groups="wc.group_teller,wc.group_sys_manager"
+    parent="wc.menu_config"
+    sequence="3010"
+  />
+
+</odoo>

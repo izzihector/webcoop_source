@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <record id="view_loan_detail_tree" model="ir.ui.view">
+    <field name="name">view_loan_detail_tree</field>
+    <field name="model">wc.loan.detail</field>
+    <field name="arch" type="xml">
+      <tree class="wc_tree" delete="0" create="0">
+        <field name="name" readonly="1" invisible="1"/>
+        <!--
+        <field name="sequence" readonly="1" string="#" invisible="1"/>
+        -->
+        <field name="date_due" readonly="1" />
+        <field name="principal_balance" readonly="1" />
+        <field name="principal_due" sum="Total Principal Due" readonly="1"/>
+        <field name="interest_due" sum="Total Interest Due" readonly="1"/>
+        <!--
+        <field name="days" readonly="1"/>
+        -->
+        <field name="penalty" readonly="1" sum="Total Penalty" />
+        <field name="adjustment" readonly="0" sum="Total Adjustment" string="Adj"/>
+        <button name="add_adjustment" icon="fa fa-plus-circle"
+          groups="wc_loan.group_loan_user,wc.group_manager"
+          string="Add Adjustment" type="object"/>
+         <field name="others_due" readonly="1" sum="Total Others"/>
+        <field name="principal_paid" sum="Principal Paid" />
+        <field name="interest_paid" sum="Interest Paid" />
+        <field name="penalty_paid" sum="Penalty Paid"/>
+        <field name="others_paid" readonly="1" sum="Others Paid" />
+        <field name="total_due" sum="Total Due" readonly="1"/>
+        <field name="state" string=""/>
+      </tree>
+    </field>
+  </record>
+
+
+  <record id="view_loan_detail_form" model="ir.ui.view">
+    <field name="name">view_loan_detail_form</field>
+    <field name="model">wc.loan.detail</field>
+    <field name="arch" type="xml">
+
+      <form>
+        <div class="oe_title">
+          <h1 class="o_row">
+            <field name="name" readonly="1"/>
+          </h1>
+        </div>
+        <group col="12">
+          <group colspan="6">
+            <field name="date_start" readonly="0" />
+            <field name="date_due" readonly="0" />
+            <field name="principal_balance" readonly="0" />
+            <field name="days" readonly="0" string="Past Due (days)"/>
+            <field name="state"/>
+            <field name="others_html"/>
+            <field name="others_paid_dict" invisible="1"/>
+          </group>
+          <group name="group2" colspan="6">
+            <field name="principal_due" readonly="0"/>
+            <field name="interest_due" readonly="0"/>
+            <field name="penalty" readonly="0"/>
+            <field name="adjustment" readonly="0"/>
+            <field name="others_due" readonly="1"/>
+            <field name="principal_paid"/>
+            <field name="interest_paid"/>
+            <field name="penalty_paid"/>
+            <field name="others_paid"/>
+            <field name="total_due" sum="Total Due" readonly="1"/>
+          </group>
+        </group>
+      </form>
+
+    </field>
+  </record>
+
+</odoo>

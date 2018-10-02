@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <menuitem id="menu_members"
+    name="Members"
+    parent="wc.menu_root"
+    sequence="10"
+  />
+
+  <!-- members -->
+
+  <record id="form_members" model="ir.ui.view">
+    <field name="name">form_members</field>
+    <field name="model">wc.member</field>
+    <field name="arch" type="xml">
+      <form string="Member">
+        <sheet>
+
+          <div class="oe_button_box wc_button_box" name="button_box">
+            <button name="toggle_active" type="object"
+                confirm="Archived members are delisted from roll, are you sure continue?"
+                class="oe_stat_button" icon="fa-archive">
+              <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+            </button>
+          </div>
+
+          <field name="is_approved" invisible="1"/>
+          <field name="image" widget='image' class="oe_avatar" options='{"preview_image":"image_medium"}'/>
+          <div class="oe_title wc_title">
+            <h1>
+              <field name="name2"/>
+              <!--
+              <h1 class="o_row oe_read_only">
+              <span attrs="{'invisible':[('is_approved', '=', True)]}" style="color:DarkRed">
+                DRAFT
+              </span>
+            -->
+            </h1>
+            <div class="oe_edit_only">
+              <group>
+                <field name="title" placeholder="Enter title..."/>
+                <field name="firstname" placeholder="Enter first name..."/>
+                <field name="middlename" placeholder="Enter middle name..."/>
+                <field name="lastname" placeholder="Enter last name..."/>
+              </group>
+            </div>
+          </div>
+          <div class="o_row oe_read_only" style="padding-left:10px;">
+            <field name="contact_address"/>
+          </div>
+
+          <notebook>
+
+            <page name="info" string="Basic Information">
+              <group>
+
+                <group string="Personal Information">
+
+                  <label for="street" string="Address"/>
+                  <div class="o_address_format">
+                      <field name="parent_id" invisible="1"/>
+                      <field name="type" invisible="1"/>
+                      <div class="oe_edit_only">
+                          <button name="open_parent" type="object" string="(edit)" class="oe_link"
+                              attrs="{'invisible': ['|', ('parent_id', '=', False), ('type', '!=', 'contact')]}"/>
+                      </div>
+                      <field name="street" placeholder="Street..." class="o_address_street"
+                          attrs="{'readonly': [('type', '=', 'contact'),('parent_id', '!=', False)]}"/>
+                      <field name="street2" placeholder="Street 2..." class="o_address_street"
+                          attrs="{'readonly': [('type', '=', 'contact'),('parent_id', '!=', False)]}"/>
+                      <field name="city" placeholder="City" class="o_address_city"
+                          attrs="{'readonly': [('type', '=', 'contact'),('parent_id', '!=', False)]}"/>
+                      <field name="state_id" class="o_address_state" placeholder="State" options='{"no_open": True}'
+                          attrs="{'readonly': [('type', '=', 'contact'),('parent_id', '!=', False)]}" context="{'country_id': country_id, 'zip': zip}"/>
+                      <field name="zip" placeholder="ZIP" class="o_address_zip"
+                          attrs="{'readonly': [('type', '=', 'contact'),('parent_id', '!=', False)]}"/>
+                      <field name="country_id" placeholder="Country" class="o_address_country" options='{"no_open": True, "no_create": True}'
+                          attrs="{'readonly': [('type', '=', 'contact'),('parent_id', '!=', False)]}"/>
+                  </div>
+                  <!--
+                  <label for="address1"/>
+                  <div class="o_address_format">
+                    <field name="address1" placeholder="Enter street, building..." class="o_address_street"/>
+                    <field name="address2" placeholder="Enter sitio, barangay..." class="o_address_street"/>
+                    <field name="address3" placeholder="Enter city, country..." class="o_address_state"/>
+                    <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                  </div>
+                -->
+                  <field name="gender"/>
+                  <field name="civil_status"/>
+                  <label for="birthday" string="Birthday/Age"/>
+                  <div class="o_row">
+                    <field name="birthday"/>
+                    <field name="age"/> years
+                  </div>
+                  <field name="nationality"/>
+                  <field name="birthplace"/>
+                  <field name="spouse"/>
+
+                  <field name="sss_no"/>
+                  <field name="gsis_no"/>
+                  <field name="phic_no"/>
+                  <field name="tin"/>
+
+                  <field name="profession"/>
+                  <field name="company"/>
+                  <field name="company_address"/>
+                  <field name="company_contact"/>
+                  <field name="mobile"/>
+                  <field name="phone"/>
+                  <field name="fax"/>
+                  <field name="email"/>
+                </group>
+
+                <group string="Account Details">
+                  <field name="company_id" groups="base.group_multi_company"
+                    options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+                  <field name="code"/>
+                  <field name="member_type"
+                    attrs="{'readonly':[('is_approved', '=', True)]}"/>
+                  <label for="membership_date"/>
+                  <div class="o_row">
+                    <field name="membership_date"/> - <field name="membership_end_date"/>
+                  </div>
+                  <!--
+                  <field name="total_savings"/>
+                -->
+                  <field name="account_officer_id"
+                    options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+                  <label for="approver_id"/>
+                  <div class="o_row">
+                    <field name="approver_id" readonly="1"
+                      options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+                    <field name="approval_date" readonly="1"/>
+                    <button name="toggle_approved" groups="wc.group_manager"
+                        type="object" icon="fa-thumbs-up">
+                      <span attrs="{'invisible':[('is_approved', '=', True)]}">Approve</span>
+                      <span attrs="{'invisible':[('is_approved', '=', False)]}">Revert to draft</span>
+                    </button>
+                    <!--
+                    <button name="toggle_approved" groups="wc.group_manager"
+                        attrs="{'invisible':[('is_approved', '=', True)]}"
+                        confirm="Are you sure you want to approve this member?"
+                        type="object" icon="fa-thumbs-up">
+                      <span>Approve</span>
+                    </button>
+                    -->
+                  </div>
+
+                  <separator string="Center" colspan="2"/>
+                  <field name="province_id" placeholder="Enter province..."
+                    options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+                  <field name="municipal_id" placeholder="Enter municipal/city..."
+                    options="{'no_create':True, 'no_edit':True, 'no_open':True}"
+                    context="{'default_province_id': province_id}"/>
+                  <field name="barangay_id" placeholder="Enter barangay..."
+                    options="{'no_create':True, 'no_edit':True, 'no_open':True}"
+                    context="{'default_municipal_id': municipal_id}"/>
+                  <field name="center_id" placeholder="Enter center..."
+                    options="{'no_create':True, 'no_edit':True, 'no_open':True}"
+                    context="{'default_barangay_id': barangay_id}"/>
+                </group>
+
+              </group>
+            </page>
+
+            <!--
+            <page invisible="1" name="other_info" string="Other Information">
+              <group>
+                <group>
+                </group>
+                <group>
+                </group>
+              </group>
+            </page>
+          -->
+
+            <page name="notes" string="Notes">
+              <field name="comment"/>
+            </page>
+
+          </notebook>
+
+        </sheet>
+
+        <div class="oe_chatter">
+          <field name="message_follower_ids" widget="mail_followers"/>
+          <field name="message_ids" widget="mail_thread"/>
+        </div>
+
+      </form>
+    </field>
+  </record>
+
+  <record id="kanban_members" model="ir.ui.view">
+      <field name="name">kanban_members</field>
+      <field name="model">wc.member</field>
+      <field name="arch" type="xml">
+          <kanban>
+              <field name="is_approved"/>
+              <templates>
+                  <t t-name="kanban-box">
+                    <div class="oe_kanban_global_click">
+                      <div class="o_kanban_image">
+                        <img t-att-src="kanban_image('wc.member', 'image_medium', record.id.value)"/>
+                      </div>
+                      <div class="oe_kanban_details">
+
+                        <strong>
+                          <div t-if="record.is_approved.raw_value">
+                            <field name="name"/>
+                          </div>
+                          <div t-else="" style="color:DarkRed;">
+                            <field name="name"/>
+                          </div>
+                        </strong>
+                        <ul>
+                          <li><strong><field name="company_id"/></strong></li>
+                          <li t-if="record.code.raw_value" class="wc_hline">
+                            <strong>
+                              <i class="fa fa-hashtag"></i>
+                              <field name="code"/>
+                            </strong>
+                          </li>
+                          <li t-if="record.contact_address.raw_value">
+                            <field name="contact_address"/>
+                          </li>
+                          <li t-if="record.mobile.raw_value">
+                            <i class="fa fa-mobile"></i>
+                            <field name="mobile"/>
+                          </li>
+                          <li t-if="record.phone.raw_value">
+                            <i class="fa fa-phone"></i>
+                            <field name="phone"/>
+                          </li>
+                          <li t-if="record.fax.raw_value">
+                            <i class="fa fa-fax"></i>
+                            <field name="fax"/>
+                          </li>
+                          <li t-if="record.email.raw_value">
+                            <i class="fa fa-envelope"></i>
+                            <field name="email"/>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </t>
+              </templates>
+          </kanban>
+      </field>
+  </record>
+
+
+  <record id="tree_members" model="ir.ui.view">
+    <field name="name">tree_members</field>
+    <field name="model">wc.member</field>
+    <field name="arch" type="xml">
+      <tree string="Members" colors="DarkRed:not is_approved">
+        <field name="company_id" groups="base.group_multi_company"/>
+        <field name="code"/>
+        <field name="name"/>
+        <field name="member_type"/>
+        <field name="center_id"/>
+        <field name="is_approved" invisible="1"/>
+        <field name="comment"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="search_members" model="ir.ui.view">
+    <field name="name">search_members</field>
+    <field name="model">wc.member</field>
+    <field name="arch" type="xml">
+      <search>
+        <field name="name"/>
+        <field name="code"/>
+        <field name="member_type"/>
+        <field name="center_id"/>
+        <field name="barangay_id"/>
+        <field name="municipal_id"/>
+        <field name="barangay_id"/>
+        <field name="province_id"/>
+        <filter name="approved" string="Approved" domain="[('is_approved','=',True)]"/>
+        <filter name="for_approval" string="For Approval" domain="[('is_approved','=',False)]"/>
+        <filter name="gmember_type" string="Membership Type" context="{'group_by':'member_type'}"/>
+        <filter name="ggender" string="Gender" context="{'group_by':'gender'}"/>
+        <filter name="gcenter" string="Center" context="{'group_by':'center_id'}"/>
+        <filter name="gbarangay" string="Barangay" context="{'group_by':'barangay_id'}"/>
+        <filter name="gmunicipal" string="Municipal/City" context="{'group_by':'municipal_id'}"/>
+        <filter name="gprovince" string="Province" context="{'group_by':'province_id'}"/>
+      </search>
+    </field>
+  </record>
+
+  <record id="action_members" model="ir.actions.act_window">
+    <field name="name">Active Members</field>
+    <field name="res_model">wc.member</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">kanban,tree,form</field>
+    <field name="search_view_id" ref="search_members"/>
+    <field name="context">{'search_default_approved':1}</field>
+  </record>
+
+  <menuitem id="menu_members_approved"
+    parent="menu_members"
+    action="action_members"
+    sequence="10"
+  />
+
+  <record id="action_members_for_approval" model="ir.actions.act_window">
+    <field name="name">Members For Approval</field>
+    <field name="res_model">wc.member</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">kanban,tree,form</field>
+    <field name="search_view_id" ref="search_members"/>
+    <field name="context">{'search_default_for_approval':1}</field>
+  </record>
+
+  <menuitem id="menu_members_for_approval"
+    parent="menu_members"
+    action="action_members_for_approval"
+    sequence="20"
+  />
+
+  <!-- ================================================================== -->
+
+  <!-- province -->
+
+  <record id="form_provinces" model="ir.ui.view">
+    <field name="name">form_provinces</field>
+    <field name="model">wc.province</field>
+    <field name="arch" type="xml">
+      <form string="Province">
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="note"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="tree_provinces" model="ir.ui.view">
+    <field name="name">tree_provinces</field>
+    <field name="model">wc.province</field>
+    <field name="arch" type="xml">
+      <tree string="Provinces" editable="bottom">
+        <field name="name"/>
+        <field name="note"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="search_provinces" model="ir.ui.view">
+    <field name="name">search_provinces</field>
+    <field name="model">wc.province</field>
+    <field name="arch" type="xml">
+      <search>
+        <field name="name"/>
+        <field name="note"/>
+      </search>
+    </field>
+  </record>
+
+  <record id="action_provinces" model="ir.actions.act_window">
+    <field name="name">Provinces</field>
+    <field name="res_model">wc.province</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <menuitem id="menu_province"
+    name="Provinces"
+    action="action_provinces"
+    parent="wc.menu_config"
+    groups="group_member_user,wc.group_sys_manager"
+    sequence="1000"
+  />
+
+  <!-- municipal -->
+
+  <record id="form_municipal" model="ir.ui.view">
+    <field name="name">form_municipal</field>
+    <field name="model">wc.municipal</field>
+    <field name="arch" type="xml">
+      <form string="Municipality/City">
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="province_id"
+              options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+            <field name="note"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="tree_municipal" model="ir.ui.view">
+    <field name="name">tree_municipal</field>
+    <field name="model">wc.municipal</field>
+    <field name="arch" type="xml">
+      <tree string="Municipalities/Cities" editable="bottom">
+        <field name="name"/>
+        <field name="province_id"
+          options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+        <field name="note"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="search_municipal" model="ir.ui.view">
+    <field name="name">search_municipal</field>
+    <field name="model">wc.municipal</field>
+    <field name="arch" type="xml">
+      <search>
+        <field name="name"/>
+        <field name="province_id"/>
+        <field name="note"/>
+        <filter name="gprovince" string="Province" context="{'group_by':'province_id'}"/>
+      </search>
+    </field>
+  </record>
+
+  <record id="action_municipal" model="ir.actions.act_window">
+    <field name="name">Municipalities/Cities</field>
+    <field name="res_model">wc.municipal</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <menuitem id="menu_municipal"
+    name="Municipals/Cities"
+    action="action_municipal"
+    parent="wc.menu_config"
+    groups="group_member_user,wc.group_sys_manager"
+    sequence="1010"
+  />
+
+  <!-- barangay -->
+
+  <record id="form_barangay" model="ir.ui.view">
+    <field name="name">form_barangay</field>
+    <field name="model">wc.barangay</field>
+    <field name="arch" type="xml">
+      <form string="Barangay">
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="municipal_id"
+              options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+            <field name="province_id" invisible="1"/>
+            <field name="note"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="tree_barangay" model="ir.ui.view">
+    <field name="name">tree_barangay</field>
+    <field name="model">wc.barangay</field>
+    <field name="arch" type="xml">
+      <tree string="Barangays" editable="bottom">
+        <field name="name"/>
+        <field name="municipal_id"
+          options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+        <field name="note"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="search_barangay" model="ir.ui.view">
+    <field name="name">search_barangay</field>
+    <field name="model">wc.barangay</field>
+    <field name="arch" type="xml">
+      <search>
+        <field name="name"/>
+        <field name="municipal_id"/>
+        <field name="province_id"/>
+        <field name="note"/>
+        <filter name="gprovince" string="Province" context="{'group_by':'province_id'}"/>
+        <filter name="gmunicipal" string="Municipality/City" context="{'group_by':'municipal_id'}"/>
+      </search>
+    </field>
+  </record>
+
+  <record id="action_barangay" model="ir.actions.act_window">
+    <field name="name">Barangays</field>
+    <field name="res_model">wc.barangay</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <menuitem id="menu_barangay"
+    name="Barangays"
+    action="action_barangay"
+    parent="wc.menu_config"
+    groups="group_member_user,wc.group_sys_manager"
+    sequence="1020"
+  />
+
+  <!-- center -->
+
+  <record id="form_center" model="ir.ui.view">
+    <field name="name">form_center</field>
+    <field name="model">wc.center</field>
+    <field name="arch" type="xml">
+      <form string="Center">
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="barangay_id"
+              options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+            <field name="municipal_id" invisible="1"/>
+            <field name="province_id" invisible="1"/>
+            <field name="note"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="tree_center" model="ir.ui.view">
+    <field name="name">tree_center</field>
+    <field name="model">wc.center</field>
+    <field name="arch" type="xml">
+      <tree string="Centers" editable="bottom">
+        <field name="name"/>
+        <field name="barangay_id"
+          options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+        <field name="municipal_id" invisible="1"/>
+        <field name="province_id" invisible="1"/>
+        <field name="note"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="search_center" model="ir.ui.view">
+    <field name="name">search_center</field>
+    <field name="model">wc.center</field>
+    <field name="arch" type="xml">
+      <search>
+        <field name="name"/>
+        <field name="barangay_id"/>
+        <field name="municipal_id"/>
+        <field name="province_id"/>
+        <field name="note"/>
+        <filter name="gprovince" string="Province" context="{'group_by':'province_id'}"/>
+        <filter name="gmunicipal" string="Municipality/City" context="{'group_by':'municipal_id'}"/>
+        <filter name="gbarangay" string="Barangay" context="{'group_by':'barangay_id'}"/>
+      </search>
+    </field>
+  </record>
+
+  <record id="action_center" model="ir.actions.act_window">
+    <field name="name">Centers</field>
+    <field name="res_model">wc.center</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <menuitem id="menu_center"
+    name="Centers"
+    action="action_center"
+    parent="wc.menu_config"
+    groups="group_member_user,wc.group_sys_manager"
+    sequence="1030"
+  />
+
+</odoo>

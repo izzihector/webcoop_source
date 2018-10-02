@@ -1,0 +1,5 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+access_wc_excel_report0,access_wc_excel_report0,model_wc_excel_report,,1,0,0,0
+access_wc_excel_report1,access_wc_excel_report1,model_wc_excel_report,wc.group_manager,1,1,1,1
+access_wc_excel_report2,access_wc_excel_report2,model_wc_excel_report,wc.group_sys_manager,1,1,1,1
+access_wc_excel_report3,access_wc_excel_report3,model_wc_excel_report,account.group_account_manager,1,1,1,1

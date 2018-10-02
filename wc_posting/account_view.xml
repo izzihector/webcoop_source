@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <record id="account.action_invoice_tree2" model="ir.actions.act_window">
+    <field name="name">Payables</field>
+  </record>
+
+  <menuitem action="account.action_invoice_tree2" id="account.menu_action_invoice_tree2"
+    name="Payables"
+    parent="account.menu_finance_payables" sequence="1"/>
+
+  <menuitem id="account.menu_finance_payables"
+    name="Disbursement" parent="account.menu_finance" sequence="3"/>
+
+  <record id="invoice_supplier_tree" model="ir.ui.view">
+    <field name="name">invoice_supplier_tree</field>
+    <field name="model">account.invoice</field>
+    <field name="inherit_id" ref="account.invoice_supplier_tree"/>
+    <field name="arch" type="xml">
+      <field name="partner_id" position="attributes">
+        <attribute name="string">Partner</attribute>
+      </field>
+      <field name="reference" position="attributes">
+        <attribute name="string">Reference</attribute>
+      </field>
+    </field>
+  </record>
+
+  <record id="invoice_supplier_form" model="ir.ui.view">
+    <field name="name">account.invoice.supplier.form</field>
+    <field name="model">account.invoice</field>
+    <field name="inherit_id" ref="account.invoice_supplier_form"/>
+    <field name="arch" type="xml">
+      <field name="partner_id" position="attributes">
+        <attribute name="string">Partner</attribute>
+      </field>
+      <field name="reference" position="attributes">
+        <attribute name="string">Reference</attribute>
+      </field>
+    </field>
+  </record>
+
+</odoo>

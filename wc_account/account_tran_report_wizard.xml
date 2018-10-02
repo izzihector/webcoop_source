@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="wizard_account_tran_report" model="ir.ui.view">
+    <field name="name">wizard_account_tran_report</field>
+    <field name="model">wc.account.report.wizard</field>
+    <field name="arch" type="xml">
+      <form>
+        <group>
+          <separator string="Account Transaction Summary" colspan="2"/>
+          <field name="company_id" invisible="1"/>
+          <field name="date1"/>
+          <field name="date2"/>
+          <field name="account_type_id"
+            domain="[('company_id','=',company_id)]"
+            options="{'no_create':True, 'no_edit':True, 'no_open':True}" />
+          <field name="trcode_id"  domain="[('trans_type','=',trans_type)]" options="{'no_create':True, 'no_edit':True, 'no_open':True}" />
+          <field name="teller_id" options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+        </group>
+        <footer>
+          <button name="account_tran_report" string="Print" type="object" class="oe_highlight"/>
+          <button string="Cancel" default_focus="1" class="oe_link" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_account_tran_report" model="ir.actions.act_window">
+    <field name="name">Account Transaction Reports</field>
+    <field name="res_model">wc.account.report.wizard</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+  </record>
+
+  <menuitem id="menu_account_tran_report"
+    action="action_account_tran_report"
+    parent="menu_account" name="Account Transaction Reports" sequence="10000"/>
+
+</odoo>

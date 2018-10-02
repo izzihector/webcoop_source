@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <data noupdate="0">
+
+    <template id="report_release">
+      <t t-call="report.html_container">
+          <div class="page">
+
+            <div class="row">
+              <div class="col-xs-12 text-center">
+                <strong>
+                  <div style="font-size: 18px;" t-field="res_company.name"/>
+                </strong>
+                <div t-field="res_company.partner_id.address2"/>
+              </div>
+              <div class="col-xs-12 text-center mt24 mb24">
+                <div style="font-size: 18px;">
+                  <strong>SUMMARY OF LOAN RELEASES</strong>
+                </div>
+                <div t-if="date1 and date2">
+                  For the period of <span t-esc="date1"/> to <span t-esc="date2"/>
+                </div>
+                <div t-if="date1 and not date2">
+                  For the period from <span t-esc="date1"/>
+                </div>
+                <div t-if="date2 and not date1">
+                  For the period up to <span t-esc="date2"/>
+                </div>
+              </div>
+            </div>
+
+            <t t-set="tamt" t-value="0.0"/>
+            <t t-set="tiamt" t-value="0.0"/>
+
+            <table class="table table-condensed">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Number</th>
+                  <th>Member</th>
+                  <th>Loan Type</th>
+                  <th class="text-right">Start Date</th>
+                  <th class="text-right">Maturity Date</th>
+                  <th class="text-right">Amount</th>
+                  <th class="text-right">Principal + Interest</th>
+                  <th class="text-right">Terms</th>
+                  <th class="text-right">No. of Payments</th>
+                  <th>Mode of Payment</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr t-foreach="docs" t-as="o">
+                  <td><span t-field="o.date"/></td>
+                  <td><span t-field="o.code"/></td>
+                  <td><span t-field="o.member_id"/></td>
+                  <td><span class="no-warp" t-field="o.loan_type_id.description"/></td>
+                  <td class="text-right"><span t-field="o.date_start"/></td>
+                  <td class="text-right"><span t-field="o.date_maturity"/></td>
+                  <td class="text-right"><span t-field="o.amount"/></td>
+                  <td class="text-right">
+                    <span t-att-style="style"
+                      t-esc="o.amount+o.interest_total"
+                      t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                  </td>
+                  <td class="text-right no-warp"><span t-field="o.maturity"/> <span t-field="o.maturity_period"/></td>
+                  <td class="text-right"><span t-field="o.term_payments"/></td>
+                  <td><span t-field="o.payment_schedule"/></td>
+
+                  <t t-set="tamt" t-value="tamt + o.amount"/>
+                  <t t-set="tiamt" t-value="tiamt + o.amount + o.interest_total"/>
+
+                </tr> <!-- docs -->
+              </tbody>
+
+              <tfooter>
+                <tr>
+                  <th class="text-right" colspan="6">
+                    GRAND TOTAL:
+                  </th>
+                  <th class="text-right">
+                    <span t-att-style="style"
+                      t-esc="tamt"
+                      t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                  </th>
+                  <th class="text-right">
+                    <span t-att-style="style"
+                      t-esc="tiamt"
+                      t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                  </th>
+                </tr>
+              </tfooter>
+
+            </table>
+
+          </div> <!-- page -->
+      </t> <!-- html_container -->
+    </template>
+
+    <!-- ================================================================ -->
+
+    <template id="report_release_per_product">
+      <t t-call="report.html_container">
+          <div class="page">
+
+            <div class="row">
+              <div class="col-xs-12 text-center">
+                <strong>
+                  <div style="font-size: 18px;" t-field="res_company.name"/>
+                </strong>
+                <div t-field="res_company.partner_id.address2"/>
+              </div>
+              <div class="col-xs-12 text-center mt24 mb24">
+                <div style="font-size: 18px;">
+                  <strong>SUMMARY OF LOAN RELEASES PER LOAN PRODUCT</strong>
+                </div>
+                <div t-if="date1 and date2">
+                  For the period of <span t-esc="date1"/> to <span t-esc="date2"/>
+                </div>
+                <div t-if="date1 and not date2">
+                  For the period from <span t-esc="date1"/>
+                </div>
+                <div t-if="date2 and not date1">
+                  For the period up to <span t-esc="date2"/>
+                </div>
+              </div>
+            </div>
+
+            <t t-set="tamt" t-value="0.0"/>
+            <t t-set="tiamt" t-value="0.0"/>
+
+            <table class="table table-condensed">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Number</th>
+                  <th>Member</th>
+                  <th>Loan Type</th>
+                  <th class="text-right">Start Date</th>
+                  <th class="text-right">Maturity Date</th>
+                  <th class="text-right">Amount</th>
+                  <th class="text-right">Principal + Interest</th>
+                  <th class="text-right">Terms</th>
+                  <th class="text-right">No. of Payments</th>
+                  <th>Mode of Payment</th>
+                </tr>
+              </thead>
+              <tbody>
+                <t t-foreach="docs_keys" t-as="k">
+
+                  <t t-set="stamt" t-value="0.0"/>
+                  <t t-set="stiamt" t-value="0.0"/>
+
+                  <tr t-foreach="docs[k]" t-as="o">
+                    <td><span t-field="o.date"/></td>
+                    <td><span t-field="o.code"/></td>
+                    <td><span t-field="o.member_id"/></td>
+                    <td><span class="no-warp" t-field="o.loan_type_id.description"/></td>
+                    <td class="text-right"><span t-field="o.date_start"/></td>
+                    <td class="text-right"><span t-field="o.date_maturity"/></td>
+                    <td class="text-right"><span t-field="o.amount"/></td>
+                    <td class="text-right">
+                      <span t-att-style="style"
+                        t-esc="o.amount+o.interest_total"
+                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    </td>
+                    <td class="text-right no-wrap"><span t-field="o.maturity"/> <span t-field="o.maturity_period"/></td>
+                    <td class="text-right"><span t-field="o.term_payments"/></td>
+                    <td><span t-field="o.payment_schedule"/></td>
+
+                    <t t-set="tamt" t-value="tamt + o.amount"/>
+                    <t t-set="tiamt" t-value="tiamt + o.amount + o.interest_total"/>
+                    <t t-set="stamt" t-value="stamt + o.amount"/>
+                    <t t-set="stiamt" t-value="stiamt + o.amount + o.interest_total"/>
+
+                  </tr> <!-- docs[k] -->
+
+                  <tr>
+                    <th class="text-right" colspan="6">
+                      <div class="mb16">Total:</div>
+                    </th>
+                    <th class="text-right">
+                      <span t-att-style="style"
+                        t-esc="stamt"
+                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    </th>
+                    <th class="text-right">
+                      <span t-att-style="style"
+                        t-esc="stiamt"
+                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                    </th>
+                    <th colspan="3"></th>
+                  </tr>
+
+                </t> <!-- t-foreach="k" t-as="sorted(doc.keys())" -->
+
+              </tbody>
+
+              <tfooter>
+                <tr>
+                  <th class="text-right" colspan="6">
+                    GRAND TOTAL:
+                  </th>
+                  <th class="text-right">
+                    <span t-att-style="style"
+                      t-esc="tamt"
+                      t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                  </th>
+                  <th class="text-right">
+                    <span t-att-style="style"
+                      t-esc="tiamt"
+                      t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                  </th>
+                  <th colspan="3"></th>
+                </tr>
+              </tfooter>
+
+            </table>
+
+          </div> <!-- page -->
+      </t> <!-- html_container -->
+    </template>
+
+
+    <!-- ================================================================ -->
+
+    <template id="report_consolidated_release_per_product">
+      <t t-call="report.html_container">
+          <div class="page">
+
+            <div class="row">
+              <div class="col-xs-12 text-center">
+                <strong>
+                  <div style="font-size: 18px;" t-field="res_company.name"/>
+                </strong>
+                <div t-field="res_company.partner_id.address2"/>
+              </div>
+              <div class="col-xs-12 text-center mt24 mb24">
+                <div style="font-size: 18px;">
+                  <strong>CONSOLIDATED LOAN RELEASES PER LOAN PRODUCT</strong>
+                </div>
+                <div t-if="date1 and date2">
+                  For the period of <span t-esc="date1"/> to <span t-esc="date2"/>
+                </div>
+                <div t-if="date1 and not date2">
+                  For the period from <span t-esc="date1"/>
+                </div>
+                <div t-if="date2 and not date1">
+                  For the period up to <span t-esc="date2"/>
+                </div>
+              </div>
+            </div>
+
+            <t t-set="rank" t-value="1"/>
+            <t t-set="tamt" t-value="0.0"/>
+            <t t-set="tmale" t-value="0"/>
+            <t t-set="tfemale" t-value="0"/>
+            <t t-set="ttotal" t-value="0"/>
+
+            <table class="table table-condensed">
+              <thead>
+                <tr>
+                  <th>Loan Product</th>
+                  <th class="text-center">Ranking</th>
+                  <th class="text-right">Amount</th>
+                  <th class="text-right">Male</th>
+                  <th class="text-right">Female</th>
+                  <th class="text-right">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr t-foreach="docs" t-as="o">
+                  <td><span t-esc="o['name']"/></td>
+                  <td class="text-center"><span t-esc="rank"/></td>
+                  <td class="text-right">
+                    <span t-att-style="style" t-esc="o['amount']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                  </td>
+                  <td class="text-right"><span t-esc="o['male']"/></td>
+                  <td class="text-right"><span t-esc="o['female']"/></td>
+                  <td class="text-right"><span t-esc="o['total']"/></td>
+
+                  <t t-set="rank" t-value="rank +1"/>
+                  <t t-set="tamt" t-value="tamt + o['amount']"/>
+                  <t t-set="tmale" t-value="tmale + o['male']"/>
+                  <t t-set="tfemale" t-value="tfemale + o['female']"/>
+                  <t t-set="ttotal" t-value="ttotal + o['total']"/>
+
+                </tr>
+              </tbody>
+
+              <tfooter>
+                <tr>
+                  <th>
+                    GRAND TOTAL:
+                  </th>
+                  <th></th>
+                  <th class="text-right">
+                    <span t-att-style="style" t-esc="tamt" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                  </th>
+                  <th class="text-right"><span t-esc="tmale"/></th>
+                  <th class="text-right"><span t-esc="tfemale"/></th>
+                  <th class="text-right"><span t-esc="ttotal"/></th>
+                </tr>
+              </tfooter>
+
+            </table>
+
+          </div> <!-- page -->
+      </t> <!-- html_container -->
+    </template>
+
+  </data>
+
+</odoo>

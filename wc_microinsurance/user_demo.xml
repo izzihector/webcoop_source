@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+  <data noupdate="0">
+
+    <record id="wc.user_manager_demo1" model="res.users">
+      <field name="groups_id" eval="[(4,ref('group_insurance_user'))]"/>
+    </record>
+
+    <record id="partner_insurance_user_demo1" model="res.partner">
+      <field name="name">Branch 1/2 Insurance Officer</field>
+      <field name="company_id" ref="wc.branch1"/>
+      <field name="customer" eval="False"/>
+      <field name="company_name">Branch 1</field>
+      <field name="email" eval="'ins1@example.com'"/>
+    </record>
+
+    <record id="user_insurance_user_demo1" model="res.users">
+      <field name="partner_id" ref="partner_insurance_user_demo1"/>
+      <field name="login">ins1</field>
+      <field name="password">ins1</field>
+      <field name="company_id" ref="wc.branch1"/>
+      <field name="company_ids" eval="[(4, ref('wc.branch1')),(4, ref('wc.branch2'))]"/>
+      <field name="groups_id" eval="[(6,0,[ref('group_insurance_user')])]"/>
+      <field name="notify_email">none</field>
+    </record>
+
+    <record id="partner_insurance_user_demo2" model="res.partner">
+      <field name="name">Branch 2 Insurance Officer</field>
+      <field name="company_id" ref="wc.branch2"/>
+      <field name="customer" eval="False"/>
+      <field name="company_name">Branch 2</field>
+      <field name="email" eval="'ins2@example.com'"/>
+    </record>
+
+    <record id="user_insurance_user_demo2" model="res.users">
+      <field name="partner_id" ref="partner_insurance_user_demo2"/>
+      <field name="login">ins2</field>
+      <field name="password">ins2</field>
+      <field name="company_id" ref="wc.branch2"/>
+      <field name="company_ids" eval="[(4, ref('wc.branch2'))]"/>
+      <field name="groups_id" eval="[(6,0,[ref('group_insurance_user')])]"/>
+      <field name="notify_email">none</field>
+    </record>
+
+    <record id="partner_insurance_user_demo3" model="res.partner">
+      <field name="name">Branch 3 Insurance Officer</field>
+      <field name="company_id" ref="wc.branch3"/>
+      <field name="customer" eval="False"/>
+      <field name="company_name">Branch 3</field>
+      <field name="email" eval="'ins2@example.com'"/>
+    </record>
+
+    <record id="user_insurance_user_demo3" model="res.users">
+      <field name="partner_id" ref="partner_insurance_user_demo3"/>
+      <field name="login">ins3</field>
+      <field name="password">ins3</field>
+      <field name="company_id" ref="wc.branch3"/>
+      <field name="company_ids" eval="[(4, ref('wc.branch3'))]"/>
+      <field name="groups_id" eval="[(6,0,[ref('group_insurance_user')])]"/>
+      <field name="notify_email">none</field>
+    </record>
+
+  </data>
+</odoo>

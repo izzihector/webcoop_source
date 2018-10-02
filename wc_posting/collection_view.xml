@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <record id="form_collection_inh" model="ir.ui.view">
+    <field name="name">form_collection_inh</field>
+    <field name="model">wc.collection</field>
+    <field name="inherit_id" ref="wc_collection.form_collection"/>
+    <field name="arch" type="xml">
+
+      <field name="amount" position="after">
+        <field name="posting_id" invisible="1"/>
+      </field>
+
+      <field name="in_branch" position="attributes">
+        <attribute name="attrs">{'readonly':[('posting_id','!=',False)]}</attribute>
+      </field>
+
+      <field name="schedule" position="attributes">
+        <attribute name="attrs">{'readonly':[('posting_id','!=',False)]}</attribute>
+      </field>
+
+    </field>
+  </record>
+
+  <record id="tree_details" model="ir.ui.view">
+    <field name="name">tree_details</field>
+    <field name="model">wc.collection.line</field>
+    <field name="inherit_id" ref="wc_collection.tree_details"/>
+    <field name="arch" type="xml">
+      <field name="amount" position="after">
+        <field name="posting_id"/>
+      </field>
+    </field>
+  </record>
+
+  <record id="form_collection_details" model="ir.ui.view">
+    <field name="name">form_collection_details</field>
+    <field name="model">wc.collection.line</field>
+    <field name="inherit_id" ref="wc_collection.form_collection_details"/>
+    <field name="arch" type="xml">
+      <field name="name" position="after">
+        <field name="insurance_id"
+          options="{'no_create':True, 'no_edit':True, 'no_open':True}"
+          attrs="{'invisible':[('insurance_id','=',False)]}"/>
+        <field name="insurance_collectible_id"
+          options="{'no_create':True, 'no_edit':True, 'no_open':True}"
+          attrs="{'invisible':[('insurance_collectible_id','=',False)]}"/>
+        <field name="posting_id"/>
+      </field>
+    </field>
+  </record>
+
+
+</odoo>

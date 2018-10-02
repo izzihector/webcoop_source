@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+<!-- remove later, disable first because unfinished
+-->
+
+  <record id="form_collection_inherit" model="ir.ui.view">
+    <field name="name">form_collection_inherit</field>
+    <field name="model">wc.collection</field>
+    <field name="inherit_id" ref="wc_collection.form_collection"/>
+    <field name="arch" type="xml">
+
+      <field name="note" position="after">
+        <field name="new_payment_type_id" states="draft" class="oe_edit_only"/>
+        <label for="oc_amount" states="draft" class="oe_edit_only"/>
+        <div class="o_row oe_edit_only">
+          <field name="oc_amount" nolabel="1" states="draft" class="oe_edit_only"/>
+          <button name="add_others" type="object" icon="fa-plus-circle" states='draft'>
+            <span>Add</span>
+          </button>
+        </div>
+        <!--
+        <field name="partner_id" attrs="{'readonly': [('state','!=','draft')]}" class="oe_edit_only"/>
+      -->
+      </field>
+
+<!--
+      <xpath expr="//field[@name='line_ids']/tree/field[@name='name']" position="after">
+        <field name="partner_id" readonly="1"/>
+      </xpath>
+-->
+    </field>
+
+  </record>
+
+</odoo>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <!-- loans AGAY_AYAN_s1.xlsx-->
+  <record id="loan_demo_1" model="wc.loan">
+    <field name="sequence">10</field>
+    <field name="name">Demo Loan 1</field>
+    <field name="partner_id" ref="base.res_partner_1"/>
+    <field name="amount">500000</field>
+    <field name="date">2015-03-11</field>
+    <field name="maturity">60</field>
+    <field name="payment_interval">3</field>
+    <field name="interest_rate">9</field>
+  </record>
+  <function id="fn1" model="wc.loan" name="generate_schedule" eval="[[ref('wc_loan.loan_demo_1')]]"/>
+  <function id="fn2" model="wc.loan" name="move_to_for_approval" eval="[[ref('wc_loan.loan_demo_1')]]"/>
+  <function id="fn3" model="wc.loan" name="move_to_approved" eval="[[ref('wc_loan.loan_demo_1')]]"/>
+
+  <record id="test_loan_1" model="wc.loan">
+    <field name="sequence">10</field>
+    <field name="name">Test Loan 1</field>
+    <field name="partner_id" ref="base.res_partner_1"/>
+    <field name="amount">500000</field>
+    <field name="date">2015-03-11</field>
+    <field name="maturity">60</field>
+    <field name="payment_interval">3</field>
+    <field name="interest_rate">9</field>
+  </record>
+
+  <function id="fn1" model="wc.loan" name="generate_schedule" eval="[[ref('wc_loan.test_loan_1')]]"/>
+  <function id="fn2" model="wc.loan" name="move_to_for_approval" eval="[[ref('wc_loan.test_loan_1')]]"/>
+  <function id="fn3" model="wc.loan" name="move_to_approved" eval="[[ref('wc_loan.test_loan_1')]]"/>
+
+  <record id="loan_demo_2" model="wc.loan">
+    <field name="sequence">20</field>
+    <field name="name">Demo Loan 2</field>
+    <field name="partner_id" ref="base.res_partner_2"/>
+    <field name="amount">1000000</field>
+    <field name="date">2016-09-14</field>
+    <field name="maturity">12</field>
+    <field name="payment_interval">1</field>
+    <field name="interest_rate">8.5</field>
+  </record>
+
+  <function id="fn11" model="wc.loan" name="generate_schedule" eval="[[ref('wc_loan.loan_demo_2')]]"/>
+  <function id="fn2" model="wc.loan" name="move_to_for_approval" eval="[[ref('wc_loan.loan_demo_2')]]"/>
+  <function id="fn3" model="wc.loan" name="move_to_approved" eval="[[ref('wc_loan.loan_demo_2')]]"/>
+
+  <!-- payments -->
+  <!--
+  <record id="payment_1" model="wc.loan.payment">
+    <field name="loan_id" ref="wc_loan.loan_demo_1" />
+    <field name="name">Payment 1</field>
+    <field name="or_number">1234</field>
+    <field name="date">2015-04-12</field>
+    <field name="amount">25000</field>
+    <field name="check_number">555555</field>
+    <field name="state">confirmed</field>
+  </record>
+
+  <record id="payment_2" model="wc.loan.payment">
+    <field name="loan_id" ref="wc_loan.loan_demo_1" />
+    <field name="name">Payment 2</field>
+    <field name="or_number">1234</field>
+    <field name="date">2015-09-25</field>
+    <field name="amount">20000</field>
+    <field name="check_number">555556</field>
+    <field name="state">confirmed</field>
+  </record>
+
+  <function id="soa1" model="wc.loan" name="generate_soa" eval="['2015-06-11']"/>
+  <function id="ppay1" model="wc.loan.payment" name="post_payment" eval="[[ref('wc_loan.payment_1')]]"/>
+-->
+  <!-- test -->
+
+</odoo>

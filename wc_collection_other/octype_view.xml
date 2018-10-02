@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <record id="form_oc_payment_type" model="ir.ui.view">
+    <field name="name">form_oc_payment_type</field>
+    <field name="model">wc.oc.payment.type</field>
+    <field name="arch" type="xml">
+      <form>
+        <group>
+          <field name="company_id" groups="base.group_multi_company"/>
+          <field name="name"/>
+          <field name="gl_account_id"/>
+          <field name="note"/>
+        </group>
+      </form>
+    </field>
+  </record>
+
+  <record id="tree_oc_payment_type" model="ir.ui.view">
+    <field name="name">tree_oc_payment_type</field>
+    <field name="model">wc.oc.payment.type</field>
+    <field name="arch" type="xml">
+      <tree string="Other Collection Types" class="wc_tree" editable="bottom">
+        <field name="company_id" groups="base.group_multi_company"/>
+        <field name="name"/>
+        <field name="gl_account_id" required="1"/>
+        <field name="note"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="open_oc_payment_type" model="ir.actions.act_window">
+    <field name="name">Other Collection Types</field>
+    <field name="res_model">wc.oc.payment.type</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="help" type="html">
+      <p class="oe_view_nocontent_create">
+        Click to create a new other payment collection type.
+      </p>
+    </field>
+  </record>
+
+  <menuitem
+    id="menu_oc_payment_type"
+    action="open_oc_payment_type"
+    sequence="6000"
+    parent="wc.menu_config"
+  />
+
+</odoo>

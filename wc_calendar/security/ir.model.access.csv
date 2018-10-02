@@ -1,0 +1,4 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+access_ez_holiday,access_ez_holiday,model_ez_holiday,,1,0,0,0
+access_ez_holiday1,access_ez_holiday1,model_ez_holiday,wc.group_manager,1,1,1,1
+access_ez_holiday2,access_ez_holiday2,model_ez_holiday,wc.group_sys_manager,1,1,1,1

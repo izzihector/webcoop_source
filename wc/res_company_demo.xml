@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+  <data noupdate="1">
+
+    <record id="partner1" model="res.partner">
+        <field name="name">Branch 1</field>
+        <field name="company_id" eval="None"/>
+        <field name="customer" eval="False"/>
+        <field name="is_company" eval="True"/>
+        <field name="email">mpc@example.com</field>
+        <field name="website">www.eztechsoft.com</field>
+    </record>
+
+    <record id="branch1" model="res.company">
+        <field name="name">Branch 1</field>
+        <field name="partner_id" ref="partner1"/>
+        <field name="parent_id" ref="base.main_company"/>
+        <field name="currency_id" ref="base.PHP"/>
+        <field name="branch_code">001</field>
+    </record>
+
+    <record id="partner2" model="res.partner">
+        <field name="name">Branch 2</field>
+        <field name="company_id" eval="None"/>
+        <field name="customer" eval="False"/>
+        <field name="is_company" eval="True"/>
+        <field name="email">mpc@example.com</field>
+        <field name="website">www.eztechsoft.com</field>
+    </record>
+
+    <record id="branch2" model="res.company">
+        <field name="name">Branch 2</field>
+        <field name="partner_id" ref="partner2"/>
+        <field name="parent_id" ref="base.main_company"/>
+        <field name="currency_id" ref="base.PHP"/>
+        <field name="branch_code">002</field>
+    </record>
+
+    <record id="partner3" model="res.partner">
+        <field name="name">Branch 3</field>
+        <field name="company_id" eval="None"/>
+        <field name="customer" eval="False"/>
+        <field name="is_company" eval="True"/>
+        <field name="email">mpc@example.com</field>
+        <field name="website">www.eztechsoft.com</field>
+    </record>
+
+    <record id="branch3" model="res.company">
+        <field name="name">Branch 3</field>
+        <field name="partner_id" ref="partner3"/>
+        <field name="parent_id" ref="base.main_company"/>
+        <field name="currency_id" ref="base.PHP"/>
+        <field name="branch_code">003</field>
+    </record>
+
+  </data>
+</odoo>

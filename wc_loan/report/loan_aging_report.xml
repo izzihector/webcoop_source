@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+
+<odoo>
+
+  <report
+    id="id_report_aging"
+    model="wc.loan"
+    string="Aging"
+    report_type="qweb-pdf"
+    attachment_use="False"
+    name="wc_loan.report_aging"
+    file="wc_loan.report_aging"
+    paperformat="wc.long13_landscape"
+    menu="False"
+  />
+
+  <report
+    id="id_report_delinquency"
+    model="wc.loan"
+    string="Aging"
+    report_type="qweb-pdf"
+    attachment_use="False"
+    name="wc_loan.report_delinquency"
+    file="wc_loan.report_delinquency"
+    paperformat="wc.letter_portrait"
+    menu="False"
+  />
+
+
+  <template id="report_aging">
+    <t t-call="report.html_container">
+      <div class="page">
+        <div class="row">
+          <div class="col-xs-12 text-center">
+            <strong>
+              <div style="font-size: 18px;" t-field="res_company.name"/>
+            </strong>
+            <div t-field="res_company.partner_id.address2"/>
+          </div>
+          <div class="col-xs-12 text-center mt24 mb16">
+            <div style="font-size: 18px;">
+              <strong><span t-esc="title"/></strong>
+            </div>
+            <div>
+              As of <span t-esc="as_of"/>
+            </div>
+          </div>
+        </div>
+
+        <t t-set="t" t-value="{}"/>
+        <t t-set="tprincipal" t-value="0"/>
+        <t t-set="tbal" t-value="0"/>
+        <table class="table table-condensed">
+          <thead>
+            <tr>
+              <th>Member</th>
+              <th>Code</th>
+              <th>Loan Type</th>
+              <th class="text-right">Start</th>
+              <th class="text-right">Maturity</th>
+              <th class="text-right">Amount</th>
+              <th class="text-right">Balance</th>
+              <th class="text-right">Current</th>
+              <th class="text-right no-warp">1-30</th>
+              <th class="text-right no-warp">31-60</th>
+              <th class="text-right no-warp">61-90</th>
+              <th class="text-right no-warp">91-180</th>
+              <th class="text-right no-warp">181-365</th>
+              <th class="text-right no-warp">&gt;365</th>
+              <th class="text-right no-warp">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr t-foreach="docs" t-as="o">
+              <t t-set="d" t-value="o.get_aging_data(date_as_of)"/>
+              <td><span class="no-warp" t-field="o.member_id"/></td>
+              <td><span class="no-warp" t-field="o.member_id.code"/></td>
+              <td><span class="no-warp" t-field="o.loan_type_id.description"/></td>
+              <td class="text-right"><span t-field="o.date_start"/></td>
+              <td class="text-right"><span t-field="o.date_maturity"/></td>
+              <td class="text-right"><span t-field="o.amount"/></td>
+              <td class="text-right"><span t-field="o.principal_balance"/></td>
+              <td class="text-right">
+                <span t-att-style="style" t-esc="nfmt(d['current'])"/>
+              </td>
+              <td class="text-right">
+                <span t-att-style="style" t-esc="nfmt(d['pd_30'])"/>
+              </td>
+              <td class="text-right">
+                <span t-att-style="style" t-esc="nfmt(d['pd_60'])"/>
+              </td>
+              <td class="text-right">
+                <span t-att-style="style" t-esc="nfmt(d['pd_90'])"/>
+              </td>
+              <td class="text-right">
+                <span t-att-style="style" t-esc="nfmt(d['pd_180'])"/>
+              </td>
+              <td class="text-right">
+                <span t-att-style="style" t-esc="nfmt(d['pd_365'])"/>
+              </td>
+              <td class="text-right">
+                <span t-att-style="style" t-esc="nfmt(d['pd_over1y'])"/>
+              </td>
+              <td class="text-right">
+                <span t-att-style="style" t-esc="nfmt(d['pd_total'])"/>
+              </td>
+              <t t-set="tprincipal" t-value="tprincipal+o.amount"/>
+              <t t-set="tbal" t-value="tbal+o.principal_balance"/>
+              <t t-set="t" t-value="add_total(t, d)"/>
+            </tr> <!-- docs -->
+          </tbody>
+          <tfooter>
+            <t t-if="t">
+              <tr>
+                <th class="text-right" colspan="5">
+                  GRAND TOTAL:
+                </th>
+                <th class="text-right">
+                  <span t-att-style="style" t-esc="nfmt(tprincipal)"/>
+                </th>
+                <th class="text-right">
+                  <span t-att-style="style" t-esc="nfmt(tbal)"/>
+                </th>
+                <th class="text-right">
+                  <span t-att-style="style" t-esc="nfmt(t['current'])"/>
+                </th>
+                <th class="text-right">
+                  <span t-att-style="style" t-esc="nfmt(t['pd_30'])"/>
+                </th>
+                <th class="text-right">
+                  <span t-att-style="style" t-esc="nfmt(t['pd_60'])"/>
+                </th>
+                <th class="text-right">
+                  <span t-att-style="style" t-esc="nfmt(t['pd_90'])"/>
+                </th>
+                <th class="text-right">
+                  <span t-att-style="style" t-esc="nfmt(t['pd_180'])"/>
+                </th>
+                <th class="text-right">
+                  <span t-att-style="style" t-esc="nfmt(t['pd_365'])"/>
+                </th>
+                <th class="text-right">
+                  <span t-att-style="style" t-esc="nfmt(t['pd_over1y'])"/>
+                </th>
+                <th class="text-right">
+                  <span t-att-style="style" t-esc="nfmt(t['pd_total'])"/>
+                </th>
+              </tr>
+            </t>
+          </tfooter>
+        </table>
+      </div> <!-- page -->
+    </t> <!-- report.html_container -->
+  </template>
+
+
+  <template id="report_delinquency">
+    <t t-call="report.html_container">
+      <div class="page">
+
+        <div class="row">
+          <div class="col-xs-12 text-center">
+            <strong>
+              <div style="font-size: 18px;" t-field="res_company.name"/>
+            </strong>
+            <div t-field="res_company.partner_id.address2"/>
+          </div>
+          <div class="col-xs-12 text-center mt24 mb32">
+            <div style="font-size: 18px;">
+              <strong><span t-esc="title"/></strong>
+            </div>
+            <div>
+              As of <span t-esc="as_of"/>
+            </div>
+          </div>
+        </div>
+
+        <table class="table table-condensed">
+          <thead>
+            <tr>
+              <th>PARTICULARS</th>
+              <th class="text-right">AMOUNT</th>
+              <t t-if="show_percent">
+                <th class="text-right">PERCENTAGE (%)</th>
+              </t>
+            </tr>
+          </thead>
+          <tbody>
+            <t t-if="show_percent">
+              <tr>
+                <th colspan="3"><br/>LOANS RECEIVABLE - CURRENT</th>
+              </tr>
+              <tr>
+                <td>NOT YET DUE</td>
+                <td class="text-right"><span t-esc="nfmt(res.notdue)"/></td>
+                <td class="text-right"><span t-esc="nfmt(100.0*res.notdue/res.balance)"/></td>
+              </tr>
+              <tr>
+                <td>CURRENT DUE</td>
+                <td class="text-right"><span t-att-style="style" t-esc="nfmt(res.current)"/></td>
+                <td class="text-right"><span t-esc="nfmt(100.0*res.current/res.balance)"/></td>
+              </tr>
+            </t>
+            <tr>
+              <th>TOTAL LOANS RECEIVABLE - CURRENT</th>
+              <th class="text-right"><span t-esc="nfmt(res.notdue + res.current)"/></th>
+              <t t-if="show_percent">
+                <th class="text-right"><span t-esc="nfmt(100.0*(res.notdue + res.current)/res.balance)"/></th>
+              </t>
+            </tr>
+            <tr>
+              <t t-if="show_percent">
+                <th colspan="3"><br/>LOANS RECEIVABLE - PAST DUE</th>
+              </t>
+              <t t-if="not show_percent">
+                <th colspan="2"><br/>LOANS RECEIVABLE - PAST DUE</th>
+              </t>
+            </tr>
+            <tr>
+              <td>1 TO 30 DAYS</td>
+              <td class="text-right"><span t-esc="nfmt(res.pd_30)"/></td>
+              <t t-if="show_percent">
+                <td class="text-right"><span t-esc="nfmt(100.0*res.pd_30/res.balance)"/></td>
+              </t>
+            </tr>
+            <tr>
+              <td>31 TO 60 DAYS</td>
+              <td class="text-right"><span t-esc="nfmt(res.pd_60)"/></td>
+              <t t-if="show_percent">
+                <td class="text-right"><span t-esc="nfmt(100.0*res.pd_60/res.balance)"/></td>
+              </t>
+            </tr>
+            <tr>
+              <td>61 TO 90 DAYS</td>
+              <td class="text-right"><span t-esc="nfmt(res.pd_90)"/></td>
+              <t t-if="show_percent">
+                <td class="text-right"><span t-esc="nfmt(100.0*res.pd_90/res.balance)"/></td>
+              </t>
+            </tr>
+            <tr>
+              <td>91 TO 180 DAYS</td>
+              <td class="text-right"><span t-esc="nfmt(res.pd_180)"/></td>
+              <t t-if="show_percent">
+                <td class="text-right"><span t-esc="nfmt(100.0*res.pd_180/res.balance)"/></td>
+              </t>
+            </tr>
+            <tr>
+              <td>181 TO 365 DAYS</td>
+              <td class="text-right"><span t-esc="nfmt(res.pd_365)"/></td>
+              <t t-if="show_percent">
+                <td class="text-right"><span t-esc="nfmt(100.0*res.pd_365/res.balance)"/></td>
+              </t>
+            </tr>
+            <tr>
+              <td>OVER 365 DAYS</td>
+              <td class="text-right"><span t-esc="nfmt(res.pd_over1y)"/></td>
+              <t t-if="show_percent">
+                <td class="text-right"><span t-esc="nfmt(100.0*res.pd_over1y/res.balance)"/></td>
+              </t>
+            </tr>
+            <tr>
+              <th>TOTAL LOANS RECEIVABLE - PAST DUE</th>
+              <th class="text-right"><span t-esc="nfmt(res.tpdue)"/></th>
+              <t t-if="show_percent">
+                <th class="text-right"><span t-esc="nfmt(100.0*(res.tpdue)/res.balance)"/></th>
+              </t>
+            </tr>
+
+            <tr>
+              <t t-if="show_percent">
+                <td colspan="3">
+                  <div style="color:white;">-</div>
+                </td>
+              </t>
+              <t t-if="not show_percent">
+                <td colspan="2">
+                  <div style="color:white;">-</div>
+                </td>
+              </t>
+            </tr>
+
+            <tr>
+              <th style="border-top:solid 2px black;border-bottom:solid 2px black;">
+                TOTAL
+              </th>
+              <th class="text-right" style="border-top:solid 2px black;border-bottom:solid 2px black;">
+                <t t-if="show_percent">
+                  <span t-esc="nfmt(res.balance)"/>
+                </t>
+                <t t-if="not show_percent">
+                  <span t-esc="nfmt(res.tpdue)"/>
+                </t>
+              </th>
+              <t t-if="show_percent">
+                <th class="text-right" style="border-top:solid 2px black;border-bottom:solid 2px black;">
+                  <span t-esc="nfmt(100.0)"/>
+                </th>
+              </t>
+            </tr>
+
+          </tbody>
+        </table>
+
+      </div> <!-- page -->
+    </t> <!-- report.html_container -->
+  </template>
+
+</odoo>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <record id="tree_ibtrans" model="ir.ui.view">
+    <field name="name">tree_ibtrans</field>
+    <field name="model">wc.account.ibtrans</field>
+    <field name="arch" type="xml">
+      <tree string="Transactions" create="1" delete="0" class="wc_tree"
+          colors="red:state=='draft';green:state=='clearing';blue:state=='for-approval';brown:state=='cancelled';">
+        <!--
+        <field name="company_id"/>
+      -->
+        <field name="company_id" groups="base.group_multi_company"/>
+        <field name="other_company_id"/>
+        <field name="name"/>
+        <field name="account_id"/>
+        <field name="date"/>
+        <field name="reference"/>
+        <field name="trcode_id"/>
+        <field name="deposit"/>
+        <field name="withdrawal"/>
+        <field name="teller_id"/>
+        <field name="state"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="form_ibtrans" model="ir.ui.view">
+    <field name="name">form_ibtrans</field>
+    <field name="model">wc.account.ibtrans</field>
+    <field name="arch" type="xml">
+      <form string="Transaction" create="1" delete="0">
+
+        <header>
+          <button name="ib_confirm" string="Confirm" states="draft"
+            confirm="Are you sure you want to confirm this transaction?"
+            class="oe_highlight oe_read_only" type="object" />
+
+          <button name="ib_approve" string="Approve" states="for-approval"
+            confirm="Are you sure you want to approve this transaction?"
+            groups="wc.group_manager"
+            class="oe_highlight oe_read_only" type="object" />
+
+          <button name="ib_cancel" string="Cancel"
+            confirm="Are you sure you want to cancel this transaction?"
+            groups="wc.group_manager" class="oe_read_only"
+            states="for-approval,draft" type="object" />
+
+          <button name="print_validation" string="Print Validation"
+            states="confirmed" type="object" />
+
+          <field name="state" widget="statusbar" readonly="1"/>
+        </header>
+
+        <sheet>
+          <field name="name" invisible="1"/>
+          <div class="oe_title">
+            <h1>
+              <field name="name"/>
+            </h1>
+          </div>
+
+          <group>
+            <group>
+
+              <field name="company_id"/>
+              <!--
+              <field name="other_company_id"/>
+            -->
+              <field name="other_company_id"
+                options="{'no_create':True, 'no_edit':True, 'no_open':False}"
+                domain="[('id','not in',[company_id])]"/>
+
+              <label for="ib_account_code"/>
+              <div class="o_row">
+                <field name="ib_account_code"/>
+                <button name="ib_search" string="Search"
+                  class="oe_edit_only"
+                  states="draft" type="object" />
+              </div>
+
+              <field name="account_id" readonly="1"
+                options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+              <field name="account_type"/>
+              <field name="balance"/>
+              <field name="new_balance"/>
+              <field name="teller_id"
+                options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+              <field name="is_deposit" invisible="1"/>
+              <field name="is_withdrawal" invisible="1"/>
+              <field name="account_type2" invisible="1"/>
+              <field name="trans_type" invisible="1"/>
+            </group>
+            <group>
+              <field name="date"/>
+              <field name="trcode_id" domain="[('trans_type','=','ib')]"
+                options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+              <field name="reference"/>
+              <field name="deposit" attrs="{'invisible': [('is_deposit','=',False)]}"/>
+              <field name="withdrawal" attrs="{'invisible': [('is_withdrawal','=',False)]}"/>
+              <field name="transaction_id"
+                options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+            </group>
+            <group string="Notes" colspan="2">
+              <field name="note" nolabel="1"/>
+            </group>
+          </group>
+        </sheet>
+
+        <div class="oe_chatter">
+          <field name="message_follower_ids" widget="mail_followers"/>
+          <field name="message_ids" widget="mail_thread"/>
+        </div>
+
+      </form>
+    </field>
+  </record>
+
+  <record id="search_transaction" model="ir.ui.view">
+    <field name="name">search_transaction</field>
+    <field name="model">wc.account.ibtrans</field>
+    <field name="arch" type="xml">
+      <search>
+        <field name="ib_account_code"/>
+        <field name="other_company_id"/>
+        <field name="name"/>
+        <field name="date"/>
+        <field name="reference"/>
+        <field name="teller_id"/>
+        <filter name="draft" string="Draft" domain="[('state','=','draft')]"/>
+      </search>
+    </field>
+  </record>
+
+  <record id="action_ibtrans" model="ir.actions.act_window">
+    <field name="name">Interbranch Transactions</field>
+    <field name="res_model">wc.account.ibtrans</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="context" eval="{
+      'default_trcode_id':ref('wc_account_interbranch.tr_ib_deposit'),
+    }"/>
+  </record>
+
+  <menuitem id="menu_ibtrans"
+    sequence="10000"
+    action="action_ibtrans"
+    parent="wc_account.menu_account"
+    groups="wc.group_teller"
+  />
+
+</odoo>

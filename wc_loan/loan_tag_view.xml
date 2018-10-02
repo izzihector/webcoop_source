@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <record id="form_loan_tag" model="ir.ui.view">
+    <field name="name">form_loan_tag</field>
+    <field name="model">wc.loan.tag</field>
+    <field name="arch" type="xml">
+      <form string="Loan Tags">
+        <group>
+          <field name="name"/>
+          <!--
+          <field name="loan_ids" widget="many2many_tags"/>
+        -->
+          <field name="note"/>
+        </group>
+      </form>
+    </field>
+  </record>
+
+  <record id="tree_loan_tag" model="ir.ui.view">
+    <field name="name">tree_loan_tag</field>
+    <field name="model">wc.loan.tag</field>
+    <field name="arch" type="xml">
+      <tree string="Loan Tags" class="wc_tree" editable="bottom">
+        <field name="name"/>
+        <field name="note"/>
+        <!--
+        <field name="loan_ids"/>
+      -->
+      </tree>
+    </field>
+  </record>
+
+  <record id="action_loan_tag" model="ir.actions.act_window">
+    <field name="name">Loan Tags</field>
+    <field name="res_model">wc.loan.tag</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <menuitem id="menu_loan_tag"
+    name="Loan Tags"
+    action="action_loan_tag"
+    groups="wc.group_sys_manager"
+    parent="wc.menu_config"
+    sequence="4020"
+  />
+
+</odoo>

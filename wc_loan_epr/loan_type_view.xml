@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <record id="form_loan_type_inherit" model="ir.ui.view">
+    <field name="name">form_loan_type_inherit</field>
+    <field name="model">wc.loan.type</field>
+    <field name="inherit_id" ref="wc_loan.form_loan_type"/>
+    <field name="arch" type="xml">
+
+      <field name="penalty_rate" position="after">
+        <field name="is_interest_epr"/>
+        <field name="round_to_peso" attrs="{'invisible':[('is_interest_epr','=',False)]}"/>
+        <field name="bulk_principal_payment" attrs="{'invisible':[('is_interest_epr','=',False)]}"/>
+        <field name="skip_saturday"
+          attrs="{'invisible':['|',('is_interest_epr','=',False),('payment_schedule','!=','day')]}"/>
+      </field>
+
+      <field name="is_fixed_payment_amount" position="attributes">
+        <attribute name="attrs">{'invisible':[('is_interest_epr','=',True)]}</attribute>
+      </field>
+
+    </field>
+  </record>
+
+  <record id="view_loan_inherit" model="ir.ui.view">
+    <field name="name">view_loan_inherit</field>
+    <field name="model">wc.loan</field>
+    <field name="inherit_id" ref="wc_loan.view_loan"/>
+    <field name="arch" type="xml">
+
+      <field name="cycle" position="after">
+        <field name="is_interest_epr" readonly="1" invisible="1"/>
+      </field>
+
+      <field name="is_fixed_payment_amount" position="before">
+        <field name="bulk_principal_payment"/>
+      </field>
+
+      <field name="is_fixed_payment_amount" position="attributes">
+        <attribute name="attrs">{'invisible':[('is_interest_epr','=',True)]}</attribute>
+      </field>
+
+    </field>
+  </record>
+
+</odoo>

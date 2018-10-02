@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <record id="form_account_inherit" model="ir.ui.view">
+    <field name="name">form_account_inherit</field>
+    <field name="model">wc.account</field>
+    <field name="inherit_id" ref="wc_account.form_account"/>
+    <field name="arch" type="xml">
+
+      <field name="member_type" position="after">
+        <field name="hold_amount"/>
+        <field name="hold_date"/>
+      </field>
+
+    </field>
+  </record>
+
+</odoo>

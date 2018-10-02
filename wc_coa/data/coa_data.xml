@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="1">
+
+    <!-- Account Templates-->
+    <!-- ASSET -->
+
+    <record id="cao_inventory" model="account.account.template">
+      <field name="code">1141</field>
+      <field name="user_type_id" ref="account.data_account_type_current_assets"/>
+      <field name="name">Inventory</field>
+      <field name="chart_template_id" ref="ca_webcoop"/>
+    </record>
+
+    <record id="coa_stock_input" model="account.account.template">
+      <field name="code">1142</field>
+      <field name="name">Stock Interim Account (Received)</field>
+      <field name="user_type_id" ref="account.data_account_type_current_assets"/>
+      <field name="chart_template_id" ref="ca_webcoop"/>
+    </record>
+
+    <record id="coa_stock_output" model="account.account.template">
+      <field name="code">1143</field>
+      <field name="name">Stock Interim Account (Delivered)</field>
+      <field name="user_type_id" ref="account.data_account_type_current_assets"/>
+      <field name="chart_template_id" ref="ca_webcoop"/>
+    </record>
+
+    <record id="coa_ar" model="account.account.template">
+      <field name="code">1151</field>
+      <field name="user_type_id" ref="account.data_account_type_receivable"/>
+      <field name="reconcile" eval="True"/>
+      <field name="name">Account Receivable</field>
+      <field name="chart_template_id" ref="ca_webcoop"/>
+    </record>
+
+    <record id="coa_ar_loan" model="account.account.template">
+      <field name="code">1160</field>
+      <field name="user_type_id" ref="account.data_account_type_current_assets"/>
+      <field name="reconcile" eval="True"/>
+      <field name="name">Member Loan Receivable</field>
+      <field name="chart_template_id" ref="ca_webcoop"/>
+    </record>
+
+    <record id="chart1181_en" model="account.account.template">
+      <field name="code">1181</field>
+      <field name="user_type_id" ref="account.data_account_type_current_assets"/>
+      <field name="reconcile" eval="False"/>
+      <field name="name">Input Tax</field>
+      <field name="chart_template_id" ref="ca_webcoop"/>
+    </record>
+
+    <record id="chart1182_en" model="account.account.template">
+      <field name="code">1182</field>
+      <field name="user_type_id" ref="account.data_account_type_current_assets"/>
+      <field name="reconcile" eval="False"/>
+      <field name="name">Creditable Withholding Tax</field>
+      <field name="chart_template_id" ref="ca_webcoop"/>
+    </record>
+
+    <!-- LIABILITIES -->
+
+    <record id="coa_ap" model="account.account.template">
+      <field name="code">2111</field>
+      <field name="user_type_id" ref="account.data_account_type_payable"/>
+      <field name="reconcile" eval="True"/>
+      <field name="name">Account Payable</field>
+      <field name="chart_template_id" ref="ca_webcoop"/>
+    </record>
+
+    <record id="chart2131_en" model="account.account.template">
+      <field name="code">2131</field>
+      <field name="user_type_id" ref="account.data_account_type_current_liabilities"/>
+      <field name="reconcile" eval="False"/>
+      <field name="name">Output Tax</field>
+      <field name="chart_template_id" ref="ca_webcoop"/>
+    </record>
+
+    <record id="chart2132_en" model="account.account.template">
+      <field name="code">2132</field>
+      <field name="user_type_id" ref="account.data_account_type_current_liabilities"/>
+      <field name="reconcile" eval="False"/>
+      <field name="name">Witholding Tax Payable</field>
+      <field name="chart_template_id" ref="ca_webcoop"/>
+    </record>
+
+    <record id="coa_vat_payable" model="account.account.template">
+      <field name="code">2134</field>
+      <field name="user_type_id" ref="account.data_account_type_current_liabilities"/>
+      <field name="reconcile" eval="False"/>
+      <field name="name">VAT Payable</field>
+      <field name="chart_template_id" ref="ca_webcoop"/>
+    </record>
+
+    <record id="chart21332_en" model="account.account.template">
+      <field name="code">2135</field>
+      <field name="user_type_id" ref="account.data_account_type_current_liabilities"/>
+      <field name="reconcile" eval="False"/>
+      <field name="name">Income Tax Payable</field>
+      <field name="chart_template_id" ref="ca_webcoop"/>
+    </record>
+
+    <record id="chart21433_en" model="account.account.template">
+      <field name="code">2136</field>
+      <field name="user_type_id" ref="account.data_account_type_current_liabilities"/>
+      <field name="name">SSS/ECC/Philhealth/Pag-ibig Premium Contributions Payable</field>
+      <field name="chart_template_id" ref="ca_webcoop"/>
+    </record>
+
+    <record id="coa_sa_account" model="account.account.template">
+      <field name="code">2220</field>
+      <field name="user_type_id" ref="account.data_account_type_current_liabilities"/>
+      <field name="reconcile" eval="True"/>
+      <field name="name">Savings Deposit</field>
+      <field name="chart_template_id" ref="ca_webcoop"/>
+    </record>
+
+    <record id="coa_td_account" model="account.account.template">
+      <field name="code">2221</field>
+      <field name="user_type_id" ref="account.data_account_type_current_liabilities"/>
+      <field name="reconcile" eval="True"/>
+      <field name="name">Time Deposit</field>
+      <field name="chart_template_id" ref="ca_webcoop"/>
+    </record>
+
+    <!-- EQUITY -->
+
+    <record id="chart3110_en" model="account.account.template">
+      <field name="code">3110</field>
+      <field name="user_type_id" ref="account.data_account_type_equity"/>
+      <field name="name">Capital</field>
+      <field name="chart_template_id" ref="ca_webcoop"/>
+    </record>
+
+    <record id="chart3120_en" model="account.account.template">
+      <field name="code">3120</field>
+      <field name="user_type_id" ref="account.data_account_type_equity"/>
+      <field name="name">Dividends</field>
+      <field name="chart_template_id" ref="ca_webcoop"/>
+    </record>
+
+    <!-- INCOME -->
+
+    <record id="coa_income" model="account.account.template">
+      <field name="code">411</field>
+      <field name="user_type_id" ref="account.data_account_type_revenue"/>
+      <field name="name">Sales</field>
+      <field name="chart_template_id" ref="ca_webcoop"/>
+    </record>
+
+    <record id="chart412_en" model="account.account.template">
+      <field name="code">412</field>
+      <field name="user_type_id" ref="account.data_account_type_revenue"/>
+      <field name="name">Income from Interest</field>
+      <field name="chart_template_id" ref="ca_webcoop"/>
+    </record>
+
+    <record id="chart413_en" model="account.account.template">
+      <field name="code">413</field>
+      <field name="user_type_id" ref="account.data_account_type_revenue"/>
+      <field name="name">Other Income</field>
+      <field name="chart_template_id" ref="ca_webcoop"/>
+    </record>
+
+    <!-- EXPENSES -->
+
+    <record id="coa_purchase" model="account.account.template">
+      <field name="code">5111</field>
+      <field name="user_type_id" ref="account.data_account_type_expenses"/>
+      <field name="name">Purchases</field>
+      <field name="chart_template_id" ref="ca_webcoop"/>
+    </record>
+
+    <record id="chart512101_en" model="account.account.template">
+      <field name="code">5120</field>
+      <field name="user_type_id" ref="account.data_account_type_expenses"/>
+      <field name="name">Salaries and Wages</field>
+      <field name="chart_template_id" ref="ca_webcoop"/>
+    </record>
+
+    <record id="chart512301_en" model="account.account.template">
+      <field name="code">5121</field>
+      <field name="user_type_id" ref="account.data_account_type_expenses"/>
+      <field name="name">SSS/ECC/Philhealth/Pag-ibig Employer Contributions</field>
+      <field name="chart_template_id" ref="ca_webcoop"/>
+    </record>
+
+    <record id="chart512304_en" model="account.account.template">
+      <field name="code">5122</field>
+      <field name="user_type_id" ref="account.data_account_type_expenses"/>
+      <field name="name">Employee benefits expense</field>
+      <field name="chart_template_id" ref="ca_webcoop"/>
+    </record>
+
+    <record id="chart412_en" model="account.account.template">
+      <field name="code">5131</field>
+      <field name="user_type_id" ref="account.data_account_type_expenses"/>
+      <field name="name">Interest Paid to Depositors</field>
+      <field name="chart_template_id" ref="ca_webcoop"/>
+    </record>
+
+    <record id="coa_fx_gain_loss" model="account.account.template">
+      <field name="name">Foreign Exchange Gain/Loss</field>
+      <field name="code">5132</field>
+      <field name="user_type_id" ref="account.data_account_type_expenses"/>
+      <field name="reconcile" eval="False"/>
+      <field name="chart_template_id" ref="ca_webcoop"/>
+    </record>
+
+  </data>
+</odoo>

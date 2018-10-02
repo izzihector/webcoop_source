@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <record id="form_loan_type_deduction" model="ir.ui.view">
+    <field name="name">form_loan_type_deduction</field>
+    <field name="model">wc.loan.type.deduction</field>
+    <field name="arch" type="xml">
+      <form>
+        <group>
+          <field name="sequence"/>
+          <field name="code"/>
+          <field name="name"/>
+          <field name="factor"/>
+          <field name="amount"/>
+          <field name="recurring"/>
+          <field name="net_include"/>
+          <field name="gl_account_id" required="1"/>
+        </group>
+      </form>
+    </field>
+  </record>
+
+  <record id="tree_loan_type_deduction" model="ir.ui.view">
+    <field name="name">tree_loan_type_deduction</field>
+    <field name="model">wc.loan.type.deduction</field>
+    <field name="arch" type="xml">
+      <tree class="wc_tree">
+        <field name="sequence"/>
+        <field name="code"/>
+        <field name="name"/>
+        <field name="factor"/>
+        <field name="amount"/>
+        <field name="recurring"/>
+        <field name="net_include"/>
+        <field name="gl_account_id" required="1"/>
+      </tree>
+    </field>
+  </record>
+
+  <!-- =========================================================== -->
+
+  <record id="form_loan_type" model="ir.ui.view">
+    <field name="name">form_loan_type</field>
+    <field name="model">wc.loan.type</field>
+    <field name="arch" type="xml">
+      <form string="Account Type">
+
+        <sheet>
+
+          <h1 class="o_row oe_read_only">
+            <field name="name"/>
+          </h1>
+          <div class="oe_title oe_edit_only">
+            <label for="code"/>
+            <h1>
+              <field name="code" placeholder="Code..."/>
+            </h1>
+            <label for="description"/>
+            <field name="description" placeholder="Description..."/>
+          </div>
+
+          <notebook>
+            <page name="info" string="Info">
+              <group>
+
+                <group string="Setup">
+                  <field name="company_id" groups="base.group_multi_company"/>
+                  <!--
+                  <field name="interest_rate"/>
+                -->
+                  <label for="interest_rate"/>
+                  <div name="div_interest">
+                    <field name="interest_rate" class="oe_inline" readonly="0"/>% per year
+                  </div>
+
+                  <field name="penalty_rate"/>
+                  <field name="is_penalty_on_interest"/>
+                  <field name="is_end_of_month_penalty"/>
+
+                  <field name="is_fixed_payment_amount"/>
+
+                  <!--
+                  <field name="is_360_day_year" invisible="1"/>
+                  -->
+                  <field name="days_in_year"/>
+
+                  <label for="maturity"/>
+                  <div class="o_row">
+                    <field name="maturity"/>
+                    <field name="maturity_period"/>
+                  </div>
+                  <field name="payment_schedule"/>
+                  <field name="sequence_id"/>
+                </group>
+
+                <group string="GL Accounts">
+                  <field name="ar_account_id"/>
+                  <field name="ar_pd_account_id"/>
+                  <field name="ap_account_id"/>
+                  <field name="interest_income_account_id"/>
+                  <field name="penalty_account_id"/>
+                </group>
+              </group>
+            </page>
+
+            <page string="Deductions" name="deductions">
+              <field name="deduction_ids" nolabel="1"/>
+            </page>
+
+            <page string="Notes" name="note">
+              <field name="note" nolabel="1"/>
+            </page>
+
+          </notebook>
+
+        </sheet>
+
+        <div class="oe_chatter">
+          <field name="message_follower_ids" widget="mail_followers"/>
+          <field name="message_ids" widget="mail_thread"/>
+        </div>
+
+      </form>
+    </field>
+  </record>
+
+  <record id="tree_loan_type" model="ir.ui.view">
+    <field name="name">tree_loan_type</field>
+    <field name="model">wc.loan.type</field>
+    <field name="arch" type="xml">
+      <tree string="Loan Types" class="wc_tree">
+        <field name="company_id" groups="base.group_multi_company"/>
+        <field name="name" invisible="1"/>
+        <field name="code"/>
+        <field name="description"/>
+        <field name="interest_rate"/>
+        <field name="maturity" string="Maturity-months"/>
+        <field name="payment_schedule"/>
+        <field name="note"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="action_loan_type" model="ir.actions.act_window">
+    <field name="name">Loan Types</field>
+    <field name="res_model">wc.loan.type</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <menuitem id="menu_loan_type"
+    name="Loan Types"
+    action="action_loan_type"
+    groups="wc_loan.group_loan_user,wc.group_sys_manager"
+    parent="wc.menu_config"
+    sequence="4010"
+  />
+
+</odoo>

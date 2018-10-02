@@ -1,0 +1,6 @@
+
+.table-responsive th[data-id='debit'],
+.table-responsive th[data-id='credit']
+{
+  text-align:right;
+}

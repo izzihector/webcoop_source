@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <record id="form_insurance_type" model="ir.ui.view">
+    <field name="name">form_insurance_type</field>
+    <field name="model">wc.insurance.type</field>
+    <field name="inherit_id" ref="wc_microinsurance.form_insurance_type"/>
+    <field name="arch" type="xml">
+      <field name="amount" position="after">
+        <field name="gl_account_id"/>
+      </field>
+    </field>
+  </record>
+
+  <record id="tree_insurance_type" model="ir.ui.view">
+    <field name="name">tree_insurance_type</field>
+    <field name="model">wc.insurance.type</field>
+    <field name="inherit_id" ref="wc_microinsurance.tree_insurance_type"/>
+    <field name="arch" type="xml">
+      <field name="amount" position="after">
+        <field name="gl_account_id"/>
+      </field>
+    </field>
+  </record>
+
+</odoo>

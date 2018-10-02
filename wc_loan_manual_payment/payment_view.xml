@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+  <record id="view_loan_payment_form_inherit" model="ir.ui.view">
+    <field name="name">view_loan_payment_form_inherit</field>
+    <field name="model">wc.loan.payment</field>
+    <field name="inherit_id" ref="wc_loan.view_loan_payment_form"/>
+    <field name="arch" type="xml">
+
+      <field name="amount" position="before">
+        <field name="is_manual_compute" attrs="{'invisible':[('payment_schedule','!=','lumpsum')]}"/>
+        <field name="principal_amount" attrs="{'invisible':[('is_manual_compute','=',False)]}"/>
+        <field name="interest_amount" attrs="{'invisible':[('is_manual_compute','=',False)]}"/>
+        <field name="penalty_amount" attrs="{'invisible':[('is_manual_compute','=',False)]}"/>
+        <field name="amount2" attrs="{'invisible':[('is_manual_compute','=',False)]}"/>
+      </field>
+
+      <field name="amount" position="attributes">
+        <attribute name="attrs">{
+          'invisible':[('is_manual_compute','=',True)],
+          'readonly':[('state', 'not in', ['draft'])],
+        }</attribute>
+      </field>
+
+    </field>
+  </record>
+
+  <record id="view_loan_payment_form_inherit2" model="ir.ui.view">
+    <field name="name">view_loan_payment_form_inherit2</field>
+    <field name="model">wc.loan.payment</field>
+    <field name="inherit_id" ref="wc_loan_manual_payment.view_loan_payment_form_inherit"/>
+    <field name="groups_id" eval="[(6, 0, [ref('base.group_system') ])]"/>
+    <field name="arch" type="xml">
+
+      <field name="amount" position="attributes">
+        <attribute name="attrs">{
+          'invisible':[('is_manual_compute','=',True)],
+        }</attribute>
+      </field>
+
+    </field>
+  </record>
+
+</odoo>

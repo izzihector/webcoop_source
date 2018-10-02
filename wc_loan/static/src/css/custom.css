@@ -1,0 +1,30 @@
+.wc_tree th[data-id='days'],
+.wc_tree th[data-id='interest_rate'],
+.wc_tree th[data-id='posted_amount'],
+.wc_tree th[data-id='unposted_amount'],
+.wc_tree th[data-id='principal_balance'],
+.wc_tree th[data-id='principal_due'],
+.wc_tree th[data-id='interest_due'],
+.wc_tree th[data-id='total_due'],
+.wc_tree th[data-id='amount'],
+.wc_tree th[data-id='penalty'],
+.wc_tree th[data-id='adjustment'],
+.wc_tree th[data-id='principal_paid'],
+.wc_tree th[data-id='interest_paid'],
+.wc_tree th[data-id='penalty_paid'],
+.wc_tree th[data-id='penalty_adjusted']
+{
+  text-align:right;
+}
+
+.ded_tree th[data-id='factor'],
+.ded_tree th[data-id='amount']
+{
+  text-align: right;
+  width: 150px;
+}
+
+.ded_tree th[data-id='name']
+{
+  width:200px;
+}

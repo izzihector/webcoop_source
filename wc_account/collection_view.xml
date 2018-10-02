@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <record id="form_collection_details_inherit" model="ir.ui.view">
+    <field name="name">form_collection_details_inherit</field>
+    <field name="model">wc.collection.line</field>
+    <field name="inherit_id" ref="wc_collection.form_collection_details"/>
+    <field name="arch" type="xml">
+      <field name="name" position="after">
+        <field name="account_id" attrs="{'invisible':[('account_id','=',False)]}"
+          options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+      </field>
+    </field>
+  </record>
+
+</odoo>

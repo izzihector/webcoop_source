@@ -1,0 +1,10 @@
+-
+    EzTech Software & Consultancy Inc. (c) 2017
+-
+    !python {model: ir.model.data, id: False} : |
+        bl_id = self.env.ref('account.account_financial_report_balancesheet0')
+        if bl_id:
+            bl_id.name = "Statement of Condition"
+        pl_id = self.env.ref('account.account_financial_report_profitandloss0')
+        if pl_id:
+            pl_id.name = "Statement of Operation"

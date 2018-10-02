@@ -1,0 +1,82 @@
+.wc_kanban_status_icon {
+  padding-top:5px;
+}
+
+.wc_hline {
+  border-bottom: 1px solid #000080;
+  padding-bottom: 3px;
+}
+
+.wc_info {
+    width: 200px;
+    font-weight: bold;
+}
+
+.wc_bold {
+  font-weight: bold;
+}
+
+.wc_button_box {
+  width:140px !important;
+}
+
+.wc_table {
+    width:100%;
+}
+
+.wc_border_top {
+  border-top: 1px;
+}
+
+.wc_right {
+  text-align: right;
+}
+
+.wc_title {
+  width:100% !important;
+}
+
+.wc_tree th[data-id='deposit'],
+.wc_tree th[data-id='withdrawal'],
+.wc_tree th[data-id='amount'],
+.wc_tree th[data-id='maintaining_balance'],
+.wc_tree th[data-id='dormant_penalty'],
+.wc_tree th[data-id='dormant_months'],
+.wc_tree th[data-id='interest_rate'],
+.wc_tree th[data-id='total_deposit'],
+.wc_tree th[data-id='total_withdrawal'],
+.wc_tree th[data-id='total_onclearing'],
+.wc_tree th[data-id='balance'],
+.wc_tree th[data-id='maturity'],
+.wc_tree th[data-id='comaker_count'],
+.wc_tree th[data-id='amount_due'],
+.wc_tree th[data-id='amount_paid'],
+.wc_tree th[data-id='factor'],
+.wc_tree th[data-id='others_due'],
+.wc_tree th[data-id='past_due_amount'],
+.wc_tree th[data-id='cbu_amount'],
+.wc_tree th[data-id='dividend'],
+.wc_tree th[data-id='patronage'],
+.wc_tree th[data-id='loan_count'],
+.wc_tree th[data-id='hold_amount'],
+.wc_tree th[data-id='age']
+{
+  text-align:right;
+}
+
+.table-responsive th[data-id='debit'],
+.table-responsive th[data-id='credit']
+{
+  text-align:right;
+}
+
+.wc_title {
+  width:800px;
+}
+
+.ded_details tr th,
+.ded_details tr td
+{
+  padding-right: 5px;
+  padding-left: 5px;
+}

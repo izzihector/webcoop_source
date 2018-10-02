@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <!-- Add custom css -->
+  
+  <template id="wc_assets_backend" name="wc_assets_backend" inherit_id="web.assets_backend">
+    <xpath expr="." position="inside">
+      <link rel="stylesheet" href="/wc/static/src/css/custom.css"/>
+    </xpath>
+  </template>
+
+  <!-- top menu -->
+
+  <menuitem id="menu_root"
+    name="Cooperative"
+    web_icon="wc,static/description/icon.png"
+    sequence="50"
+  />
+
+  <menuitem id="menu_dashboard"
+    name="Dashboard"
+    parent="menu_root"
+    sequence="1"
+  />
+
+  <menuitem id="menu_config"
+    name="Configuration"
+    parent="menu_root"
+    sequence="100000"
+  />
+
+</odoo>

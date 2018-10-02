@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <record id="view_loan_inh" model="ir.ui.view">
+    <field name="name">view_loan_inh</field>
+    <field name="model">wc.loan</field>
+    <field name="inherit_id" ref="wc_loan.view_loan"/>
+    <field name="groups_id" eval="[(6, 0, [ref('base.group_system') ])]"/>
+    <field name="arch" type="xml">
+
+      <button name="move_to_cancelled" position="replace">
+        <button name="move_to_cancelled"
+          confirm="Are you sure you to cancel this loan?"
+          groups="base.group_system"
+          string="Cancel" states="draft,approved" type="object" class="oe_read_only"/>
+      </button>
+
+      <button name="move_to_closed" position="replace">
+        <button name="move_to_closed" class="oe_read_only"
+          confirm="Are you sure you want to close this loan?"
+          groups="base.group_system"
+          states="draft,paid,approved,past-due"
+          string="Close Loan" type="object"/>
+        <button name="check_if_paid" class="oe_read_only"
+          groups="base.group_system"
+          states="approved,past-due"
+          string="Check if paid" type="object"/>
+      </button>
+
+      <field name="details" position="attributes">
+        <attribute name="readonly">0</attribute>
+      </field>
+
+      <field name="is_check_payment" position="attributes">
+        <attribute name="attrs">{}</attribute>
+      </field>
+
+      <field name="check_number" position="attributes">
+        <attribute name="attrs">{}</attribute>
+      </field>
+
+    </field>
+  </record>
+
+  <record id="view_loan_payment_form_inh2" model="ir.ui.view">
+    <field name="name">view_loan_payment_form_inh2</field>
+    <field name="model">wc.loan.payment</field>
+    <field name="inherit_id" ref="wc_loan.view_loan_payment_form"/>
+    <field name="groups_id" eval="[(6, 0, [ref('base.group_system') ])]"/>
+    <field name="arch" type="xml">
+
+      <field name="distributions" position="replace">
+        <field name="distributions" readonly="0">
+          <tree delete="1" create="1" edit="1" class="wc_tree">
+            <field name="detail_id"/>
+            <field name="payment_type"/>
+            <field name="code"/>
+            <field name="amount" sum="Total Amount"/>
+            <field name="deposit_account_id"/>
+            <field name="gl_account_id"/>
+          </tree>
+        </field>
+      </field>
+
+      <field name="amount" position="attributes">
+        <attribute name="attrs">{}</attribute>
+      </field>
+
+    </field>
+  </record>
+
+  <record id="view_loan_inherit2" model="ir.ui.view">
+    <field name="name">view_loan_inherit2</field>
+    <field name="model">wc.loan</field>
+    <field name="inherit_id" ref="wc_loan.view_loan_inherit"/>
+    <field name="groups_id" eval="[(6, 0, [ref('base.group_system') ])]"/>
+    <field name="arch" type="xml">
+      <field name="deduction_ids" position="attributes">
+        <attribute name="attrs">{}</attribute>
+      </field>
+    </field>
+  </record>
+
+  <record id="view_loan_payment_form_all" model="ir.ui.view">
+    <field name="name">view_loan_payment_form_all</field>
+    <field name="model">wc.loan.payment</field>
+    <field name="priority" eval="16"/>
+    <field name="inherit_id" ref="wc_loan.view_loan_payment_form"/>
+    <field name="arch" type="xml">
+      <field name="or_number" position="attributes">
+        <attribute name="attrs">{'readonly': [('state','!=','draft')]}</attribute>
+      </field>
+      <field name="name" position="attributes">
+        <attribute name="attrs">{'readonly': [('state','!=','draft')]}</attribute>
+      </field>
+    </field>
+  </record>
+
+  <record id="view_loan_payment_form_admin" model="ir.ui.view">
+    <field name="name">view_loan_payment_form_admin</field>
+    <field name="model">wc.loan.payment</field>
+    <field name="priority" eval="20"/>
+    <field name="inherit_id" ref="wc_loan.view_loan_payment_form"/>
+    <field name="groups_id" eval="[(6, 0, [ref('base.group_system') ])]"/>
+    <field name="arch" type="xml">
+      <field name="or_number" position="attributes">
+        <attribute name="attrs">{}</attribute>
+      </field>
+      <field name="name" position="attributes">
+        <attribute name="attrs">{}</attribute>
+      </field>
+    </field>
+  </record>
+
+</odoo>

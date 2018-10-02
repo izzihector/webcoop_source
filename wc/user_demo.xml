@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+  <data noupdate="0">
+
+    <record id="base.user_root" model="res.users">
+      <field name="company_ids" eval="[
+        (4, ref('branch1')),
+        (4, ref('branch2')),
+        (4, ref('branch3')),
+      ]"/>
+    </record>
+
+    <record id="partner_teller_demo1" model="res.partner">
+      <field name="name">Branch 1 and 2 Teller</field>
+      <field name="company_id" ref="branch1"/>
+      <field name="customer" eval="False"/>
+      <field name="company_name">ABC MPC</field>
+      <field name="email" eval="'teller@example.com'"/>
+    </record>
+
+    <record id="user_teller_demo1" model="res.users">
+      <field name="partner_id" ref="partner_teller_demo1"/>
+      <field name="login">teller1</field>
+      <field name="password">teller1</field>
+      <field name="company_id" ref="branch1"/>
+      <field name="company_ids" eval="[(4, ref('branch1')),(4, ref('branch2'))]"/>
+      <field name="groups_id" eval="[(6,0,[ref('wc.group_teller')])]"/>
+      <field name="notify_email">none</field>
+    </record>
+
+    <record id="partner_teller_demo2" model="res.partner">
+      <field name="name">Branch 2 Teller</field>
+      <field name="company_id" ref="branch2"/>
+      <field name="customer" eval="False"/>
+      <field name="company_name">ABC MPC</field>
+      <field name="email" eval="'teller@example.com'"/>
+    </record>
+
+    <record id="user_teller_demo2" model="res.users">
+      <field name="partner_id" ref="partner_teller_demo2"/>
+      <field name="login">teller2</field>
+      <field name="password">teller2</field>
+      <field name="company_id" ref="branch2"/>
+      <field name="company_ids" eval="[(4, ref('branch2'))]"/>
+      <field name="groups_id" eval="[(6,0,[ref('wc.group_teller')])]"/>
+      <field name="notify_email">none</field>
+    </record>
+
+    <record id="partner_teller_demo3" model="res.partner">
+      <field name="name">Branch 3 Teller</field>
+      <field name="company_id" ref="branch3"/>
+      <field name="customer" eval="False"/>
+      <field name="company_name">ABC MPC</field>
+      <field name="email" eval="'teller@example.com'"/>
+    </record>
+
+    <record id="user_teller_demo3" model="res.users">
+      <field name="partner_id" ref="partner_teller_demo3"/>
+      <field name="login">teller3</field>
+      <field name="password">teller3</field>
+      <field name="company_id" ref="branch3"/>
+      <field name="company_ids" eval="[(4, ref('branch3'))]"/>
+      <field name="groups_id" eval="[(6,0,[ref('wc.group_teller')])]"/>
+      <field name="notify_email">none</field>
+    </record>
+
+    <!-- =================================================================== -->
+
+    <record id="partner_manager_demo1" model="res.partner">
+      <field name="name">Branch 1 and 2 Manager</field>
+      <field name="company_id" ref="branch1"/>
+      <field name="customer" eval="False"/>
+      <field name="company_name">ABC MPC</field>
+      <field name="email" eval="'manager@example.com'"/>
+    </record>
+
+    <record id="user_manager_demo1" model="res.users">
+      <field name="partner_id" ref="partner_manager_demo1"/>
+      <field name="login">manager1</field>
+      <field name="password">manager1</field>
+      <field name="company_id" ref="branch2"/>
+      <field name="company_ids" eval="[(4, ref('branch1')),(4, ref('branch2'))]"/>
+      <field name="groups_id" eval="[(6,0,[ref('wc.group_manager')])]"/>
+      <field name="notify_email">none</field>
+    </record>
+
+    <record id="partner_manager_demo2" model="res.partner">
+      <field name="name">Branch 2 Manager</field>
+      <field name="company_id" ref="branch2"/>
+      <field name="customer" eval="False"/>
+      <field name="company_name">ABC MPC</field>
+      <field name="email" eval="'manager@example.com'"/>
+    </record>
+
+    <record id="user_manager_demo2" model="res.users">
+      <field name="partner_id" ref="partner_manager_demo2"/>
+      <field name="login">manager2</field>
+      <field name="password">manager2</field>
+      <field name="company_id" ref="branch2"/>
+      <field name="company_ids" eval="[(4, ref('branch2'))]"/>
+      <field name="groups_id" eval="[(6,0,[ref('wc.group_manager')])]"/>
+      <field name="notify_email">none</field>
+    </record>
+
+    <record id="partner_manager_demo3" model="res.partner">
+      <field name="name">Branch 3 Manager</field>
+      <field name="company_id" ref="branch3"/>
+      <field name="customer" eval="False"/>
+      <field name="company_name">ABC MPC</field>
+      <field name="email" eval="'manager@example.com'"/>
+    </record>
+
+    <record id="user_manager_demo3" model="res.users">
+      <field name="partner_id" ref="partner_manager_demo3"/>
+      <field name="login">manager3</field>
+      <field name="password">manager3</field>
+      <field name="company_id" ref="branch3"/>
+      <field name="company_ids" eval="[(4, ref('branch3'))]"/>
+      <field name="groups_id" eval="[(6,0,[ref('wc.group_manager')])]"/>
+      <field name="notify_email">none</field>
+    </record>
+
+  </data>
+</odoo>

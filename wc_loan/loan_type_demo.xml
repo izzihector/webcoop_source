@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+  <data noupdate="1">
+
+    <record model="wc.loan.type" id="lt_1">
+      <field name="code">SL001</field>
+      <field name="description">Salary Loan</field>
+      <field name="interest_rate" eval="12"/>
+      <field name="maturity" eval="12"/>
+      <field name="payment_schedule">half-month</field>
+      <field name="savings_factor" eval="0.1"/>
+      <field name="cbu_factor" eval="1.0"/>
+      <field name="service_fee_factor" eval="2.5"/>
+      <field name="notarial_fee_factor" eval="0.05"/>
+      <field name="appraisal_fee_factor" eval="0.04"/>
+      <field name="loan_protection_factor" eval="1.25"/>
+      <field name="filing_fee_factor" eval="0.1"/>
+      <field name="other_deduction_factor" eval="0.03"/>
+    </record>
+
+    <record model="wc.loan.type" id="lt_2">
+      <field name="code">AGR001</field>
+      <field name="description">Harvest Loan</field>
+      <field name="interest_rate" eval="10"/>
+      <field name="maturity" eval="6"/>
+      <field name="payment_schedule">lumpsum</field>
+      <field name="savings_factor" eval="0.1"/>
+      <field name="cbu_factor" eval="1.0"/>
+      <field name="service_fee_factor" eval="2.5"/>
+      <field name="notarial_fee_factor" eval="0.05"/>
+      <field name="appraisal_fee_factor" eval="0.04"/>
+      <field name="loan_protection_factor" eval="1.25"/>
+      <field name="filing_fee_factor" eval="0.1"/>
+      <field name="other_deduction_factor" eval="0.03"/>
+    </record>
+
+    <record model="wc.loan.type" id="lt_3">
+      <field name="code">MP001</field>
+      <field name="description">Multi-Purpose Loan</field>
+      <field name="interest_rate" eval="15"/>
+      <field name="maturity" eval="24"/>
+      <field name="payment_schedule">half-month</field>
+      <field name="savings_factor" eval="0.1"/>
+      <field name="cbu_factor" eval="1.0"/>
+      <field name="service_fee_factor" eval="2.5"/>
+      <field name="notarial_fee_factor" eval="0.05"/>
+      <field name="appraisal_fee_factor" eval="0.04"/>
+      <field name="loan_protection_factor" eval="1.25"/>
+      <field name="filing_fee_factor" eval="0.1"/>
+      <field name="other_deduction_factor" eval="0.03"/>
+    </record>
+
+    <record model="wc.loan.type" id="lt_4">
+      <field name="code">ST001</field>
+      <field name="description">Short-Term Loan</field>
+      <field name="interest_rate" eval="20"/>
+      <field name="maturity" eval="2"/>
+      <field name="payment_schedule">day</field>
+      <field name="savings_factor" eval="0.0"/>
+      <field name="cbu_factor" eval="1.0"/>
+      <field name="service_fee_factor" eval="2.5"/>
+      <field name="notarial_fee_factor" eval="0.05"/>
+      <field name="appraisal_fee_factor" eval="0.04"/>
+      <field name="loan_protection_factor" eval="1.25"/>
+      <field name="filing_fee_factor" eval="0.1"/>
+      <field name="other_deduction_factor" eval="0.03"/>
+    </record>
+
+  </data>
+</odoo>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+  <data noupdate="0">
+
+    <record id="partner_collector_demo1" model="res.partner">
+      <field name="name">Branch 1/2 Collection Officer</field>
+      <field name="company_id" ref="wc.branch1"/>
+      <field name="customer" eval="False"/>
+      <field name="company_name">Branch 1</field>
+      <field name="email" eval="'insurance_user@example.com'"/>
+    </record>
+
+    <record id="user_collector_demo1" model="res.users">
+      <field name="partner_id" ref="partner_collector_demo1"/>
+      <field name="login">collector1</field>
+      <field name="password">collector1</field>
+      <field name="company_id" ref="wc.branch1"/>
+      <field name="company_ids" eval="[(4, ref('wc.branch1')),(4, ref('wc.branch2'))]"/>
+      <field name="groups_id" eval="[(6,0,[ref('wc_collection.group_collection_officer')])]"/>
+      <field name="notify_email">none</field>
+    </record>
+
+    <record id="partner_collector_demo2" model="res.partner">
+      <field name="name">Branch 2 Collection Officer</field>
+      <field name="company_id" ref="wc.branch2"/>
+      <field name="customer" eval="False"/>
+      <field name="company_name">Branch 2</field>
+      <field name="email" eval="'insurance_user@example.com'"/>
+    </record>
+
+    <record id="user_collector_demo2" model="res.users">
+      <field name="partner_id" ref="partner_collector_demo2"/>
+      <field name="login">collector2</field>
+      <field name="password">collector2</field>
+      <field name="company_id" ref="wc.branch2"/>
+      <field name="company_ids" eval="[(4, ref('wc.branch2'))]"/>
+      <field name="groups_id" eval="[(6,0,[ref('wc_collection.group_collection_officer')])]"/>
+      <field name="notify_email">none</field>
+    </record>
+
+    <record id="partner_collector_demo3" model="res.partner">
+      <field name="name">Branch 3 Collection Officer</field>
+      <field name="company_id" ref="wc.branch3"/>
+      <field name="customer" eval="False"/>
+      <field name="company_name">Branch 3</field>
+      <field name="email" eval="'insurance_user@example.com'"/>
+    </record>
+
+    <record id="user_collector_demo3" model="res.users">
+      <field name="partner_id" ref="partner_collector_demo3"/>
+      <field name="login">collector3</field>
+      <field name="password">collector3</field>
+      <field name="company_id" ref="wc.branch3"/>
+      <field name="company_ids" eval="[(4, ref('wc.branch3'))]"/>
+      <field name="groups_id" eval="[(6,0,[ref('wc_collection.group_collection_officer')])]"/>
+      <field name="notify_email">none</field>
+    </record>
+
+  </data>
+</odoo>

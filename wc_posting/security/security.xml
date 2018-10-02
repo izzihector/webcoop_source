@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+  <data noupdate="1">
+
+    <record id="posting_company_rule" model="ir.rule">
+      <field name="name">posting_company_rule</field>
+      <field name="model_id" ref="model_wc_posting"/>
+      <field eval="True" name="global"/>
+      <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+    </record>
+
+    <record id="collector_member_access_rule" model="ir.rule">
+      <field name="name">collector_member_access_rule</field>
+      <field name="model_id" ref="wc_member.model_wc_member"/>
+      <field name="domain_force">[('account_officer_id','=',user.id)]</field>
+      <field name="groups" eval="[(4, ref('wc_collection.group_collection_officer'))]"/>
+    </record>
+
+    <record id="other_member_access_rule" model="ir.rule">
+      <field name="name">other_member_access_rule</field>
+      <field name="model_id" ref="wc_member.model_wc_member"/>
+      <field name="domain_force">[(1,'=',1)]</field>
+      <field name="groups" eval="[
+        (4, ref('wc.group_teller')),
+        (4, ref('wc.group_manager')),
+        (4, ref('wc.group_sys_manager')),
+        (4, ref('wc_member.group_member_user')),
+        (4, ref('wc_microinsurance.group_insurance_user')),
+        (4, ref('wc_loan.group_loan_user')),
+        (4, ref('wc_loan.group_loan_manager')),
+        (4, ref('base.group_system')),
+      ]"/>
+    </record>
+
+    <record id="collector_collection_access_rule" model="ir.rule">
+      <field name="name">collector_collection_access_rule</field>
+      <field name="model_id" ref="wc_collection.model_wc_collection"/>
+      <field name="domain_force">[('create_uid','=',user.id)]</field>
+      <field name="groups" eval="[(4, ref('wc_collection.group_collection_officer'))]"/>
+    </record>
+
+    <record id="other_collection_access_rule" model="ir.rule">
+      <field name="name">other_collection_access_rule</field>
+      <field name="model_id" ref="wc_collection.model_wc_collection"/>
+      <field name="domain_force">[(1,'=',1)]</field>
+      <field name="groups" eval="[
+        (4, ref('wc.group_teller')),
+        (4, ref('wc.group_manager')),
+        (4, ref('wc.group_sys_manager')),
+        (4, ref('wc_member.group_member_user')),
+        (4, ref('wc_microinsurance.group_insurance_user')),
+        (4, ref('wc_loan.group_loan_user')),
+        (4, ref('wc_loan.group_loan_manager')),
+        (4, ref('base.group_system')),
+      ]"/>
+    </record>
+
+  </data>
+</odoo>

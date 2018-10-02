@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+  <data noupdate="0">
+
+    <record id="wc.user_teller_demo1" model="res.users">
+      <field name="groups_id" eval="[(4,ref('group_member_user'))]"/>
+    </record>
+
+    <record id="wc.user_teller_demo2" model="res.users">
+      <field name="groups_id" eval="[(4,ref('group_member_user'))]"/>
+    </record>
+
+    <record id="wc.user_teller_demo3" model="res.users">
+      <field name="groups_id" eval="[(4,ref('group_member_user'))]"/>
+    </record>
+
+  </data>
+</odoo>

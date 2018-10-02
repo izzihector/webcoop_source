@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <record id="wizard_loan_report" model="ir.ui.view">
+    <field name="name">wizard_loan_report</field>
+    <field name="model">wc.loan.report.wizard</field>
+    <field name="arch" type="xml">
+      <form>
+        <group>
+          <!--
+          <field name="company_id" groups="base.group_multi_company"
+            options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+          -->
+          <separator string="Loan Releases" colspan="2"/>
+          <field name="date1"/>
+          <field name="date2"/>
+          <separator string="Aging By Maturity" colspan="2"/>
+          <field name="maturity_date_as_of"/>
+
+        </group>
+        <footer>
+          <button name="release_report" string="Releases" type="object" class="oe_highlight"/>
+          <button name="release_per_product_report" string="Releases per Product" type="object" class="oe_highlight"/>
+          <button name="consolidated_release_per_product_report" string="Consolidated" type="object" class="oe_highlight"/>
+          <button name="aging_report" string="Aging" type="object" class="oe_highlight"/>
+          <button name="delinquency_report" string="Delinquency" type="object" class="oe_highlight"/>
+          <button string="Cancel" default_focus="1" class="oe_link" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_loan_report" model="ir.actions.act_window">
+    <field name="name">Loan Reports</field>
+    <field name="res_model">wc.loan.report.wizard</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+  </record>
+
+  <menuitem id="menu_loan_report" action="action_loan_report"
+    parent="menu_loan_main" name="Loan Reports" sequence="10000"/>
+
+</odoo>

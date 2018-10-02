@@ -1,0 +1,4 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+acc_wc_dividend_line,acc_wc_dividend_line,model_wc_dividend_line,,1,0,0,0
+acc_wc_dividend_line2,acc_wc_dividend_line2,model_wc_dividend_line,account.group_account_manager,1,1,1,1
+acc_wc_dividend,acc_wc_dividend,model_wc_dividend,account.group_account_manager,1,1,1,1

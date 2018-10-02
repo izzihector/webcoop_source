@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data noupdate="0">
+
+    <template id="account_tran_report">
+      <t t-call="report.html_container">
+          <div class="page">
+
+            <div class="row">
+              <div class="col-xs-12 text-center">
+                <strong>
+                  <div style="font-size: 18px;" t-field="res_company.name"/>
+                </strong>
+                <div t-field="res_company.partner_id.address2"/>
+              </div>
+              <div class="col-xs-12 text-center mt24 mb24">
+                <div style="font-size: 18px;">
+                  <strong>Summary of transactions </strong>
+                </div>
+	              <div t-if="account_type">
+	                  Account Type : <span t-esc="account_type"/>
+	              </div>
+	              <div t-if="trcode">
+	                  Transaction : <span t-esc="trcode"/>
+	              </div>
+	              <div t-if="teller">
+	                Teller : <span t-esc="teller"/>
+	              </div>
+
+	              <div t-if="date1 and date2">
+	                  For the period of <span t-esc="date1"/> to <span t-esc="date2"/>
+	              </div>
+	              <div t-if="date1 and not date2">
+	                  For the period from <span t-esc="date1"/>
+	              </div>
+	              <div t-if="date2 and not date1">
+	                  For the period up to <span t-esc="date2"/>
+	              </div>
+              </div>
+
+            </div>
+
+            <t t-set="tdamt" t-value="0.0"/>
+            <t t-set="twamt" t-value="0.0"/>
+
+            <table class="table table-condensed">
+              <thead>
+                <tr>
+                  <th>no.</th>
+                  <th>Number</th>
+                  <th>Member</th>
+                  <th>Reference</th>
+                  <th>Teller</th>
+                  <th class="text-right">Date</th>
+                  <th class="text-right">Deposit</th>
+                  <th class="text-right">Withdrawal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr t-foreach="docs" t-as="o">
+                  <td><span t-esc="o_index+1"/></td>
+                  <td><span t-field="o.account_id.member_code"/></td>
+                  <td><span t-field="o.account_id.member_id.name"/></td>
+                  <td><span t-field="o.reference"/></td>
+                  <td><span t-field="o.teller_id.name"/></td>
+                  <td class="text-right"><span t-field="o.date"/></td>
+                  <td class="text-right"><span t-field="o.deposit"/></td>
+                  <td class="text-right"><span t-field="o.withdrawal"/></td>
+
+                  <t t-set="tdamt" t-value="tdamt+o.deposit" />
+                  <t t-set="twamt" t-value="twamt+o.withdrawal" />
+
+                </tr>
+              </tbody>
+              <tfooter>
+                <tr>
+                  <th class="text-right" colspan="6">
+                    GRAND TOTAL:
+                  </th>
+                  <th class="text-right">
+                    <span t-att-style="style"
+                      t-esc="tdamt"
+                      t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                  </th>
+                  <th class="text-right">
+                    <span t-att-style="style"
+                      t-esc="twamt"
+                      t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                  </th>
+                </tr>
+              </tfooter>
+
+            </table>
+
+          </div> <!-- page -->
+      </t> <!-- html_container -->
+    </template>
+
+  </data>
+
+  <report
+    id="id_report_account_tran"
+    model="wc.account.transaction"
+    string="Account Transaction Summary"
+    report_type="qweb-pdf"
+    attachment_use="False"
+    name="wc_account.account_tran_report"
+    file="wc_account.account_tran_report"
+    paperformat="wc.long13_landscape"
+    menu="False"
+  />
+
+</odoo>

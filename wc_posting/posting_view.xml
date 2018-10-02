@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <record id="form_posting" model="ir.ui.view">
+    <field name="name">form_posting</field>
+    <field name="model">wc.posting</field>
+    <field name="arch" type="xml">
+
+      <!-- Add custom css -->
+
+      <form>
+
+        <header>
+          <button name="open_date" string="Open Date" states="draft"
+            class="oe_highlight oe_read_only" type="object"/>
+          <button name="close_date"
+            confirm="Warning! Transactions for this date will be restricted and all draft transactions will be deleted as well. Are you sure to close this date?"
+            string="Close Date" states="open" class="oe_highlight oe_read_only" type="object"/>
+          <button name="confirm_posting" string="Confirm Posting"
+            confirm="Warning! Posting to accounting is non-reversible. Are you sure to confirm the posting of transactions for this date?"
+            states="closed" class="oe_highlight oe_read_only" type="object"/>
+          <button name="open_date" string="Re-open Date" states="closed"
+            class="oe_read_only" type="object"/>
+          <button name="add_details" string="Add Details" states="open" type="object"/>
+
+          <button name="gen_moves"
+            string="Generate Journal Entries"
+            groups="base.group_system"
+            states="closed"
+            type="object"/>
+
+          <field name="state" widget="statusbar" readonly="1"/>
+        </header>
+
+        <sheet>
+
+          <div class="oe_title wc_title">
+            <h1>
+              <field name="name"/>
+            </h1>
+          </div>
+          <group>
+            <field name="company_id" groups="base.group_multi_company"/>
+          </group>
+          <!--
+          <group>
+            <group>
+              <field name="company_id" groups="base.group_multi_company"/>
+              <field name="move_id"/>
+            </group>
+            <group>
+              <field name="cd_move_id"/>
+              <field name="cr_move_id"/>
+            </group>
+          </group>
+          -->
+          <notebook>
+            <page name="deposit" string="Journal Entries">
+              <field name="move_ids">
+                <tree class="wc_tree">
+                  <field name="state" invisible="1"/>
+                  <field name="date"/>
+                  <field name="name"/>
+                  <field name="partner_id"/>
+                  <field name="ref"/>
+                  <field name="journal_id"/>
+                  <field name="amount"/>
+                </tree>
+              </field>
+            </page>
+
+            <page name="deposit" string="Deposit Products Transactions">
+              <field name="deposit_account_transaction_ids">
+                <tree string="Transactions" class="wc_tree" colors="red:state=='draft'">
+                  <field name="state" invisible="1"/>
+                  <field name="name"/>
+                  <field name="account_id"/>
+                  <field name="reference"/>
+                  <field name="trcode_id"/>
+                  <field name="deposit"/>
+                  <field name="withdrawal"/>
+                  <field name="check_number"/>
+                  <field name="teller_id"/>
+                </tree>
+              </field>
+            </page>
+
+            <page name="loan_approval" string="Loans Approved">
+              <field name="loan_approved_ids">
+                <tree class="wc_tree">
+                  <field name="name"/>
+                  <field name="loan_type_id"/>
+                  <field name="date"/>
+                  <field name="date_maturity" />
+                  <field name="amount" sum="Total Amount"/>
+                  <field name="total_deduction" sum="Total Deductions"/>
+                  <field name="net_amount" sum="Total Net Amount"/>
+                  <field name="state" />
+                  <field name="note" />
+                </tree>
+
+                <form>
+                  <group>
+                    <group>
+                      <field name="name"/>
+                      <field name="loan_type_id"/>
+                      <field name="date"/>
+                      <field name="date_maturity" />
+                    </group>
+                    <group>
+                      <field name="amount" sum="Total Amount"/>
+                      <field name="total_deduction" sum="Total Deductions"/>
+                      <field name="net_amount" sum="Total Net Amount"/>
+                      <field name="state" />
+                      <field name="note" />
+                    </group>
+                  </group>
+                </form>
+
+              </field>
+            </page>
+
+            <page name="past_due_loans" string="Past Due Loans">
+              <field name="past_due_ids">
+                <tree class="wc_tree">
+                  <field name="name"/>
+                  <field name="loan_type_id"/>
+                  <field name="date"/>
+                  <field name="date_maturity" />
+                  <field name="past_due_amount" sum="Total"/>
+                  <field name="state" />
+                  <field name="note" />
+                </tree>
+
+                <form>
+                  <group>
+                    <group>
+                      <field name="name"/>
+                      <field name="loan_type_id"/>
+                      <field name="date"/>
+                      <field name="date_maturity" />
+                    </group>
+                    <group>
+                      <field name="past_due_amount"/>
+                      <field name="state" />
+                      <field name="note" />
+                    </group>
+                  </group>
+                </form>
+
+              </field>
+            </page>
+
+            <page name="loan_payments" string="Loan Payments">
+              <field name="payment_ids">
+                <tree class="wc_tree">
+                  <field name="loan_id"/>
+                  <field name="payment_id"/>
+                  <field name="or_number"/>
+                  <field name="check_number"/>
+                  <field name="payment_type"/>
+                  <field name="code"/>
+                  <field name="amount"/>
+                </tree>
+              </field>
+            </page>
+
+            <page name="insurance_payments" string="Microinsurance Payments">
+              <field name="insurance_payment_ids"/>
+            </page>
+
+            <page name="other_payments" string="Other Payments">
+              <field name="oc_payment_ids"/>
+            </page>
+
+            <page name="notes" string="Notes">
+              <field name="note" nolabel="1"/>
+            </page>
+          </notebook>
+
+        </sheet>
+
+        <div class="oe_chatter">
+          <field name="message_follower_ids" widget="mail_followers"/>
+          <field name="message_ids" widget="mail_thread"/>
+        </div>
+
+      </form>
+
+    </field>
+  </record>
+
+  <record id="tree_posting" model="ir.ui.view">
+    <field name="name">tree_posting</field>
+    <field name="model">wc.posting</field>
+    <field name="arch" type="xml">
+      <tree string="Postings" class="wc_tree" colors="red:state=='draft'">
+        <field name="company_id" groups="base.group_multi_company"/>
+        <field name="name"/>
+        <!--
+        <field name="date"/>
+      -->
+        <field name="note"/>
+        <field name="state"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="search_posting" model="ir.ui.view">
+    <field name="name">search_posting</field>
+    <field name="model">wc.posting</field>
+    <field name="arch" type="xml">
+      <search class="wc_tree">
+        <field name="state" invisible="1"/>
+        <field name="name"/>
+        <field name="state"/>
+        <field name="note"/>
+      </search>
+    </field>
+  </record>
+
+  <record id="action_posting" model="ir.actions.act_window">
+    <field name="name">Daily Postings</field>
+    <field name="res_model">wc.posting</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <menuitem id="menu_posting"
+    sequence="4"
+    action="action_posting"
+    parent="account.menu_finance_entries"
+  />
+
+</odoo>

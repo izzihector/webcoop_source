@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+  <data noupdate="1">
+
+    <!-- transaction codes -->
+
+    <record model="wc.tr.code" id="tr_deposit">
+      <field name="code">1000</field>
+      <field name="description">CBU Deposit</field>
+      <field name="gl_posting">cr</field>
+      <field name="trans_type">cbu</field>
+      <field name="is_deposit" eval="True"/>
+    </record>
+
+    <record model="wc.tr.code" id="tr_withdrawal">
+      <field name="code">2000</field>
+      <field name="description">CBU Withdrawal</field>
+      <field name="gl_posting">dr</field>
+      <field name="trans_type">cbu</field>
+      <field name="is_withdrawal" eval="True"/>
+    </record>
+
+    <record model="wc.tr.code" id="tr_adjustment">
+      <field name="code">3000</field>
+      <field name="description">CBU Error Correction/Adjustment</field>
+      <field name="gl_posting">cr</field>
+      <field name="trans_type">cbu</field>
+      <field name="is_deposit" eval="True"/>
+      <field name="is_withdrawal" eval="True"/>
+    </record>
+
+<!--
+-->
+    <record model="wc.tr.code" id="tr_dividend">
+      <field name="code">DIV</field>
+      <field name="description">Dividend</field>
+      <field name="gl_posting">cr</field>
+      <field name="trans_type">cbu</field>
+      <field name="is_deposit" eval="True"/>
+      <field name="is_withdrawal" eval="False"/>
+    </record>
+
+    <record model="wc.tr.code" id="tr_patronage">
+      <field name="code">PAT</field>
+      <field name="description">Patronage</field>
+      <field name="gl_posting">cr</field>
+      <field name="trans_type">cbu</field>
+      <field name="is_deposit" eval="True"/>
+      <field name="is_withdrawal" eval="False"/>
+    </record>
+
+    <record model="wc.tr.code" id="tr_cshp">
+      <field name="code">CSHP</field>
+      <field name="description">Cash Payment</field>
+      <field name="gl_posting">dr</field>
+      <field name="trans_type">sa</field>
+      <field name="is_withdrawal" eval="True"/>
+    </record>
+
+    <record model="wc.tr.code" id="tr_chk0">
+      <field name="code">CHK0</field>
+      <field name="description">Check Payment</field>
+      <field name="gl_posting">dr</field>
+      <field name="trans_type">sa</field>
+      <field name="is_withdrawal" eval="True"/>
+    </record>
+
+    <record model="wc.tr.code" id="tr_cm00">
+      <field name="code">CM00</field>
+      <field name="description">Credit Memo</field>
+      <field name="gl_posting">cr</field>
+      <field name="trans_type">sa</field>
+      <field name="is_deposit" eval="True"/>
+      <field name="is_withdrawal" eval="True"/>
+    </record>
+
+    <record model="wc.tr.code" id="tr_xplt">
+      <field name="code">XPLT</field>
+      <field name="description">Offset Penalty Interest</field>
+      <field name="gl_posting">dr</field>
+      <field name="trans_type">sa</field>
+      <field name="is_deposit" eval="True"/>
+      <field name="is_withdrawal" eval="True"/>
+    </record>
+
+    <record model="wc.tr.code" id="tr_rchk">
+      <field name="code">RCHK</field>
+      <field name="description">Return Check</field>
+      <field name="gl_posting">cr</field>
+      <field name="trans_type">sa</field>
+      <field name="is_deposit" eval="False"/>
+      <field name="is_withdrawal" eval="False"/>
+    </record>
+
+    <record model="wc.tr.code" id="tr_a2d">
+      <field name="code">A->D</field>
+      <field name="description">Active to Dormant</field>
+      <field name="gl_posting">cr</field>
+      <field name="trans_type">sa</field>
+      <field name="is_deposit" eval="False"/>
+      <field name="is_withdrawal" eval="False"/>
+    </record>
+
+    <record model="wc.tr.code" id="tr_d2a">
+      <field name="code">D->A</field>
+      <field name="description">Dormant to Active</field>
+      <field name="gl_posting">cr</field>
+      <field name="trans_type">sa</field>
+      <field name="is_deposit" eval="False"/>
+      <field name="is_withdrawal" eval="False"/>
+    </record>
+
+    <record model="wc.tr.code" id="tr_csd">
+      <field name="code">CSD</field>
+      <field name="description">Cash Deposit</field>
+      <field name="gl_posting">cr</field>
+      <field name="trans_type">sa</field>
+      <field name="is_deposit" eval="True"/>
+    </record>
+
+    <record model="wc.tr.code" id="tr_csw">
+      <field name="code">CSW</field>
+      <field name="description">Cash Withdrawal</field>
+      <field name="gl_posting">dr</field>
+      <field name="trans_type">sa</field>
+      <field name="is_withdrawal" eval="True"/>
+    </record>
+
+    <record model="wc.tr.code" id="tr_lckd">
+      <field name="code">LCKD</field>
+      <field name="description">Local Check Deposit</field>
+      <field name="gl_posting">cr</field>
+      <field name="trans_type">sa</field>
+      <field name="is_deposit" eval="True"/>
+    </record>
+
+    <record model="wc.tr.code" id="tr_rckd">
+      <field name="code">RCKD</field>
+      <field name="description">Regional Check Deposit</field>
+      <field name="gl_posting">cr</field>
+      <field name="trans_type">sa</field>
+      <field name="is_deposit" eval="True"/>
+    </record>
+
+    <record model="wc.tr.code" id="tr_int">
+      <field name="code">INT</field>
+      <field name="description">Interest Posting</field>
+      <field name="gl_posting">cr</field>
+      <field name="trans_type">sa</field>
+      <field name="is_deposit" eval="True"/>
+    </record>
+
+    <record model="wc.tr.code" id="tr_wtax">
+      <field name="code">WTAX</field>
+      <field name="description">Withholding Tax Posting</field>
+      <field name="gl_posting">cr</field>
+      <field name="trans_type">sa</field>
+      <field name="is_withdrawal" eval="True"/>
+    </record>
+
+  </data>
+</odoo>

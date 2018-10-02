@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <record id="form_transaction_all" model="ir.ui.view">
+    <field name="name">form_transaction_all</field>
+    <field name="model">wc.account.transaction</field>
+    <field name="priority" eval="16"/>
+    <field name="inherit_id" ref="wc_account.form_transaction"/>
+    <field name="arch" type="xml">
+      <field name="reference" position="attributes">
+        <attribute name="attrs">{'readonly': [('state','!=','draft')]}</attribute>
+      </field>
+    </field>
+  </record>
+
+  <record id="form_transaction_admin" model="ir.ui.view">
+    <field name="name">form_transaction_admin</field>
+    <field name="model">wc.account.transaction</field>
+    <field name="priority" eval="20"/>
+    <field name="inherit_id" ref="wc_account.form_transaction"/>
+    <field name="groups_id" eval="[(6, 0, [ref('base.group_system') ])]"/>
+    <field name="arch" type="xml">
+      <field name="reference" position="attributes">
+        <attribute name="attrs">{}</attribute>
+      </field>
+    </field>
+  </record>
+
+</odoo>

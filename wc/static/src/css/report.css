@@ -1,0 +1,86 @@
+.table_header td {
+  padding-right: 5px;
+  padding-left: 5px;
+  padding-bottom: 10px;
+  /* white-space: nowrap; */
+}
+
+.no-wrap {
+  white-space: nowrap;
+}
+
+.table_header table {
+  width: 100%;
+}
+
+.border-box tr td, .border-box tr th,
+.border-box td, .border-box th
+{
+  padding-left: 2px;
+  padding-right: 2px;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  border-top: 1px solid black !important;
+  border-bottom: 1px solid black;
+  vertical-align: middle !important;
+}
+
+div.border-b,
+td.border-b,
+.border-b td,
+.border-b th
+{
+  border-bottom: 1px solid black !important;
+}
+
+div.border-t,
+td.border-t,
+.border-t td,
+.border-t th
+{
+  border-top: 1px solid black !important;
+}
+
+.table-loan-voucher
+{
+  width: 100%;
+  margin-right: -5px;
+  margin-left: -5px;
+  /* fix chrome/webkit border bug */
+  border-collapse: separate; /* the default option */
+  border-spacing: 0; /* remove border gaps */
+}
+
+.table-loan-voucher td
+{
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+td.bborder,
+div.bborder
+{
+  border-bottom: 1px solid black;
+}
+
+td.no-border {
+  border-style: none !important;
+}
+
+.table-compressed {
+    width:100%;
+}
+
+.table-compressed > thead > tr > th
+{
+  border-bottom: 2px solid black;
+}
+
+.table-compressed > tbody > tr > td
+{
+  padding-top: 1px !important;
+  padding-bottom: 1px !important;
+  border-top: 1px solid #ddd;
+}

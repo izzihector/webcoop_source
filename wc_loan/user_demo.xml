@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+  <data noupdate="0">
+
+    <record id="wc.user_manager_demo1" model="res.users">
+      <field name="groups_id" eval="[(4,ref('wc_loan.group_loan_manager'))]"/>
+    </record>
+
+    <record id="partner_loan_user_demo1" model="res.partner">
+      <field name="name">Branch 1/2 Loan Officer</field>
+      <field name="company_id" ref="wc.branch1"/>
+      <field name="customer" eval="False"/>
+      <field name="company_name">Branch 1</field>
+      <field name="email" eval="'loan_officer@example.com'"/>
+    </record>
+
+    <record id="user_loan_user_demo1" model="res.users">
+      <field name="partner_id" ref="partner_loan_user_demo1"/>
+      <field name="login">loan1</field>
+      <field name="password">loan1</field>
+      <field name="company_id" ref="wc.branch1"/>
+      <field name="company_ids" eval="[(4, ref('wc.branch1')),(4, ref('wc.branch2'))]"/>
+      <field name="groups_id" eval="[(6,0,[ref('wc_loan.group_loan_user')])]"/>
+      <field name="notify_email">none</field>
+    </record>
+
+    <record id="partner_loan_user_demo2" model="res.partner">
+      <field name="name">Branch 2 Loan Officer</field>
+      <field name="company_id" ref="wc.branch2"/>
+      <field name="customer" eval="False"/>
+      <field name="company_name">Branch 2</field>
+      <field name="email" eval="'loan_officer@example.com'"/>
+    </record>
+
+    <record id="user_loan_user_demo2" model="res.users">
+      <field name="partner_id" ref="partner_loan_user_demo2"/>
+      <field name="login">loan2</field>
+      <field name="password">loan2</field>
+      <field name="company_id" ref="wc.branch2"/>
+      <field name="company_ids" eval="[(4, ref('wc.branch2'))]"/>
+      <field name="groups_id" eval="[(6,0,[ref('wc_loan.group_loan_user')])]"/>
+      <field name="notify_email">none</field>
+    </record>
+
+    <record id="partner_loan_user_demo3" model="res.partner">
+      <field name="name">Branch 3 Loan Officer</field>
+      <field name="company_id" ref="wc.branch2"/>
+      <field name="customer" eval="False"/>
+      <field name="company_name">Branch 3</field>
+      <field name="email" eval="'loan_officer@example.com'"/>
+    </record>
+
+    <record id="user_loan_user_demo3" model="res.users">
+      <field name="partner_id" ref="partner_loan_user_demo3"/>
+      <field name="login">loan3</field>
+      <field name="password">loan3</field>
+      <field name="company_id" ref="wc.branch3"/>
+      <field name="company_ids" eval="[(4, ref('wc.branch3'))]"/>
+      <field name="groups_id" eval="[(6,0,[ref('wc_loan.group_loan_user')])]"/>
+      <field name="notify_email">none</field>
+    </record>
+
+    <!-- =================================================================== -->
+
+    <record id="partner_loan_manager_demo1" model="res.partner">
+      <field name="name">Branch 1/2 Loan Manager</field>
+      <field name="company_id" ref="wc.branch1"/>
+      <field name="customer" eval="False"/>
+      <field name="company_name">Branch 1</field>
+      <field name="email" eval="'loan_manager@example.com'"/>
+    </record>
+
+    <record id="user_loan_manager_demo1" model="res.users">
+      <field name="partner_id" ref="partner_loan_manager_demo1"/>
+      <field name="login">lmgr1</field>
+      <field name="password">lmgr1</field>
+      <field name="company_id" ref="wc.branch1"/>
+      <field name="company_ids" eval="[(4, ref('wc.branch1')),(4, ref('wc.branch2'))]"/>
+      <field name="groups_id" eval="[(6,0,[ref('wc_loan.group_loan_manager')])]"/>
+      <field name="notify_email">none</field>
+    </record>
+
+    <record id="partner_loan_manager_demo2" model="res.partner">
+      <field name="name">Branch 2 Loan Manager</field>
+      <field name="company_id" ref="wc.branch2"/>
+      <field name="customer" eval="False"/>
+      <field name="company_name">Branch 2</field>
+      <field name="email" eval="'loan_manager@example.com'"/>
+    </record>
+
+    <record id="user_loan_manager_demo2" model="res.users">
+      <field name="partner_id" ref="partner_loan_manager_demo2"/>
+      <field name="login">lmgr2</field>
+      <field name="password">lmgr2</field>
+      <field name="company_id" ref="wc.branch2"/>
+      <field name="company_ids" eval="[(4, ref('wc.branch2'))]"/>
+      <field name="groups_id" eval="[(6,0,[ref('wc_loan.group_loan_manager')])]"/>
+      <field name="notify_email">none</field>
+    </record>
+
+    <record id="partner_loan_manager_demo3" model="res.partner">
+      <field name="name">Branch 3 Loan Manager</field>
+      <field name="company_id" ref="wc.branch3"/>
+      <field name="customer" eval="False"/>
+      <field name="company_name">Branch 3</field>
+      <field name="email" eval="'loan_manager@example.com'"/>
+    </record>
+
+    <record id="user_loan_manager_demo3" model="res.users">
+      <field name="partner_id" ref="partner_loan_manager_demo3"/>
+      <field name="login">lmgr3</field>
+      <field name="password">lmgr3</field>
+      <field name="company_id" ref="wc.branch3"/>
+      <field name="company_ids" eval="[(4, ref('wc.branch3'))]"/>
+      <field name="groups_id" eval="[(6,0,[ref('wc_loan.group_loan_manager')])]"/>
+      <field name="notify_email">none</field>
+    </record>
+
+  </data>
+</odoo>

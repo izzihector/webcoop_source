@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+  <data noupdate="1">
+
+    <record id="sequence_ibtrans" model="ir.sequence">
+      <field name="name">Interbranch Transactions Sequence</field>
+      <field name="code">wc.account.ibtrans</field>
+      <field name="prefix"></field>
+      <field eval="1" name="number_next"/>
+      <field eval="1" name="number_increment"/>
+      <field eval="10" name="padding"/>
+      <field eval="False" name="company_id"/>
+    </record>
+
+    <record model="wc.tr.code" id="tr_ib_deposit">
+      <field name="code">ICSD</field>
+      <field name="description">Interbranch Deposit</field>
+      <field name="gl_posting">cr</field>
+      <field name="trans_type">ib</field>
+      <field name="is_deposit" eval="True"/>
+    </record>
+
+    <record model="wc.tr.code" id="tr_ib_withdrawal">
+      <field name="code">ICSW</field>
+      <field name="description">Interbranch Withdrawal</field>
+      <field name="gl_posting">dr</field>
+      <field name="trans_type">ib</field>
+      <field name="is_withdrawal" eval="True"/>
+    </record>
+
+<!--
+    <record model="wc.tr.code" id="tr_deposit_icbu">
+      <field name="code">ICSD</field>
+      <field name="description">CBU Interbranch Deposit</field>
+      <field name="gl_posting">cr</field>
+      <field name="trans_type">cbu</field>
+      <field name="is_deposit" eval="True"/>
+    </record>
+
+    <record model="wc.tr.code" id="tr_withdrawal_icbu">
+      <field name="code">ICSW</field>
+      <field name="description">CBU Interbranch Withdrawal</field>
+      <field name="gl_posting">dr</field>
+      <field name="trans_type">cbu</field>
+      <field name="is_withdrawal" eval="True"/>
+    </record>
+
+    <record model="wc.tr.code" id="tr_icsd">
+      <field name="code">ICSD</field>
+      <field name="description">Interbranch Cash Deposit</field>
+      <field name="gl_posting">cr</field>
+      <field name="trans_type">sa</field>
+      <field name="is_deposit" eval="True"/>
+    </record>
+
+    <record model="wc.tr.code" id="tr_icsw">
+      <field name="code">ICSW</field>
+      <field name="description">Interbranch Cash Withdrawal</field>
+      <field name="gl_posting">dr</field>
+      <field name="trans_type">sa</field>
+      <field name="is_withdrawal" eval="True"/>
+    </record>
+-->
+
+  </data>
+</odoo>

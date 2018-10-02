@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <record id="wizard_daily_collection" model="ir.ui.view">
+    <field name="name">wizard_daily_collection</field>
+    <field name="model">daily.collection.wizard</field>
+    <field name="arch" type="xml">
+      <form>
+        <group>
+          <field name="date"/>
+          <field name="collector_id" options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+          <field name="due_filter"/>
+        </group>
+        <footer>
+          <button name="print_report" string="Print" type="object" default_focus="1" class="oe_highlight"/>
+          or
+          <button string="Cancel" class="oe_link" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_daily_collection" model="ir.actions.act_window">
+    <field name="name">Daily Collection Sheet</field>
+    <field name="res_model">daily.collection.wizard</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+  </record>
+
+  <menuitem id="menu_daily_collection"
+    action="action_daily_collection"
+    sequence="900"
+    parent="wc_collection.menu_collection"
+  />
+
+  <!-- ============================================================ -->
+
+  <record id="paperformat_long" model="report.paperformat">
+      <field name="name">Long 13inch</field>
+      <field name="format">custom</field>
+      <field name="page_height">330</field>
+      <field name="page_width">215</field>
+      <field name="orientation">Portrait</field>
+      <field name="margin_top">7</field>
+      <field name="margin_bottom">7</field>
+      <field name="margin_left">7</field>
+      <field name="margin_right">7</field>
+      <field name="header_line" eval="False"/>
+      <field name="header_spacing">35</field>
+      <field name="dpi">90</field>
+  </record>
+
+  <report
+    id="action_report_daily_collection"
+    model="daily.collection.wizard"
+    string="Daily Collection"
+    menu="False"
+    report_type="qweb-pdf"
+    name="wc_posting.report_daily_collection"
+    file="wc_posting.report_daily_collection"
+    paperformat="paperformat_long"
+  />
+
+  <template id="report_daily_collection_subtotal">
+    <tr>
+      <th class='text-right' colspan="6"
+        style="border-top:solid black 1px;border-bottom:none">
+        TOTAL:
+      </th>
+      <th class='text-right'
+        style="border-top:solid black 1px;border-bottom:none">
+        <t t-esc="'{:,.2f}'.format(tdue)"/>
+      </th>
+      <th class='text-left' colspan="993"
+        style="border-top:solid black 1px;border-bottom:none">
+      </th>
+    </tr>
+    <tr>
+      <td colspan="1000" style="height:10pt;border-top:none"></td>
+    </tr>
+  </template>
+
+  <template id="report_daily_collection">
+    <t t-call="report.html_container">
+        <t t-call="report.external_layout">
+            <div class="page">
+                <div class="row">
+                  <div class="col-xs-8">
+                    <h2>Daily Collection Sheet</h2>
+                    <strong>
+                      <span t-field="res_company.name"/>
+                    </strong>
+                  </div>
+                  <div class="col-xs-4">
+                    <div class="row">
+                      <div class="row">
+                        <div class="col-xs-5 text-right" style="padding-right:0px">
+                          <strong>Date :</strong>
+                        </div>
+                        <div class="col-xs-7" style="padding-left:10px">
+                          <t t-esc="form['date']" t-options='{"widget": "date"}'/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xs-5 text-right" style="padding-right:0px">
+                          <strong>Collector :</strong>
+                        </div>
+                        <div class="col-xs-7" style="padding-left:10px">
+                          <t t-esc="collector"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xs-5 text-right" style="padding-right:0px">
+                          <strong>Filter :</strong>
+                        </div>
+                        <div class="col-xs-7" style="padding-left:10px">
+                          <t t-esc="form['due_filter']"/>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <br/>
+
+                <table class="table table-condensed">
+                  <thead>
+                    <tr>
+                      <th>No.</th>
+                      <th>Member</th>
+                      <th>Loan Ref</th>
+                      <!--
+                        <th class="text-right">Amount</th>
+                        <th class="text-right">Term</th>
+                        <th>Date</th>
+                      -->
+                      <th class="text-right">Balance</th>
+                      <th>Maturity</th>
+                      <th>Due Date</th>
+                      <th class="text-right">Total Due</th>
+                      <th class="text-right" style="white-space:nowrap;"> Amount Paid</th>
+                      <th class="text-right">Principal</th>
+                      <th class="text-right">Interest</th>
+                      <th class="text-right">Penalty</th>
+
+                      <t t-foreach="headers" t-as="h">
+                        <th class="text-right"><t t-esc="h"/></th>
+                      </t>
+
+                      <th width="100%">Signature</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <t t-set="loan_type_id" t-value="-2"/>
+                    <t t-set="tdue" t-value="0.0"/>
+                    <t t-set="count" t-value="0"/>
+                    <t t-foreach="docs" t-as="o">
+
+                      <t t-if="loan_type_id!=o.loan_type_id.id">
+                        <t t-set="center_id" t-value="-2"/>
+                      </t>
+
+                      <t t-if="center_id!=o.center_id.id">
+                        <t t-if="count>0">
+                          <t t-call="wc_posting.report_daily_collection_subtotal"/>
+                        </t>
+                      </t>
+
+                      <t t-if="loan_type_id!=o.loan_type_id.id">
+                        <t t-set="loan_type_id" t-value="o.loan_type_id.id"/>
+                        <tr>
+                          <td colspan="1000">
+                            <h4 t-field="o.loan_type_id.description"/>
+                          </td>
+                        </tr>
+                      </t>
+
+                      <t t-if="center_id!=o.center_id.id">
+                        <t t-set="tdue" t-value="0.0"/>
+                        <t t-set="count" t-value="0"/>
+                        <t t-set="center_id" t-value="o.center_id.id"/>
+                        <tr>
+                          <th class='text-left' colspan="1000"
+                            style="border-top:solid black 1px;">
+                            Center: <span t-field="o.center_id"/>
+                          </th>
+                        </tr>
+                      </t>
+
+                      <t t-if="o.total_due>0.0">
+                        <t t-set="count" t-value="count + 1"/>
+                        <t t-set="others" t-value="o.get_others_due_dict(o)"/>
+                        <t t-set="tdue" t-value="tdue + o.total_due"/>
+                        <tr>
+                          <td class="text-right">
+                            <t t-esc="count"/>.
+                          </td>
+                          <td>
+                            <span style='white-space:nowrap;' t-field="o.member_id.name2"/>
+                          </td>
+                          <td>
+                            <span style='white-space:nowrap;' t-field="o.code"/>
+                          </td>
+                          <!--
+                          <td class="text-right"><span t-field="o.amount"/></td>
+                          <td class="text-right"><span t-field="o.term_payments"/></td>
+                          <td><span t-field="o.date"/></td>
+                        -->
+                          <td class="text-right"><span t-field="o.total_balance"/></td>
+                          <td><span t-field="o.date_maturity"/></td>
+                          <td><span t-field="o.ldate_soa"/></td>
+                          <td class="text-right"><span t-field="o.total_due"/></td>
+                          <td class="text-right" style="border-bottom:solid black 1px;"></td>
+                          <td class="text-right">
+                            <t t-if="o.principal_due">
+                              <span t-field="o.principal_due"/>
+                            </t>
+                          </td>
+                          <td class="text-right">
+                            <t t-if="o.interest_due">
+                              <span t-field="o.interest_due"/>
+                            </t>
+                          </td>
+                          <td class="text-right">
+                            <t t-if="o.penalty_due">
+                              <span t-field="o.penalty_due"/>
+                            </t>
+                          </td>
+                          <t t-foreach="headers" t-as="h">
+                            <td class="text-right">
+                              <t t-set="val" t-value="others.get(h)"/>
+                              <t t-if="val">
+                                <t t-esc="'{:,.2f}'.format(val)"/>
+                              </t>
+                            </td>
+                          </t>
+
+                          <td class="text-right" style="border-bottom:solid black 1px;width=50px;"></td>
+
+                        </tr>
+                      </t>
+
+                    </t>
+
+                    <t t-call="wc_posting.report_daily_collection_subtotal"/>
+
+                  </tbody>
+                </table>
+
+            </div>
+        </t>
+    </t>
+  </template>
+
+
+</odoo>

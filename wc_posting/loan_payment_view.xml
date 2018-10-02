@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <record id="view_loan_payment_form" model="ir.ui.view">
+    <field name="name">view_loan_payment_form</field>
+    <field name="model">wc.loan.payment</field>
+    <field name="inherit_id" ref="wc_loan.view_loan_payment_form"/>
+    <field name="arch" type="xml">
+
+      <field name="date" position="before">
+        <field name="editable_date" invisible="1"/>
+      </field>
+
+      <field name="date" position="attributes">
+        <attribute name="attrs">{
+          'readonly':[
+            '|',
+            ('editable_date','=',False),
+            ('state','!=','draft'),
+          ]
+        }</attribute>
+      </field>
+
+    </field>
+  </record>
+
+  <record id="tree_payment_distribution" model="ir.ui.view">
+    <field name="name">tree_payment_distribution</field>
+    <field name="model">wc.loan.payment.distribution</field>
+    <field name="inherit_id" ref="wc_loan.tree_payment_distribution"/>
+    <field name="arch" type="xml">
+      <field name="amount" position="after">
+        <field name="posting_id"/>
+      </field>
+    </field>
+  </record>
+
+  <record id="form_payment_distribution" model="ir.ui.view">
+    <field name="name">form_payment_distribution</field>
+    <field name="model">wc.loan.payment.distribution</field>
+    <field name="inherit_id" ref="wc_loan.form_payment_distribution"/>
+    <field name="arch" type="xml">
+      <field name="amount" position="after">
+        <field name="posting_id"/>
+      </field>
+    </field>
+  </record>
+
+</odoo>

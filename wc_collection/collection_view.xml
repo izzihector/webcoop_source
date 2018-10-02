@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <menuitem id="menu_collection"
+    name="Collection"
+    sequence="40"
+    parent="wc.menu_root"
+    groups="wc_collection.group_collection_officer,wc.group_manager"
+  />
+
+
+  <record id="form_collection" model="ir.ui.view">
+    <field name="name">form_collection</field>
+    <field name="model">wc.collection</field>
+    <field name="arch" type="xml">
+      <form>
+
+        <header>
+          <button name="confirm" string="Confirm"
+            confirm="Are you sure you want to confirm this payment/collection?"
+            states="draft" type="object" class="oe_highlight oe_read_only"/>
+
+          <button name="cancel" string="Cancel"
+            confirm="Are you sure you to cancel this payment/collection?"
+            states="draft" type="object" class="oe_read_only"/>
+
+          <button name="gen_lines" string="Generate Lines"
+            states="draft" type="object" class="oe_highlight oe_edit_only"/>
+
+          <button name="reverse_collection"
+            string="Reverse Collection"
+            groups="wc.group_manager,wc_collection.group_collection_officer"
+            confirm="Are you sure you want to reverse this payment/collection?"
+            states="confirmed"
+            class="oe_read_only"
+            type="object"/>
+
+          <field name="state" readonly="1" widget="statusbar" statusbar_colors="{'draft':'red'}"/>
+        </header>
+
+        <sheet>
+
+          <group col="12">
+
+            <group colspan="4">
+              <field name="company_id"
+                options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+              <field name="in_branch"/>
+              <field name="schedule" required="1"/>
+              <field name="name"/>
+              <field name="member_code"/>
+              <field name="member_id"
+                domain="[('company_id','=',company_id)]"
+                options="{'no_create':True, 'no_edit':True}"/>
+              <field name="date"/>
+              <field name="amount"/>
+              <field name="note"/>
+            </group>
+
+            <group colspan="8">
+
+              <field name="line_ids"
+                domain="[('is_deleted','=',False)]" nolabel="1"
+                attrs="{'readonly':[('state','!=','draft')]}">
+
+                <tree class="wc_tree" editable="bottom" create="0" delete="0" default_order="sequence">
+                  <field name="sequence" invisible="1"/>
+                  <field name="name"/>
+                  <field name="amount_due" sum="Total Due"/>
+                  <field name="amount" sum="Total Collection"/>
+                  <field name="note" invisible="1"/>
+                  <field name="is_deleted" invisible="1"/>
+                </tree>
+
+              </field>
+            </group>
+
+          </group>
+
+        </sheet>
+
+        <div class="oe_chatter">
+          <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+          <field name="message_ids" widget="mail_thread"/>
+        </div>
+
+      </form>
+    </field>
+  </record>
+
+  <record id="tree_collection" model="ir.ui.view">
+    <field name="name">tree_collection</field>
+    <field name="model">wc.collection</field>
+    <field name="arch" type="xml">
+      <tree class="wc_tree" delete="0" colors="red:state=='draft';brown:state=='cancelled'">
+        <field name="company_id" groups="base.group_multi_company"/>
+        <field name="create_uid" string="Collector"/>
+        <field name="name"/>
+        <field name="date"/>
+        <field name="member_code"/>
+        <field name="member_id"/>
+        <field name="amount"/>
+        <field name="state"/>
+        <field name="note" invisible="1"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="search_collection" model="ir.ui.view">
+    <field name="name">search_collection</field>
+    <field name="model">wc.collection</field>
+    <field name="arch" type="xml">
+      <search>
+        <field name="member_id"/>
+        <field name="name"/>
+        <field name="create_uid" string="Collector"/>
+        <field name="date"/>
+        <field name="amount"/>
+        <filter name="gcollector" string="Collector" context="{'group_by': 'create_uid'}"/>
+      </search>
+    </field>
+  </record>
+
+  <record id="action_collection_entries" model="ir.actions.act_window">
+    <field name="name">Collection Entries</field>
+    <field name="res_model">wc.collection</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <menuitem id="menu_entries"
+    name="Collection Entries"
+    action="action_collection_entries"
+    sequence="10"
+    parent="wc_collection.menu_collection"
+  />
+
+  <!-- ======================================= -->
+
+  <record id="form_collection_details" model="ir.ui.view">
+    <field name="name">form_collection_details</field>
+    <field name="model">wc.collection.line</field>
+    <field name="arch" type="xml">
+      <form edit="0" create="0" delete="0">
+        <sheet>
+          <group>
+            <group>
+              <field name="collection_id"
+                options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+              <field name="member_code"/>
+              <field name="member_id"
+                options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+              <field name="name"/>
+            </group>
+            <group>
+              <field name="date"/>
+              <field name="amount_due"/>
+              <field name="amount"/>
+              <field name="state"/>
+              <field name="is_deleted" invisible="1"/>
+            </group>
+          </group>
+          <!--
+          <separator string="Notes"/>
+          <field name="note"/>
+          -->
+        </sheet>
+      </form>
+
+    </field>
+  </record>
+
+  <record id="tree_details" model="ir.ui.view">
+    <field name="name">tree_details</field>
+    <field name="model">wc.collection.line</field>
+    <field name="arch" type="xml">
+      <tree class="wc_tree" create="0" delete="0" edit="0"
+        colors="red:state=='draft';brown:state=='cancelled'"
+        default_order="date desc,collection_id desc,sequence"
+      >
+        <field name="company_id" groups="base.group_multi_company"/>
+        <field name="date"/>
+        <field name="collection_id"/>
+        <field name="member_code"/>
+        <field name="member_id"/>
+        <field name="name"/>
+        <field name="amount"/>
+        <field name="sequence" invisible="1"/>
+        <field name="is_deleted" invisible="1"/>
+        <field name="state"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="search_details" model="ir.ui.view">
+    <field name="name">search_details</field>
+    <field name="model">wc.collection.line</field>
+    <field name="arch" type="xml">
+      <search>
+        <field name="member_id"/>
+        <field name="name"/>
+        <field name="date"/>
+        <field name="amount"/>
+      </search>
+    </field>
+  </record>
+
+  <record id="action_details" model="ir.actions.act_window">
+    <field name="name">Collection Transaction Details</field>
+    <field name="res_model">wc.collection.line</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="domain">[('is_deleted','=',False)]</field>
+  </record>
+
+  <menuitem id="menu_details"
+    name="Collection Transaction Details"
+    action="action_details"
+    sequence="20"
+    parent="wc_collection.menu_collection"
+  />
+
+</odoo>
