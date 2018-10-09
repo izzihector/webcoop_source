@@ -10,14 +10,22 @@ EzTech Software & Consultancy Inc. (c) 2017
     <field name="arch" type="xml">
       <form>
         <group>
+          <field name="member_id" invisible="1"/>
           <field name="code"/>
           <field name="name"/>
           <field name="factor"/>
           <field name="amount"/>
           <field name="recurring"/>
           <field name="net_include"/>
-          <field name="deposit_account_id" attrs="{'invisible':[('code','not in',['CBU','SA'])]}"/>
-          <field name="gl_account_id"/>
+          <field name="deposit_account_id"
+            attrs="{'invisible':[('code','not in',['CBU','SA'])]}"
+            options="{'no_create':True, 'no_edit':True, 'no_open':True}"
+            domain="['&amp;',('account_type','=ilike',code),'|',('member_id','=',member_id),('other_member_ids','in',member_id)]"
+          />
+          <field name="gl_account_id"
+            required="1"
+            options="{'no_create':True, 'no_edit':True, 'no_open':True}"
+          />
           <field name="note"/>
           <field name="state" invisible="1"/>
         </group>
@@ -44,7 +52,8 @@ EzTech Software & Consultancy Inc. (c) 2017
         <field name="net_include"/>
         <field name="deposit_account_id"
           options="{'no_create':True, 'no_edit':True, 'no_open':False}"
-          domain="['&amp;',('account_type','=ilike',code),'|',('member_id','=',member_id),('other_member_ids','in',member_id)]"/>
+          domain="['&amp;',('account_type','=ilike',code),'|',('member_id','=',member_id),('other_member_ids','in',member_id)]"
+        />
         <field name="gl_account_id" required="1"
           options="{'no_create':True, 'no_edit':True, 'no_open':False}"/>
         <field name="note"/>
