@@ -7,4 +7,5 @@ Fix #269
 Add feature #271
 - initial force bulk approvals for data migration.
 
-Test
+Add feature #274
+- passbook and validation print formatting
