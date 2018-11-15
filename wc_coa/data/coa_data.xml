@@ -92,7 +92,7 @@
       <field name="chart_template_id" ref="ca_webcoop"/>
     </record>
 
-    <record id="chart21332_en" model="account.account.template">
+    <record id="chart2135_en" model="account.account.template">
       <field name="code">2135</field>
       <field name="user_type_id" ref="account.data_account_type_current_liabilities"/>
       <field name="reconcile" eval="False"/>
@@ -100,7 +100,7 @@
       <field name="chart_template_id" ref="ca_webcoop"/>
     </record>
 
-    <record id="chart21433_en" model="account.account.template">
+    <record id="chart2136_en" model="account.account.template">
       <field name="code">2136</field>
       <field name="user_type_id" ref="account.data_account_type_current_liabilities"/>
       <field name="name">SSS/ECC/Philhealth/Pag-ibig Premium Contributions Payable</field>
@@ -163,7 +163,7 @@
     </record>
 
     <!-- EXPENSES -->
-
+   
     <record id="coa_purchase" model="account.account.template">
       <field name="code">5111</field>
       <field name="user_type_id" ref="account.data_account_type_expenses"/>
@@ -171,28 +171,28 @@
       <field name="chart_template_id" ref="ca_webcoop"/>
     </record>
 
-    <record id="chart512101_en" model="account.account.template">
+    <record id="chart5120_en" model="account.account.template">
       <field name="code">5120</field>
       <field name="user_type_id" ref="account.data_account_type_expenses"/>
       <field name="name">Salaries and Wages</field>
       <field name="chart_template_id" ref="ca_webcoop"/>
     </record>
 
-    <record id="chart512301_en" model="account.account.template">
+    <record id="chart5121_en" model="account.account.template">
       <field name="code">5121</field>
       <field name="user_type_id" ref="account.data_account_type_expenses"/>
       <field name="name">SSS/ECC/Philhealth/Pag-ibig Employer Contributions</field>
       <field name="chart_template_id" ref="ca_webcoop"/>
     </record>
 
-    <record id="chart512304_en" model="account.account.template">
+    <record id="chart5122_en" model="account.account.template">
       <field name="code">5122</field>
       <field name="user_type_id" ref="account.data_account_type_expenses"/>
       <field name="name">Employee benefits expense</field>
       <field name="chart_template_id" ref="ca_webcoop"/>
     </record>
 
-    <record id="chart412_en" model="account.account.template">
+    <record id="chart5131_en" model="account.account.template">
       <field name="code">5131</field>
       <field name="user_type_id" ref="account.data_account_type_expenses"/>
       <field name="name">Interest Paid to Depositors</field>

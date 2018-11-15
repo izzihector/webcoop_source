@@ -9,3 +9,10 @@ Add feature #271
 
 Add feature #274
 - passbook and validation print formatting
+
+Fix #277
+- change record id with rule of "chartxxxxxx_en"(xxxxxx=code).
+  (except for the one having special record id like "ao_inventory")
+
+
+
