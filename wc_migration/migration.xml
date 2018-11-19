@@ -1,33 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+<!-- Form Template -->
+  <!-- initial approve -->
   <record id="form_migration" model="ir.ui.view">
     <field name="name">form_migration</field>
     <field name="model">wc.migration</field>
     <field name="arch" type="xml">
       <form string="Initial Approve " create="false" edit="false">
         <header>
-          <button name="initialapproveMember" string="Bulk Approve Member" type="object" />
-          <button name="initialapproveLoan" string="Bulk Approve Loan" type="object" />
+          <button name="initialapproveMember" string="Bulk Approve Member" type="object" /> 
+          <button name="initialapproveLoan_onlyloan" string="Bulk Approve Loan(no schedule creation)" type="object" />
           <button name="initialapproveSavingAndTimeDeposit" string="Bulk Approve For Saving and TimeDeposit" type="object" />         
-          <button name="initialaccounttran" string="Bulk Approve For account transaction" type="object" />         
+          <button name="initialaccounttran" string="Bulk Approve For account transaction" type="object" />        
         </header>
-        <sheet>
-        </sheet>
       </form>
     </field>
   </record>
 
+
+ <!-- Action -->
   <record id="action_migration" model="ir.actions.act_window">
     <field name="name">migration</field>
     <field name="type">ir.actions.act_window</field>
     <field name="res_model">wc.migration</field>
     <field name="view_mode">form</field>
-    <field name="search_view_id" ref="form_migration"/>
   </record>
 
+  <!-- Menu -->
+  <menuitem id="menu_initial_data_creation"
+    name="Initial Data Creation"
+    parent="wc.menu_root"
+    sequence="100001"/>
+  
   <menuitem id="menu_migration" 
     action="action_migration"
-    parent="wc.menu_config" name="Initial Approve" sequence="9999"
-    groups="base.group_system"/>
-
+    parent="menu_initial_data_creation" name="Initial Approve" sequence="9999"
+    groups="group_initial_migration" />
+    <!--  groups="base.group_system"/> -->
+    
 </odoo>

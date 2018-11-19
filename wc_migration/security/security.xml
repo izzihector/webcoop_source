@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="0">
+    <record id="group_initial_migration" model="res.groups">
+      <field name="name">Data Migration User</field>
+      <field name="category_id" ref="base.module_category_extra"/>
+      <field name="comment">the user will be able to use data migration feature.</field>
+    </record>
+
+   <!--  Record Rule -->    
+    
+  </data>
+
+</odoo>
