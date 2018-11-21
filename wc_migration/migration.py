@@ -141,14 +141,17 @@ class ForceApproveForInitialData(models.Model):
             sql = "UPDATE wc_account "\
                   "SET state='%s',"\
                   "    code='%s',"\
+                  "    name='%s',"\
                   "    write_uid=%s ,"\
                   "    write_date='%s' "\
                   " WHERE id = %s"\
                    % (r_state,
                       r_code,
+                      r_code + " - " + r.member_id.name,
                       self.selfDic()['uid'],
                       self.selfDic()['time'],
                       r.id )
+         
             self._cr.execute(sql)
 
                 
