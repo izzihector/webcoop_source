@@ -74,7 +74,7 @@ class Account(models.Model):
         date_start = False
         date_end = False
         sdate = VALID_DATES.get(acct.account_type_id.posting_schedule, {}).get(date[5:])
-        _logger.debug("valid_dates: acct=% date=%s sdate=%s", acct.name, date, sdate)
+        _logger.debug("valid_dates: acct=%s date=%s sdate=%s", acct.name, date, sdate)
         if sdate:
             date_end = fields.Date.from_string(date) # - relativedelta(days=1)
             date_start = fields.Date.from_string("%s-%s" % (date[:4], sdate))
