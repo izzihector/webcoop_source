@@ -41,23 +41,23 @@ class ForceApproveForInitialData(models.Model):
                 else:
                     prefix = ''
                 mem_code = '%s%s' % (prefix, self.env['ir.sequence'].next_by_code('wc.member'))
-                sql = "UPDATE wc_member "\
+                self._cr.execute("UPDATE wc_member "\
                       "SET approver_id=%s,"\
                       "    write_uid=%s ,"\
-                      "    write_date='%s' ,"\
-                      "    approval_date='%s',"\
+                      "    write_date=%s ,"\
+                      "    approval_date=%s,"\
                       "    is_approved=%s ,"\
-                      "    code='%s' "\
+                      "    code=%s "\
                       "WHERE id = %s"\
-                       % (self.selfDic()['uid'],
+                       , (self.selfDic()['uid'],
                           self.selfDic()['uid'],
                           self.selfDic()['time'],
                           self.selfDic()['date'],
                           True,
                           mem_code,
-                          rec.id )
+                          rec.id ))
 
-                self._cr.execute(sql)                
+                #self._cr.execute(sql)                
                 _logger.debug('member approved id=%s ,mem_code=%s' % (rec.id,mem_code)) 
 
             if rec.member_type == 'regular':
@@ -75,26 +75,28 @@ class ForceApproveForInitialData(models.Model):
                 dt = fields.Datetime.from_string(self.selfDic()['date']) + relativedelta(months=months)
                 date_maturity = dt.strftime(DF)
 
-                sql = "INSERT INTO wc_account"\
-                        " ("\
-                        "  create_uid ,"\
-                        "  create_date ,"\
-                        "  write_uid ,"\
-                        "  write_date ,"\
-                        "  company_id ,"\
-                        "  passbook_line ,"\
-                        "  balance ,"\
-                        "  date_start ,"\
-                        "  date_maturity ,"\
-                        "  member_id ,"\
-                        "  account_type_id ,"\
-                        "  account_type ,"\
-                        "  state ,"\
-                        "  code ,"\
-                        "  name ,"\
-                        "  active"\
-                        " ) VALUES (%s,'%s',%s,'%s',%s,%s,%s,'%s','%s',%s,%s,'%s','%s','%s','%s',%s)"\
-                        % (self.selfDic()['uid'],
+                self._cr.execute("""\
+                    INSERT INTO wc_account
+                         (
+                          create_uid ,
+                          create_date ,
+                          write_uid ,
+                          write_date ,
+                          company_id ,
+                          passbook_line ,
+                          balance ,
+                          date_start ,
+                          date_maturity ,
+                          member_id ,
+                          account_type_id ,
+                          account_type ,
+                          state ,
+                          code ,
+                          name ,
+                          active
+                         ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) 
+                        """ ,
+                        (self.selfDic()['uid'],
                            self.selfDic()['time'], 
                            self.selfDic()['uid'],
                            self.selfDic()['time'], 
@@ -108,10 +110,10 @@ class ForceApproveForInitialData(models.Model):
                            cbu_type_id.category ,
                            'open' ,
                            mem_code ,
-                           mem_code + " - " + rec.name,
-                           True )
-                                                      
-                self._cr.execute(sql)
+                           mem_code + ' - ' + rec.name,
+                           True ))
+                                                                              
+                #self._cr.execute(sql)
                 _logger.debug('account created code=%s ,name=%s' % (mem_code,mem_code + " - " + rec.name))
         
     #changed 2018 11 19 for speedup                          
@@ -138,21 +140,21 @@ class ForceApproveForInitialData(models.Model):
                 elif r.account_type_id.sequence_id:
                     r_code = r.account_type_id.code + '-' + r.account_type_id.sequence_id.next_by_id()
             
-            sql = "UPDATE wc_account "\
-                  "SET state='%s',"\
-                  "    code='%s',"\
-                  "    name='%s',"\
+            self._cr.execute("UPDATE wc_account "\
+                  "SET state=%s,"\
+                  "    code=%s,"\
+                  "    name=%s,"\
                   "    write_uid=%s ,"\
-                  "    write_date='%s' "\
+                  "    write_date=%s "\
                   " WHERE id = %s"\
-                   % (r_state,
+                   , (r_state,
                       r_code,
                       r_code + " - " + r.member_id.name,
                       self.selfDic()['uid'],
                       self.selfDic()['time'],
-                      r.id )
+                      r.id ))
          
-            self._cr.execute(sql)
+#            self._cr.execute(sql)
 
                 
     #changed 2018 11 19 for speedup    
@@ -177,18 +179,18 @@ class ForceApproveForInitialData(models.Model):
                 r_code = r.loan_type_id.code + '-' + r.loan_type_id.sequence_id.next_by_id()
             r.gen_soa_details(r, r.date_start)
             
-            sql = "UPDATE wc_loan "\
-                  "SET state='%s',"\
-                  "    code='%s',"\
+            self._cr.execute("UPDATE wc_loan "\
+                  "SET state=%s,"\
+                  "    code=%s,"\
                   "    write_uid=%s ,"\
-                  "    write_date='%s' "\
+                  "    write_date=%s "\
                   " WHERE id = %s"\
-                       % ('approved',
+                       , ('approved',
                           r_code,
                           self.selfDic()['uid'],
                           self.selfDic()['time'],
-                          r.id )
-            self._cr.execute(sql)
+                          r.id ))
+#            self._cr.execute(sql)
                     
                                          
     @api.multi
@@ -210,18 +212,18 @@ class ForceApproveForInitialData(models.Model):
             if r_code == 'DRAFT' or not r_code:
                 r_code = r.loan_type_id.code + '-' + r.loan_type_id.sequence_id.next_by_id()
 
-            sql = "UPDATE wc_loan "\
-                  "SET state='%s',"\
-                  "    code='%s',"\
+            self._cr.execute("UPDATE wc_loan "\
+                  "SET state=%s,"\
+                  "    code=%s,"\
                   "    write_uid=%s ,"\
-                  "    write_date='%s' "\
+                  "    write_date=%s "\
                   " WHERE id = %s"\
-                       % ('approved',
+                  ,('approved',
                           r_code,
                           self.selfDic()['uid'],
                           self.selfDic()['time'],
-                          r.id )
-            self._cr.execute(sql)
+                          r.id ))
+#            self._cr.execute(sql)
                     
 
     #changed 2018 11 19 for speedup    
@@ -271,20 +273,20 @@ class ForceApproveForInitialData(models.Model):
                     r_state = new_state
                     r_confirm_date = fields.Datetime.now()
                 
-                sql = "UPDATE wc_account_transaction "\
-                  "SET name = '%s',"\
-                  "    state='%s',"\
-                  "    confirm_date ='%s',"\
+                self._cr.execute("UPDATE wc_account_transaction "\
+                  "SET name = %s,"\
+                  "    state=%s,"\
+                  "    confirm_date =%s,"\
                   "    write_uid=%s ,"\
-                  "    write_date='%s' "\
+                  "    write_date=%s "\
                   " WHERE id = %s"\
-                       % (r_name,
+                  ,(r_name,
                           r_state,
                           r_confirm_date,
                           self.selfDic()['uid'],
                           self.selfDic()['time'],
-                          r.id )
-                self._cr.execute(sql)                
+                          r.id ))
+#                self._cr.execute(sql)                
  
                         
     @api.multi                
