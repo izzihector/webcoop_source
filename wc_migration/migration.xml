@@ -9,9 +9,10 @@
       <form string="Initial Approve " create="false" edit="false">
         <header>
           <button name="initialapproveMember" string="Bulk Approve Member" type="object" /> 
-          <button name="initialapproveLoan_onlyloan" string="Bulk Approve Loan(no schedule creation)" type="object" />
+          <button name="initialapproveLoan_onlyloan" string="Bulk Approve Loan(no schedule creation, used for initial migration data import)" type="object" />
           <button name="initialapproveSavingAndTimeDeposit" string="Bulk Approve For Saving and TimeDeposit" type="object" />         
           <button name="initialaccounttran" string="Bulk Approve For account transaction" type="object" />        
+          <button name="initialapproveLoan" string="Bulk Approve Loan(WITH SCHEDULE)" type="object" />        
         </header>
       </form>
     </field>
