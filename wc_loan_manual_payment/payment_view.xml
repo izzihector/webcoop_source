@@ -10,10 +10,14 @@ EzTech Software & Consultancy Inc. (c) 2017
     <field name="arch" type="xml">
 
       <field name="amount" position="before">
+        <!--
         <field name="is_manual_compute" attrs="{'invisible':[('payment_schedule','!=','lumpsum')]}"/>
+      -->
+        <field name="is_manual_compute"/>
         <field name="principal_amount" attrs="{'invisible':[('is_manual_compute','=',False)]}"/>
         <field name="interest_amount" attrs="{'invisible':[('is_manual_compute','=',False)]}"/>
         <field name="penalty_amount" attrs="{'invisible':[('is_manual_compute','=',False)]}"/>
+        <field name="others_amount" attrs="{'invisible':[('is_manual_compute','=',False)]}"/>
         <field name="amount2" attrs="{'invisible':[('is_manual_compute','=',False)]}"/>
       </field>
 
