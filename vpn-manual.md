@@ -3,7 +3,7 @@ Copyright © 2019 | [EzTech Software and Consultancy Inc.](https://www.eztechsof
 
 ## Requirements
 - SSH access to VPN server
-- VPN pass phrase (PEM Password)
+- VPN pass phrase (PEM Password)  (Refer PEM paraphase in [aws-install.md] for this.)
 
 ## Create user certificate
 - Login using SSH at VPN server.
