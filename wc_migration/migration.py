@@ -288,6 +288,7 @@ class ForceApproveForInitialData(models.Model):
                           r.id ))
 #                self._cr.execute(sql)                
  
+                r.account_id.balance=r.account_id.balance+r.deposit-r.withdrawal                
                         
     @api.multi                
     def selfDic(self):
