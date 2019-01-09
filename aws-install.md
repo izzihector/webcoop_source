@@ -218,6 +218,9 @@ docker-compose up -d
 
 - - -
 ## File Server Installation
+
+### Setup NFS Sharing.
+
 ##### Install NFS utilities.
 ```
 yum -y install nfs-utils
@@ -243,11 +246,107 @@ chown nfsnobody.nfsnobody /mnt/share/filestore
 exportfs -a
 ```
 
-#### Add the following line in /etc/fstab on the app server to connect to the NFS share. The IP address is the NFS server address.
+##### Add the following line in /etc/fstab on the app server to connect to the NFS share. The IP address is the NFS server address.
 ```
 172.31.25.176:/mnt/share/filestore /opt/webcoop/data/.local/share/ nfs rsize=8192,wsize=8192,timeo=14,intr
 ```
-### Restart the app server.
+##### Restart the app server.
+
+### Setup Automated Backup
+
+##### Create backup directory.
+```
+cd ~
+mkdir -p backup
+```
+
+##### Create backup script file as `~/backup/backup.py`.
+```
+#!/usr/bin/env python
+
+#########################################################################
+import base64
+import xmlrpclib
+import time
+import os
+from dateutil.relativedelta import *
+import glob
+from datetime import datetime
+
+def backupX(path, url, db, password):
+    filename='%s/%s_%s.zip' % (path, db, time.strftime('%Y-%m-%d_%H%M%S'))
+
+    print "Backup", filename
+
+    sock = xmlrpclib.ServerProxy(url+"/xmlrpc/db")
+    backup_file = open(filename, 'wb')
+    dump = sock.dump(password, db, 'zip')
+    backup_file.write(base64.b64decode(dump))
+    backup_file.close()
+
+def backup(path, url, db, password):
+    filename='%s/%s_%s.zip' % (path, db, time.strftime('%Y-%m-%d_%H%M%S'))
+
+    if 1:
+        print "Backup", filename
+        cmd = "curl -o %s -d master_pwd=%s -d name=%s %s/web/database/backup" % (
+            filename,
+            password,
+            db,
+            url,
+        )
+
+        print "CMD", cmd
+        os.system(cmd)
+
+    if 1:
+        #delete old files
+        now = datetime.now()
+        dt_3months = now - relativedelta(months=3)
+        #print dt_3months
+        filename='%s/%s_%s*.zip' % (path, db, dt_3months.strftime('%Y-%m-%d'))
+        files = glob.glob('%s/%s_*' % (path, db))
+        for fn in files:
+            if fn<filename:
+                print "Deleting file", fn
+                os.remove(fn)
+
+
+#########################################################################
+
+if __name__=="__main__":
+
+    path = "<backup-storage-dir>"
+    dbs = [
+        '<list-of-db-to-backup>',
+        ...
+        ...
+    ]
+
+    for db in dbs:
+        backup(
+            path,
+            "https://test.philippines-webcoop.com",
+            db,
+            "<master-password>",
+        )
+```
+
+##### Create a cron file `cronz`.
+Adjust the backup time if necessary depending on the server timezone.
+Example is set at 13-UTC to start backup at 9PM Philippine time.
+```
+#min  hour  dom  month  dow  command
+0     13    *    *      1-7  /home/centos/backup/backup.py >> /home/centos/backup.log
+```
+
+##### Set crontab of user by running the following command.
+```
+crontab ~/cronz
+```
+
+##### Backup script will now periodically run at the cron schedule.
+
 
 - - -
 ## VPN Server Installation
