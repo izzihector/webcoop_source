@@ -176,7 +176,7 @@ class Collections(models.Model):
                         #'state': 'confirmed',
                     })
                     res.confirm()
-        return res
+        #return res
 
     @api.multi
     def Xcancel(self):
