@@ -470,6 +470,12 @@ class ExcelReportWizard(models.TransientModel):
                 act_row += 1
                 continue
 
+            #fix bug 507 start,#forcibly set is_skip=True if no account title and the line is account transaction data line. 
+            is_datarow_but_no_account_title = False
+            if cmd != '$copy' and ( len(data_lines) == 0 or data_lines== [{}]):
+                is_datarow_but_no_account_title = True
+            #fix bug 507 end
+            
             totals = {}
             for rec in data_lines:
 
@@ -501,7 +507,12 @@ class ExcelReportWizard(models.TransientModel):
                     is_skip = False
                 else:
                     is_skip = True
-
+                    
+                #fix bug 507 start,#forcibly set is_skip=True if no data and the line is account transaction data line. 
+                if is_datarow_but_no_account_title:
+                    is_skip = True
+                #fix bug 507 end
+                    
                 #_logger.debug("skipz %s: is_skip=%d d=%s c=%s", skip_zero, is_skip, debit, credit)
                 #if (not skip_zero) or debit or credit:
 
