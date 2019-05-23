@@ -76,7 +76,8 @@ EzTech Software & Consultancy Inc. (c) 2017
               <group>
                 <group>
                   <field name="company_id" groups="base.group_multi_company"/>
-                  <field name="report_type"/>
+<!--                   <field name="report_type"/> -->
+                  <field name="report_type" readonly='True'/>
                   <field name="template_filename" invisible="0"/>
                   <field name="template_data" filename="template_filename"/>
                 </group>
@@ -124,6 +125,7 @@ EzTech Software & Consultancy Inc. (c) 2017
     <field name="res_model">wc.excel.report</field>
     <field name="view_type">form</field>
     <field name="view_mode">tree,form</field>
+    <field name="context">{'default_report_type':'jsummary'}</field>
   </record>
 
   <menuitem id="menu_excel_report_config"
