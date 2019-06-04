@@ -62,6 +62,11 @@ class ExcelReportWizard(models.TransientModel):
 
     filename = fields.Char("Filename", default="output.xlsx")
     excel_file = fields.Binary("Excel File", readonly=True)
+    
+    #add 20190603 suzuki (feature #514)
+    target_move = fields.Selection([('posted', 'All Posted Entries'),
+                                    ('all', 'All Entries'),
+                                    ], string='Target Moves', required=True, default='posted')
 
     @api.onchange('report_id')
     def onchange_report_id(self):
@@ -83,7 +88,9 @@ class ExcelReportWizard(models.TransientModel):
         else:
             return "Account code not found!"
 
-    def get_acct_totals(self, code1, code2, where_str="", where_params=[]):
+    #modify 20190603 suzuki (feature #514)
+#     def get_acct_totals(self, code1, code2, where_str="", where_params=[]):
+    def get_acct_totals(self, code1, code2, where_str="", where_params=[],is_posted_data_only=True):
         scode1 = ("%s" % code1).strip()
         scode2 = ("%s" % code2).strip()
         accounts = self.env['account.account'].search([
@@ -97,6 +104,13 @@ class ExcelReportWizard(models.TransientModel):
         if where_str:
             where_str = " AND " + where_str
 
+        #add 20190603 suzuki (feature #514)
+        if is_posted_data_only:
+            state_whr = " AND move.state='posted' "
+        else:
+            state_whr = " AND 1=1 "
+
+
         request = (
             "SELECT SUM(debit) AS debit," +
             " SUM(credit) AS credit," +
@@ -104,8 +118,9 @@ class ExcelReportWizard(models.TransientModel):
             " FROM account_move_line AS line" +
             " INNER JOIN account_move AS move ON move.id=line.move_id" +
             " WHERE line.account_id IN %s" +
-            " AND move.state='posted'" +
-            where_str
+            state_whr + where_str
+#             " AND move.state='posted'" +
+#             where_str
         )
         params = (tuple(accounts.ids),) + tuple(where_params)
         _logger.debug("sql request: %s param=%s", request, params)
@@ -114,9 +129,10 @@ class ExcelReportWizard(models.TransientModel):
             return row
 
 
-    @api.model
-    def gen_excel_jsummary(self, wiz, template):
-
+    @api.model 
+    #modify 20190603 suzuki (feature #514)
+#     def gen_excel_jsummary(self, wiz, template):
+    def gen_excel_jsummary(self, wiz, template,is_posted_data_only=True):
         template_io = StringIO(template.decode('base64'))
         wb = load_workbook(template_io)
         if 'data' not in wb.get_sheet_names():
@@ -137,6 +153,13 @@ class ExcelReportWizard(models.TransientModel):
 
         start_row =  int(ws['B12'].value)
 
+        #add 20190603 suzuki (feature #514)
+        if is_posted_data_only:
+            whr_string = " WHERE m.state='posted' $where_str"
+        else:
+            whr_string = " WHERE 1=1 $where_str"
+
+        #mod 20190603 suzuki
         sql = """
             SELECT l.account_id as account_id,
                 a.code AS code,
@@ -146,10 +169,16 @@ class ExcelReportWizard(models.TransientModel):
             FROM account_move_line AS l
             INNER JOIN account_move AS m ON m.id = l.move_id
             INNER JOIN account_account AS a ON a.id = l.account_id
-            WHERE m.state='posted' AND %s
+            """ + \
+            whr_string + \
+            """
             GROUP BY 1,2,3
             ORDER BY 2,3
-        """
+            """
+#             WHERE m.state='posted' AND %s
+#             GROUP BY 1,2,3
+#             ORDER BY 2,3
+#             """
 
         where_str = "l.company_id=%s AND l.date>=%s AND l.date<=%s"
         params = [wiz.report_id.company_id.id, date1, date2]
@@ -288,10 +317,18 @@ class ExcelReportWizard(models.TransientModel):
         return where_str, params
 
     @api.model
-    def get_data_details(self, add_where_str="", add_params=[], order="2,1"):
+    #modify 20190603 suzuki (feature #514)
+#     def get_data_details(self, add_where_str="", add_params=[], order="2,1"):
+    def get_data_details(self, add_where_str="", add_params=[], order="2,1",is_posted_data_only=True):
 
         date1 = fields.Date.from_string(self.date1)
         date2 = fields.Date.from_string(self.date2)
+
+        #add 20190603 suzuki (feature #514)
+        if is_posted_data_only:
+            whr_string = " WHERE m.state='posted' $where_str"
+        else:
+            whr_string = " WHERE 1=1 $where_str"
 
         sql = """
             SELECT
@@ -311,9 +348,14 @@ class ExcelReportWizard(models.TransientModel):
             INNER JOIN account_account AS a ON a.id = l.account_id
             INNER JOIN account_journal AS j ON j.id = m.journal_id
             LEFT JOIN res_partner AS p ON p.id = l.partner_id
-            WHERE m.state='posted' $where_str
+            """ \
+            + whr_string + \
+            """
             ORDER BY $order_str
             """
+#            WHERE m.state='posted' $where_str
+#            ORDER BY $order_str
+#            """
 
         params = [self.report_id.company_id.id, date1, date2]
         where_str = " AND l.company_id=%s AND l.date>=%s AND l.date<=%s"
@@ -329,11 +371,21 @@ class ExcelReportWizard(models.TransientModel):
         return self.env.cr.dictfetchall()
 
     @api.model
-    def get_data_lines(self, add_where_str="", add_params=[], totals=False, order="2,3"):
+    #modify 20190603 suzuki (feature #514)
+#     def get_data_lines(self, add_where_str="", add_params=[], totals=False, order="2,3"):
+    def get_data_lines(self, add_where_str="", add_params=[], totals=False, order="2,3",is_posted_data_only=True):
 
         date1 = fields.Date.from_string(self.date1)
         date2 = fields.Date.from_string(self.date2)
+        
+        #add 20190603 suzuki (feature #514)
+        if is_posted_data_only:
+            whr_string = " WHERE m.state='posted' $where_str"
+        else:
+            whr_string = " WHERE 1=1 $where_str"
+            
 
+        #mod 20190603 suzuki (feature #514)
         if totals:
             sql = """
                 SELECT
@@ -346,8 +398,10 @@ class ExcelReportWizard(models.TransientModel):
                 FROM account_move_line AS l
                 INNER JOIN account_move AS m ON m.id = l.move_id
                 INNER JOIN account_account AS a ON a.id = l.account_id
-                WHERE m.state='posted' $where_str
-            """
+                """ \
+                + whr_string
+#                 WHERE m.state='posted' $where_str
+#             """
 
         else:
             sql = """
@@ -363,10 +417,16 @@ class ExcelReportWizard(models.TransientModel):
                 FROM account_move_line AS l
                 INNER JOIN account_move AS m ON m.id = l.move_id
                 INNER JOIN account_account AS a ON a.id = l.account_id
-                WHERE m.state='posted' $where_str
+                """ \
+                + whr_string + \
+                """
                 GROUP BY 1,2,3
                 ORDER BY $order_str
-            """
+                """
+#                 WHERE m.state='posted' $where_str
+#                 GROUP BY 1,2,3
+#                 ORDER BY $order_str
+#                 """
 
         params = [date1, date1, date1, date2, date1, date2]
         where_str = " AND l.company_id=%s"
@@ -407,6 +467,19 @@ class ExcelReportWizard(models.TransientModel):
         ws['B6'] = wiz.prepared_by or " "
         ws['B7'] = wiz.checked_by or " "
         ws['B8'] = wiz.approved_by or " "
+  
+        #add start 20190604 suzuki (feature [#513])
+        company_setting = self.env['res.company']._company_default_get('wc.excel.report.wizard')
+        ws['B12'] = company_setting.name or ""
+        ws['B13'] = company_setting.street + \
+            (company_setting.street2 and ("," + company_setting.street2) or "") + \
+            (company_setting.city and ("," + company_setting.city) or "") #Address
+        ws['B14'] = company_setting.phone or ""
+        ws['B15'] = company_setting.fax or ""
+        ws['B16'] = company_setting.vat or ""#TIN ID
+        ws['B17'] = company_setting.cda_registration or "" #CDA Registration ID
+        ws['B18'] = company_setting.email or "" #CDA Registration ID
+        #add end
 
         fill_row =  int(ws['B9'].value)
         col_count = int(ws['B10'].value)
@@ -425,29 +498,77 @@ class ExcelReportWizard(models.TransientModel):
             cmd = xfilter[0]
 
             if cmd in ['$total', '$acct', '$detail']:
-                if len(xfilter)<4:
-                    act_row += 1
-                    continue
+#delete start 20190603 suzuki (feature #512)
+#                 if len(xfilter)<4:
+#                     act_row += 1
+#                     continue
+#  
+#                 acct1 = str(xfilter[1])
+#                 acct2 = str(xfilter[2])
+#                 skip_zero = int(xfilter[3] or 0)
+#  
+#                 where_str = " AND a.code>=%s AND a.code<=%s"
+#                 params = [acct1, acct2]
+                 #delete end
 
-                acct1 = str(xfilter[1])
-                acct2 = str(xfilter[2])
-                skip_zero = int(xfilter[3] or 0)
+                #add start 20190603 suzuki
+                cmd_filter_length = len(xfilter)
+                if cmd_filter_length < 4 or \
+                   cmd_filter_length % 2 == 1 or \
+                   (cmd_filter_length % 2 == 0 and not(xfilter[cmd_filter_length-1] in ['0','1','2','3'])):
+                               
+                    raise ValidationError(_("Command formula [%s] on excel report template is incorrect."\
+                        "[%s] command requires even number's filter for account code range and , one filter for skipzero flag."\
+                         % (filter,cmd)))
+                    
+                where_str_parts = []
+                params=[]
+                #add 20190603 suzuki(feature #514)
+                if wiz.target_move == 'posted':
+                    is_posted_data_only = True
+                else:
+                    is_posted_data_only = False
+                #add end
+                    
+                #add 20190603 suzuki(feature #512)
+                for x in range(1, int((cmd_filter_length-2) / 2) + 1):
+                    acct1 = str(xfilter[1 + (x-1)*2 ])
+                    acct2 = str(xfilter[2 + (x-1)*2 ])
+                    
+                    if acct1 > acct2:
+                        raise ValidationError(_("Command formula [%s] on excel report template is incorrect." \
+                             "Code indicated for range start[%s] is bigger than range end code[%s]" \
+                             % (filter,acct1,acct2)))
+                    
+                    where_str_parts.append(" (a.code>=%s AND a.code<=%s) ")
+                    params.append(acct1)
+                    params.append(acct2)
 
-                where_str = " AND a.code>=%s AND a.code<=%s"
-                params = [acct1, acct2]
-
+                where_str = " AND (" + "or".join(where_str_parts) + ")"
+                skip_zero = int(xfilter[cmd_filter_length - 1] or 0)
+                #add end
+                
                 if wiz.voucher_ref:
                     where_str += " AND m.ref ILIKE %s"
                     params.append("%%%s%%" % wiz.voucher_ref.strip())
 
                 if cmd == '$total':
                     #data_lines = [wiz.get_acct_totals(acct1, acct2)]
-                    data_lines = wiz.get_data_lines(where_str, params, totals=True)
+                    # modify 20190603 suzuki (feature #514)
+#                     data_lines = wiz.get_data_lines(where_str, params, totals=True)
+                    data_lines = wiz.get_data_lines(where_str, params, totals=True,
+                                                     is_posted_data_only=is_posted_data_only)
                 elif cmd=='$detail':
-                    data_lines = wiz.get_data_details(where_str, params)
+                    # modify 20190603 suzuki(feature #514)
+#                     data_lines = wiz.get_data_details(where_str, params)
+                    data_lines = wiz.get_data_details(where_str, params,
+                                                     is_posted_data_only=is_posted_data_only)
                 else:
                     #$acct
-                    data_lines = wiz.get_data_lines(where_str, params)
+                    # modify 20190603 suzuki(feature #514)
+#                     data_lines = wiz.get_data_lines(where_str, params)
+                    data_lines = wiz.get_data_lines(where_str, params,
+                                                     is_posted_data_only=is_posted_data_only)
 
                 if not data_lines:
                     data_lines = [{}]
@@ -461,7 +582,11 @@ class ExcelReportWizard(models.TransientModel):
                 skip_zero = int(xfilter[-1] or 0)
                 where_str = " AND a.code IN %s"
                 params = [tuple(xfilter[1:-1])]
-                data_lines = wiz.get_data_lines(where_str, params, totals=True)
+                
+                # modify 20190603 suzuki(feature #514)
+#                 data_lines = wiz.get_data_lines(where_str, params, totals=True)
+                data_lines = wiz.get_data_lines(where_str, params, totals=True,
+                                       is_posted_data_only=is_posted_data_only)
 
             elif cmd=='$copy':
                 data_lines = [{}]

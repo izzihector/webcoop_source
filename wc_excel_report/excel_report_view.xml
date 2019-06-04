@@ -22,6 +22,8 @@ EzTech Software & Consultancy Inc. (c) 2017
               widget="many2many_tags"/>
             <field name="partner_id" options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
             <field name="voucher_ref" string="Ref/Collector"/>
+            <!-- add 20190603 suzuki -->
+            <field name="target_move" widget="radio"/>
           </group>
           <group>
             <field name="prepared_by"/>

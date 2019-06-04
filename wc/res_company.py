@@ -31,3 +31,8 @@ class Company(models.Model):
     def get_last_closed_date(self):
         self.ensure_one()
         return fields.Date.context_today(self)
+    
+    #add 20190604 suzuki (feature #513)
+    cda_registration = fields.Char("CDA Registration")
+    
+    
