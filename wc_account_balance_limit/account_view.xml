@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="form_account_type_inherit_for_balance_limit" model="ir.ui.view">
+    <field name="name">form_account_type_inherit_for_balance_limit</field>
+    <field name="model">wc.account.type</field>
+    <field name="inherit_id" ref="wc_account.form_acc_type"/>
+    <field name="arch" type="xml">
+      <field name="maintaining_balance" position="after">
+        <field name="balance_roof_limit"/>
+      </field>
+    </field>
+  </record>
+
+</odoo>
