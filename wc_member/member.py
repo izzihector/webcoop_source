@@ -130,6 +130,13 @@ class Member(models.Model):
 
     children = fields.Char('No. of Children', track_visibility='onchange')
 
+    #add 20190529 suzuki (bug #510)
+    active2 = fields.Boolean('Active',compute='compute_active',track_visibility='onchange')
+    @api.depends('active')
+    def compute_active(self):
+        self.active2 = self.active
+    #add end
+    
     @api.model
     def create(self, vals):
         res = super(Member, self).create(vals)
