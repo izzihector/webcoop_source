@@ -12,12 +12,7 @@ EzTech Software & Consultancy Inc. (c) 2017
 
       <field name="partner_id" position="before">
         <field name="branch_code"/>
-      </field>
-      <!-- feature 513 -->
-      <field name="vat" position="after">
-        <field name="cda_registration"/>
-      </field>
-      
+      </field>      
       
 
     </field>

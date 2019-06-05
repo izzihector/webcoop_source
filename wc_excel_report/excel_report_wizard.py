@@ -477,7 +477,7 @@ class ExcelReportWizard(models.TransientModel):
         ws['B14'] = company_setting.phone or ""
         ws['B15'] = company_setting.fax or ""
         ws['B16'] = company_setting.vat or ""#TIN ID
-        ws['B17'] = company_setting.cda_registration or "" #CDA Registration ID
+        ws['B17'] = company_setting.company_registry or "" #CDA Registration ID
         ws['B18'] = company_setting.email or "" #CDA Registration ID
         #add end
 
