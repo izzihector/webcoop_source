@@ -9,9 +9,9 @@
       <form>
         <sheet>
           <group>
-             <field name ="selected_ids_count"/>
-             <field name ="deposit_total"/>
-             <field name ="withdraw_total"/>
+             <field name ="selected_ids_count" readonly ='True'/>
+             <field name ="deposit_total" readonly ='True'/>
+             <field name ="withdraw_total" readonly ='True'/>
           </group>
           <footer>
             <button string="Approve Selected Transaction"
