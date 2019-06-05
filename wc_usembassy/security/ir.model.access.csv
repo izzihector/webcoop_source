@@ -1,0 +1,2 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+acc_wc_account_transaction_bulk_imp_1,acc_wc_account_transaction_bulk_imp_1,model_wc_account_transaction,wc_usembassy.group_account_tran_bulk_import,1,1,1,0

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+  <!-- add  -->
+  <record id="bulk_approval_selected_acctran_4_usembassy" model="ir.ui.view">
+    <field name="name">wizard_acc_tran_bulkapprove</field>
+    <field name="model">wc.usembassy.acc.transaction.bulkapproval</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+             <field name ="selected_ids_count"/>
+             <field name ="deposit_total"/>
+             <field name ="withdraw_total"/>
+          </group>
+          <footer>
+            <button string="Approve Selected Transaction"
+              confirm="Are you sure to confirm these transaction?"
+              name="bulk_approve" type="object" default_focus="1" class="btn-primary"/>
+            <button string="Cancel" class="btn-default" special="cancel"/>
+          </footer>
+        </sheet>
+      </form>
+    </field>
+  </record>
+  
+  <act_window id="action_bulk_approval_selected_acctran_4_usembassy"
+	name="Bulk Approval for Saving Transaction"
+	src_model="wc.account.transaction"
+	res_model="wc.usembassy.acc.transaction.bulkapproval"
+	view_mode="form"
+	key2="client_action_multi" 
+	target="new"
+	groups="wc_usembassy.group_account_tran_bulk_import"/>
+
+</odoo>
+
