@@ -471,7 +471,7 @@ class ExcelReportWizard(models.TransientModel):
         #add start 20190604 suzuki (feature [#513])
         company_setting = self.env['res.company']._company_default_get('wc.excel.report.wizard')
         ws['B12'] = company_setting.name or ""
-        ws['B13'] = company_setting.street + \
+        ws['B13'] = (company_setting.street or "")  + \
             (company_setting.street2 and ("," + company_setting.street2) or "") + \
             (company_setting.city and ("," + company_setting.city) or "") #Address
         ws['B14'] = company_setting.phone or ""
