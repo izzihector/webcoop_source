@@ -25,3 +25,6 @@ Fix #279
 -4.change menu
 -5.add access group for data migration
 
+Fix #528 (20190726
+-Add some field on membership form and Hide some fields on CBU , SAVING form (USEMB coop request )
+
