@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+  <!-- add  -->
+      <record id="form_members_ex_for_usemb" model="ir.ui.view">
+          <field name="name">form_members_ex_for_usemb</field>
+          <field name="model">wc.member</field>
+          <field name="inherit_id" ref="wc_member.form_members" />
+          <field name="arch" type="xml">
+          	<xpath expr="//label[@for='street']" position ="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath expr="//div[@class='o_address_format']" position ="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<field name="gender" position ="attributes">
+				<attribute name="invisible">1</attribute>
+			</field>
+			<field name="civil_status" position ="attributes">
+				<attribute name="invisible">1</attribute>
+			</field>
+			<xpath expr="//label[@for='birthday']" position ="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath expr="//div[@class='o_row']" position ="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<field name="nationality" position ="attributes">
+				<attribute name="invisible">1</attribute>
+			</field>
+			<field name="birthplace" position ="attributes">
+				<attribute name="invisible">1</attribute>
+			</field>
+			<field name="spouse" position ="attributes">
+				<attribute name="invisible">1</attribute>
+			</field>
+			<field name="sss_no" position ="attributes">
+				<attribute name="invisible">1</attribute>
+			</field>
+			<field name="gsis_no" position ="attributes">
+				<attribute name="invisible">1</attribute>
+			</field>
+			<field name="phic_no" position ="attributes">
+				<attribute name="invisible">1</attribute>
+			</field>
+			<field name="tin" position ="attributes">
+				<attribute name="invisible">1</attribute>
+			</field>
+			<field name="profession" position ="attributes">
+				<attribute name="invisible">1</attribute>
+			</field>
+			<field name="company" position ="attributes">
+				<attribute name="invisible">1</attribute>
+			</field>
+			<field name="company_address" position ="attributes">
+				<attribute name="invisible">1</attribute>
+			</field>
+			<field name="company_address" position ="after">
+				<field name="division"/> 
+				<field name="date_of_employement"/>
+				<field name="payroll_number"/>
+			</field>
+			<field name="company_contact" position ="attributes">
+				<attribute name="invisible">0</attribute>
+			</field>
+			<field name="mobile" position ="attributes">
+				<attribute name="invisible">0</attribute>
+			</field>
+			<field name="phone" position ="attributes">
+				<attribute name="invisible">0</attribute>
+			</field>
+			<field name="fax" position ="attributes">
+				<attribute name="invisible">0</attribute>
+			</field>
+			<field name="email" position ="attributes">
+				<attribute name="invisible">0</attribute>
+			</field>
+          </field>
+        </record>
+   
+
+</odoo>
+

@@ -65,7 +65,7 @@ class AccTranBulkApproval(models.Model):
         max_cnt = 100
         cnt = 0           
         if self.selected_ids_count > max_cnt:
-            raise Warning(_("Only %s can be approved with this bulk approval."))
+            raise Warning(_("Only %s can be approved with this bulk approval." % max_cnt))
             
         for r in self.selected_ids:
             cnt = cnt +1

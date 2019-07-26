@@ -10,15 +10,16 @@
                    """,
     'author': 'Esupportlink.',
     'depends': [
-        'wc_account','wc','wc_posting'
+        'wc_account','wc','wc_posting','wc_member'
     ],
     'init_xml': [],
     'data': [
-        'acc_transaction_bulkapproval.xml',
-        'account_transaction_view.xml',
         'security/security.xml',
         'security/ir.model.access.csv',
-        
+        'acc_transaction_bulkapproval.xml',
+        'account_transaction_view.xml',
+        'member_view_ex.xml',
+        'account_view.xml',
     ],
     'demo': [],
     'installable': True,

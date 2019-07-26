@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+  <!-- add  -->
+      <record id="form_account_ex_for_usemb" model="ir.ui.view">
+          <field name="name">form_account_ex_for_usemb</field>
+          <field name="model">wc.account</field>
+          <field name="inherit_id" ref="wc_account.form_account"/>
+          <field name="arch" type="xml">
+			<field name="other_member_ids" position ="attributes">
+				<attribute name="invisible">1</attribute>
+			</field>
+          </field>
+        </record>
+
+</odoo>
+
