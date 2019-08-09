@@ -19,11 +19,16 @@
 			<field name="civil_status" position ="attributes">
 				<attribute name="invisible">1</attribute>
 			</field>
-			<xpath expr="//label[@for='birthday']" position ="attributes">
+			<field name="civil_status" position ="attributes">
 				<attribute name="invisible">1</attribute>
+			</field>
+			
+			<xpath expr="//label[@for='birthday']" position ="attributes">
+				<attribute name="invisible">0</attribute>
+				<attribute name="string">Birthdate / Age</attribute>
 			</xpath>
 			<xpath expr="//div[@class='o_row']" position ="attributes">
-				<attribute name="invisible">1</attribute>
+				<attribute name="invisible">0</attribute>
 			</xpath>
 			<field name="nationality" position ="attributes">
 				<attribute name="invisible">1</attribute>
@@ -56,9 +61,20 @@
 				<attribute name="invisible">1</attribute>
 			</field>
 			<field name="company_address" position ="after">
+				<field name="employee_code"/> 
 				<field name="division"/> 
 				<field name="date_of_employement"/>
 				<field name="payroll_number"/>
+				<label for="fund_transfer_type"/>
+				<div class="o_row">
+				   <field name="fund_transfer_type"/> 
+				   <field name="fund_transfer" 
+				     attrs = "{'invisible': [('fund_transfer_type','=',False)]}"/>
+				   </div>
+				<label for="member_age"  string="Years serving as a coop member"/>
+				<div class="o_row">
+				 <field name="member_age"/> years
+				</div>
 			</field>
 			<field name="company_contact" position ="attributes">
 				<attribute name="invisible">0</attribute>
@@ -74,6 +90,7 @@
 			</field>
 			<field name="email" position ="attributes">
 				<attribute name="invisible">0</attribute>
+				<attribute name="string">Office Email</attribute>
 			</field>
           </field>
         </record>
