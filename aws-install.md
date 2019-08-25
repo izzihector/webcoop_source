@@ -29,6 +29,14 @@ yum install -y docker-ce
 systemctl start docker
 chkconfig docker on
 pip install docker-compose
+(Note: if you failed the install of docker-compose ,you cannot execute [docker-compose] command.maybe error message of [Command not found] will be shown in this case.
+In this case ,you can follow below step.
+1.downgrade pip to version 9.0.3
+sudo pip install --upgrade --force-reinstall pip==9.0.3
+2.install docker-compose
+sudo pip install docker-compose
+(please refer to https://github.com/docker/compose/issues/5883 for more details.)
+)
 ```
 ##### Create the installation directory.
 ```
@@ -163,12 +171,14 @@ addons_path = /mnt/extra-addons,/var/lib/odoo/webcoop,/usr/lib/python2.7/dist-pa
 
 admin_passwd = [admin-password>]
 db_host = mycoopdbrds.ccfshrgpl98r.ap-southeast-1.rds.amazonaws.com
+;change appropriate host name depending on the env
 db_port = 5432
 db_user = [db-username]
 db_password = [db-password]
 db_template = template0
 
-db-filter = ^%d.*$
+#db-filter = ^%d.*$
+dbfilter = ^%d.*$
 
 xmlrpc = True
 
@@ -177,7 +187,8 @@ logfile = /var/lib/odoo/logs/odoo.log
 log_level = debug
 logrotate = True
 
-proxy-mode = True
+#proxy-mode = True
+proxy_mode = True
 
 ;1048576 * 768 * workers
 limit_memory_hard = 4831838208
@@ -197,7 +208,7 @@ EOF
 chown -R centos.centos /opt/webcoop
 chmod 777 /opt/webcoop/data
 chmod 777 /opt/webcoop/data/logs
-cd /opt/wecoop/data
+cd /opt/webcoop/data
 find webcoop -type d -exec chmod 777 {} \;
 ```
 ##### Add user to docker group.
@@ -369,6 +380,15 @@ yum install -y docker-ce
 systemctl start docker
 chkconfig docker on
 pip install docker-compose
+(Note: if you failed the install of docker-compose ,you cannot execute [docker-compose] command.maybe error message of [Command not found] will be shown in this case.
+In this case ,you can follow below step.
+1.downgrade pip to version 9.0.3
+sudo pip install --upgrade --force-reinstall pip==9.0.3
+2.install docker-compose
+sudo pip install docker-compose
+(please refer to https://github.com/docker/compose/issues/5883 for more details.)
+)
+
 ```
 ##### Create the installation directory.
 ```
@@ -420,11 +440,24 @@ exit
 ssh -i private_key.pem centos@[vpn-server-address]
 cd /opt/openvpn
 docker-compose up -d
+(Note: if you failed the install of docker-compose ,you cannot execute [docker-compose] command.maybe error message of [Command not found] will be shown in this case.
+In this case ,you can follow below step.
+1.downgrade pip to version 9.0.3
+sudo pip install --upgrade --force-reinstall pip==9.0.3
+2.install docker-compose
+sudo pip install docker-compose
+3.Then exit and re-login the server ,then  run docker compose script.
+cd /opt/openvpn
+docker-compose up -d
+(please refer to https://github.com/docker/compose/issues/5883 for more details.)
+)
 ```
 ##### Initialize the configuration files and certificates. Enter the paraphrase and remember it. (PEM paraphase: vxvY9g8cRfeVdcaR)
 ```
 docker-compose run --rm openvpn ovpn_genconfig -u udp://vpn.philippines-webcoop.com
+(change [udp://vpn.philippines-webcoop.com] to [udp://(vpn server's dns, or ip)]
 docker-compose run --rm openvpn ovpn_initpki
+(after above , you need to entry any passphrase. But you need to keep the passphrase for key createion. After that , you may be asked Common Name , but you can skip by blank.)
 ```
 ##### Create user client certiticate.
 ```
