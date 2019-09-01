@@ -185,7 +185,8 @@ xmlrpc = True
 ;Log Settings
 logfile = /var/lib/odoo/logs/odoo.log
 log_level = debug
-logrotate = True
+#logrotate = True
+#this logrotate doesn't work in case of multiporcess , so change it to using os's logrotate (20190827)
 
 #proxy-mode = True
 proxy_mode = True
@@ -215,11 +216,38 @@ find webcoop -type d -exec chmod 777 {} \;
 ```
 usermod -aG docker centos
 ```
-##### Logout from server.
-```
-exit
-exit
-```
+
+##### Availe system logrotate for odoo.log(20190828 add suzuki)
+
+1.Diable selinux
+In case of centos7 on AWS,Selinux is enabled by default.But if selinux is enabled , system logrotate by cron will be failed , inspite  logrotate configuration is correct.reference:https://qiita.com/2no553/items/ac951b988d03cf520966).And selinux is not used and not necessary for current, so it need to be disabled for avoiding this logrotation problem and for avoiding too much security checking.Note:incase you need selinux, need to consider to create manual logrotation script on cron instead of using system logrotate.
+
+sudo sed -i -e 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+
+2.Add config
+
+sudo cat <<EOF > /etc/logrotate.d/odoo
+/opt/webcoop/data/logs/odoo.log
+{
+    daily
+    rotate 90
+    ifempty
+    missingok
+    copytruncate
+    compress
+    su root root
+    dateext
+}
+EOF
+
+sudo logrotate /etc/logrotate.conf
+
+3.system re-start
+
+sudo shutdown now -r
+(And wait about 5 minutes)
+
+
 ##### Re-login to server, then run docker compose script.
 ```
 ssh -i private_key.pem centos@[app-server-address]
@@ -232,8 +260,9 @@ docker-compose up -d
 
 ### Setup NFS Sharing.
 
-##### Install NFS utilities.
+##### Change user to root and Install NFS utilities.
 ```
+sudo su
 yum -y install nfs-utils
 ```
 ##### Then enable and start the NFS server service.
@@ -246,11 +275,15 @@ systemctl start nfs-server.service
 mkdir -p /mnt/share/filestore
 chown nfsnobody.nfsnobody /mnt/share
 chown nfsnobody.nfsnobody /mnt/share/filestore
+#add 20190831
+chmod 777 /mnt/share/filestore
 ```
-##### Add NFS IP address rights in /etc/exports. The IP addresses are the local VPC addresses of the app servers.
+##### Add NFS IP address rights in [/etc/exports] The IP addresses are the local VPC addresses of the app servers.
 ```
+
 /mnt/share/filestore        172.31.8.240(rw,sync,no_subtree_check)
 /mnt/share/filestore        172.31.9.197(rw,sync,no_subtree_check)
+(note: change 172.31.8.240 part to application server's private ip address)
 ```
 ##### Apply new exported NFS shares.
 ```
@@ -260,6 +293,9 @@ exportfs -a
 ##### Add the following line in /etc/fstab on the app server to connect to the NFS share. The IP address is the NFS server address.
 ```
 172.31.25.176:/mnt/share/filestore /opt/webcoop/data/.local/share/ nfs rsize=8192,wsize=8192,timeo=14,intr
+172.31.25.176:/mnt/share/filestore/odoolog/server1 /opt/webcoop/data/logs/ nfs rsize=8192,wsize=8192,timeo=14,intr
+(172.31.25.176 is file server's ip)
+(need to change "server1" to "server2" in case of server2)
 ```
 ##### Restart the app server.
 
