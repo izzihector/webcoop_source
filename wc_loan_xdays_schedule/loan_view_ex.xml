@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+  <record id="form_loan_inherit_4xdays" model="ir.ui.view">
+    <field name="name">form_loan_inherit_4xdays</field>
+    <field name="model">wc.loan</field>
+    <field name="inherit_id" ref="wc_loan.view_loan"/>
+    <field name="arch" type="xml">
+      <field name="payment_schedule" position="replace">
+          <label for="payment_schedule"/>
+	      <div class="o_row">
+	        <field name="payment_schedule"/>
+	        <field name="payment_schedule_xdays"
+	               attrs="{'invisible':[('payment_schedule','not in',['x-days'])]}"/>
+	        <label for="payment_schedule_xdays" 
+	               attrs="{'invisible':[('payment_schedule','not in',['x-days'])]}"/>
+	      </div>
+      </field>
+    </field>
+  </record>
+
+</odoo>
