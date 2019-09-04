@@ -315,6 +315,9 @@ class Loan(models.Model):
     def compute_date_first_due(self):
        for r in self:
            mdate = fields.Datetime.from_string(r.date_start)
+           #bug fix 532
+           if r.date_start == False:
+               return
            mdate, days = self.get_next_due(mdate, r.payment_schedule, 1, mdate, loan=r)
            if mdate:
                r.date_first_due = mdate.strftime(DF)

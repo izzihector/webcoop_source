@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-###############################################
-# EzTech Software & Consultancy Inc. (c) 2017
-###############################################
 {
     'name': 'Web Coop - Loans',
-    'version': "1.0",
+    'version': "1.1",
     'category': "Generic Modules",
     'summary': "Loans Module for Web Coop System",
-    'description': "Loans Module for Web Coop System",
+    'description': """
+     |  Loans Module for Web Coop System
+     |  ver10.0.1.1 -20190904fix bug532 (system error at calculation of next due(1.create new loan , 2.select loan type ,3.erase amortization start , then error happened) )
+       """,
     'author': 'EzTech Software & Consultancy Inc.',
     'website': 'http://www.eztechsoft.com',
     'depends': [
