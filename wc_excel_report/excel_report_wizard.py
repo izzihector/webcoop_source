@@ -155,9 +155,9 @@ class ExcelReportWizard(models.TransientModel):
 
         #add 20190603 suzuki (feature #514)
         if is_posted_data_only:
-            whr_string = " WHERE m.state='posted' $where_str"
+            whr_string = " WHERE m.state='posted' AND %s"
         else:
-            whr_string = " WHERE 1=1 $where_str"
+            whr_string = " WHERE 1=1 AND %s"
 
         #mod 20190603 suzuki
         sql = """
