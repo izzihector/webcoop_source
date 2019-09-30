@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+  <record id="form_loan_type_inherit_f538" model="ir.ui.view">
+    <field name="name">form_loan_type_inherit_f538</field>
+    <field name="model">wc.loan.type</field>
+    <field name="inherit_id" ref="wc_loan.form_loan_type"/>
+    <field name="arch" type="xml">
+      <xpath expr="//page[@name='deductions']" position="after">
+         <page name="other" string="Other Settings">
+           <group name ="range1">
+	            <div class="o_row">
+	                <field name = "is_check_by_principal_range"/>
+	                <label for ="is_check_by_principal_range"/>
+                  
+	                <label for ="min_principal" attrs="{'invisible': [('is_check_by_principal_range','!=',True)]}"/>
+                    <field name="min_principal" placeholder="Minimum" attrs="{'invisible': [('is_check_by_principal_range','!=',True)]}"/>
+	                <label for ="max_principal" attrs="{'invisible': [('is_check_by_principal_range','!=',True)]}"/>
+                    <field name="max_principal" placeholder="Max" attrs="{'invisible': [('is_check_by_principal_range','!=',True)]}"/>
+    	        </div>
+    	        <br/>
+	            <div class="o_row" >
+	                <field name = "is_check_by_interest_rate_range" string="Inputtable interest rate range(%)"/>
+	                <label for ="is_check_by_interest_rate_range"/>
+	                <label for ="min_interest" attrs="{'invisible': [('is_check_by_interest_rate_range','!=',True)]}"/>
+                    <field name="min_interest" placeholder="Minimum" attrs="{'invisible': [('is_check_by_interest_rate_range','!=',True)]}"/>
+	                <label for ="max_interest" attrs="{'invisible': [('is_check_by_interest_rate_range','!=',True)]}"/>
+                    <field name="max_interest" placeholder="Max" attrs="{'invisible': [('is_check_by_interest_rate_range','!=',True)]}"/>
+                    <br/>
+    	        </div>
+    	        <br/>
+	            <div class="o_row" >
+	                <field name = "is_check_by_no_of_payment_range"/>
+	                <label for ="is_check_by_no_of_payment_range"/>
+	                <label for ="min_payment_cnt" attrs="{'invisible': [('is_check_by_no_of_payment_range','!=',True)]}"/>
+                    <field name="min_payment_cnt" placeholder="Minimum" attrs="{'invisible': [('is_check_by_no_of_payment_range','!=',True)]}"/>
+	                <label for ="max_payment_cnt" attrs="{'invisible': [('is_check_by_no_of_payment_range','!=',True)]}"/>
+                    <field name="max_payment_cnt" placeholder="Max" attrs="{'invisible': [('is_check_by_no_of_payment_range','!=',True)]}"/>
+    	        </div>
+    	    </group>
+         </page>
+    </xpath>
+    </field>
+  </record>
+
+</odoo>
+
