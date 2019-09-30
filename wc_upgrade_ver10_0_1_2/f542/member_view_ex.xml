@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+  <!-- members -->
+  <record id="form_members_inherit_f542" model="ir.ui.view">
+    <field name="name">form_members_inherit_f542</field>
+    <field name="model">wc.member</field>
+    <field name="inherit_id" ref="wc_member.form_members"/>
+    <field name="arch" type="xml">
+      <page name="info" position="after">
+        <page name="other_collection" string="Other Collection">
+          <field name="other_type_collection_lines" readonly="1" >
+            <tree class="wc_tree">
+              <field name="date"/>
+              <field name="name"/>
+              <field name="amount"/>
+              <field name="gl_account_id"/>
+            </tree>
+            <form>
+              <group>
+              <field name="date"/>
+              <field name="name"/>
+              <field name="amount"/>
+              <field name="gl_account_id"/>
+              </group>
+            </form>
+          </field>
+        </page>
+
+      </page>
+
+    </field>
+  </record>
+
+</odoo>
