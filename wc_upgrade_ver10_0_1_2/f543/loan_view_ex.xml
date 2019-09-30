@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+  <record id="form_loan_inherit_f543" model="ir.ui.view">
+    <field name="name">form_loan_inherit_f543</field>
+    <field name="model">wc.loan</field>
+    <field name="inherit_id" ref="wc_posting.view_loan_inherit"/>
+    <field name="arch" type="xml">
+      <field name="date" position="before">
+        <field name ="is_necessary_making_schedule" invisible="1" />
+      </field>
+<!--       <button name="generate_deductions" position ="attributes"> -->
+<!--         <atribute name ="states"/> -->
+<!--       </button> -->
+                
+<!--       <button name="generate_schedule" position ="attributes"> -->
+<!--         <atribute name ="states"/> -->
+<!--       </button> -->
+      
+    </field>
+  </record>
+
+</odoo>
