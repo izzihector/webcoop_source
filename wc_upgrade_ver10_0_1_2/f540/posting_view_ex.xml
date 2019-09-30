@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+  <record id="form_posting_f540" model="ir.ui.view">
+    <field name="name">form_posting_f540</field>
+    <field name="model">wc.posting</field>
+    <field name="inherit_id" ref="wc_posting.form_posting"/>
+    <field name="arch" type="xml">
+<!--           <button name="close_date" position="replace"> -->
+<!--              <button name="close_date" -->
+<!--                string="Close Date" states="open" class="oe_highlight oe_read_only" type="object"/> -->
+<!--           </button> -->
+          <button name="close_date" position="attributes">
+             <attribute name="confirm">Warning! Transactions for this date will be restricted</attribute>
+          </button>
+          
+    </field>
+   </record>
+</odoo>
