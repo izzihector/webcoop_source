@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+  <record id="form_loan_inherit_f535" model="ir.ui.view">
+    <field name="name">form_loan_inherit_f535</field>
+    <field name="model">wc.loan</field>
+    <field name="inherit_id" ref="wc_loan.view_loan"/>
+    <field name="arch" type="xml">
+      <field name ="penalty_rate" position="before">
+        <field name="is_interest_deduction_first" attrs="{'invisible':[('is_interest_epr','=',False)]}"/>
+      </field>
+    </field>
+  </record>
+
+</odoo>

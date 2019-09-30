@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+  <record id="form_loan_type_inherit_f535" model="ir.ui.view">
+    <field name="name">form_loan_type_inherit_f535</field>
+    <field name="model">wc.loan.type</field>
+    <field name="inherit_id" ref="wc_loan.form_loan_type"/>
+    <field name="arch" type="xml">
+        <field name="is_interest_epr" position="after">
+         <field name="is_interest_deduction_first" 
+            string="Interest Advance Deduction"
+             attrs="{'invisible':[('is_interest_epr','=',False)]}"/>
+        </field>
+    </field>
+  </record>
+
+</odoo>
+
