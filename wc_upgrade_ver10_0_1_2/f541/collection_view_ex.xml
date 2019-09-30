@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="form_collection_f541" model="ir.ui.view">
+    <field name="name">form_collection_f541</field>
+    <field name="model">wc.collection</field>
+    <field name="inherit_id" ref="wc_collection.form_collection"/>
+    <field name="arch" type="xml">
+              <field name="schedule" position="attributes">
+                <attribute name ="required">0</attribute>
+              </field>
+    </field>
+  </record>
+  </odoo>
