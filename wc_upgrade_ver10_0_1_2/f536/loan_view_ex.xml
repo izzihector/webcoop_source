@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+  <record id="form_loan_inherit_f536" model="ir.ui.view">
+    <field name="name">form_loan_inherit_f536</field>
+    <field name="model">wc.loan</field>
+    <field name="inherit_id" ref="wc_posting.view_loan_inherit"/>
+    <field name="arch" type="xml">
+      <field name="date" position="attributes">
+         <attribute name="attrs">{'invisible':[('state','=','draft')],
+            'readonly':['|',
+            ('editable_date','=',False),
+            ('state','!=','draft'),
+          ]}</attribute>
+      </field>
+    </field>
+  </record>
+
+
+  <record id="tree_loan_inherit_f536" model="ir.ui.view">
+    <field name="name">tree_loan_inherit_f536</field>
+    <field name="model">wc.loan</field>
+    <field name="inherit_id" ref="wc_loan.view_loan_tree"/>
+    <field name="arch" type="xml">
+      <field name="date" position="before">
+         <field name="date_application"/>
+      </field>
+      <field name="date" position="attributes">
+         <attribute name="attrs">{'invisible':[('state','=','draft')]}</attribute>
+      </field>
+    </field>
+  </record>
+  
+  
+  
+
+
+
+
+</odoo>
