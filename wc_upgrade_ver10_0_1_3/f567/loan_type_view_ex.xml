@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+  <record id="form_loan_type_inherit_f535_2" model="ir.ui.view">
+    <field name="name">form_loan_type_inherit_f535_2</field>
+    <field name="model">wc.loan.type</field>
+    <field name="inherit_id" ref="wc_loan.form_loan_type"/>
+    <field name="arch" type="xml">
+        <field name="is_interest_deduction_first" position="attributes">
+         <attribute name="attrs"/>         
+         <attribute name="string">Upfront Interest</attribute>
+        </field>
+
+        <field name="is_fixed_payment_amount" position="attributes">
+         <attribute name="attrs">{'invisible':['|',('is_interest_epr','=',True),('is_interest_deduction_first','=',True)]}</attribute>
+        </field>
+    </field>
+  </record>
+
+</odoo>
+
