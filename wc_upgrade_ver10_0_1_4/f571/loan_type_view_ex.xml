@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+  <record id="form_loan_type_inherit_f535_2" model="ir.ui.view">
+    <field name="name">form_loan_type_inherit_f535_2</field>
+    <field name="model">wc.loan.type</field>
+    <field name="inherit_id" ref="wc_loan.form_loan_type"/>
+    <field name="arch" type="xml">
+      
+      <xpath expr="//label[@for='maturity']" position="before">
+        <field name ="schedule_making_type" 
+                 attrs="{'readonly':[('payment_schedule','in',['day','half-month','lumpsum'])]}" />
+        <field name="term_payments_for_input"
+           attrs="{'invisible':[('schedule_making_type','=','periods')]}" />
+      </xpath>
+
+      <xpath expr="//label[@for='maturity']" position="attributes">
+        <attribute name="attrs">{'invisible':[('schedule_making_type','=','count')]}</attribute>
+      </xpath>
+            
+      <field name="maturity" position="attributes">
+        <attribute name="attrs">{'invisible':[('schedule_making_type','=','count')]}</attribute>
+      </field>
+      <field name="maturity_period" position="attributes">
+        <attribute name="attrs">{'invisible':[('schedule_making_type','=','count')]}</attribute>
+      </field>
+    
+    </field>
+  </record>
+
+</odoo>
+

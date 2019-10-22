@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+  <record id="tree_loan_deduction_f569" model="ir.ui.view">
+    <field name="name">tree_loan_deduction_f569</field>
+    <field name="model">wc.loan.deduction</field>
+    <field name="inherit_id" ref="wc_loan.tree_loan_deduction"/>
+    <field name="arch" type="xml">
+       <field name ="amount" position ="after">
+          <field name="amount_rate_per_principal"/>
+       </field>
+    </field>
+  </record>
+
+
+</odoo>

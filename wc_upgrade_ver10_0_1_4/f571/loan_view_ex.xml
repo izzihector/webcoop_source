@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+  <record id="form_loan_inherit_f571" model="ir.ui.view">
+    <field name="name">form_loan_inherit_f571</field>
+    <field name="model">wc.loan</field>
+    <field name="inherit_id" ref="wc_loan_xdays_schedule.form_loan_inherit_4xdays"/>
+    <field name="arch" type="xml">
+
+     
+       <xpath expr="//field[@name='payment_schedule']/.." position="replace"></xpath>
+       <xpath expr="//label[@for='payment_schedule']" position="replace"/>
+<!--        <field name="payment_schedule" position="replace"/> -->
+<!--        <field name="payment_schedule_xdays" position="replace"/> -->
+<!--        <xpath expr="//label[@for='payment_schedule_xdays']" position="replace"/> -->
+
+
+
+      <field name ="date_start" position ="after">
+          <label for="payment_schedule"/>
+	      <div class="o_row">
+	        <field name="payment_schedule"/>
+	        <field name="payment_schedule_xdays"
+	               attrs="{'invisible':[('payment_schedule','not in',['x-days'])]}"/>
+	        <label for="payment_schedule_xdays" 
+	               attrs="{'invisible':[('payment_schedule','not in',['x-days'])]}"/>
+	      </div>
+	      <field name ="schedule_making_type" 
+                 attrs="{'readonly':['|',('state','not in',['draft']),('payment_schedule','in',['day','half-month','lumpsum'])]}" />
+    
+           <field name="term_payments_for_input"
+            attrs="{'invisible':[('schedule_making_type','=','periods')]}" />
+	      
+      </field>
+      
+      <xpath expr="//label[@for='maturity']" position="attributes">
+        <attribute name="attrs">{'invisible':[('schedule_making_type','=','count')]}</attribute>
+      </xpath>
+        
+      <field name="maturity" position="attributes">
+        <attribute name="attrs">{'invisible':[('schedule_making_type','=','count')]}</attribute>
+      </field>
+      <field name="maturity_period" position="attributes">
+        <attribute name="attrs">{'invisible':[('schedule_making_type','=','count')]}</attribute>
+      </field>
+
+<!--       <field name="term_payments" position="attributes"> -->
+<!--         <attribute name="attrs"> -->
+<!--            {'invisible':[('schedule_making_type','=','count')]} -->
+<!--         </attribute> -->
+<!--       </field> -->
+    </field>
+  </record>
+
+</odoo>
