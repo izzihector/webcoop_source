@@ -1,0 +1,4 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+
+loanpay_reconciliation_1,loanpay_reconciliation_1,model_wc_loan_payment_reconciliation,,1,0,0,0
+loanpay_reconciliation_m,loanpay_reconciliation_m,model_wc_loan_payment_reconciliation,wc_loan_payment_reconciliation.group_loan_payment_reconciliation_user,1,1,1,0

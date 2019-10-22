@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+
+
+  <record id="tree_loan_pay_reconciliation" model="ir.ui.view">
+    <field name="name">tree_loan_pay_reconciliation</field>
+    <field name="model">wc.loan.payment.reconciliation</field>
+    <field name="arch" type="xml">
+      <tree create="0" delete="0"  colors="blue:state =='confirmed';red:state =='reversed';grey:state=='closed'" >
+        <field name ="name"/>
+<!--         <field name ="journal_id" string="Payment Jounal"/> -->
+        <field name ="date"/>
+<!--         <field name ="loan_detail_count" readonly="True"/> -->
+        <field name ="loan_count" readonly="True"/>
+        <field name ="member_count" readonly="True"/>
+        <field name ="amount" readonly="True"/>
+        <field name ="is_bank_recon" readonly="True"/>
+        <field name ="note"/>
+        <field name ="state"/>
+        <field name ="reversed_date"/>
+      </tree>
+	</field>
+  </record>
+
+  <record id="form_loan_pay_reconciliation" model="ir.ui.view">
+    <field name="name">form_loan_pay_reconciliation</field>
+    <field name="model">wc.loan.payment.reconciliation</field>
+    <field name="arch" type="xml">
+      <form>
+       <header>
+<!--          <button name="draft_to_confirmed" string="Confirm" type="object"  -->
+<!--           default_focus="1" class="oe_highlight" -->
+<!--           attrs="{'invisible':[('state','not in',['draft'])]}"/> -->
+<!--          <button name="proceed_reconcile" string="Reconcile" type="object"  -->
+<!--           default_focus="1" class="oe_highlight" -->
+<!--           attrs="{'invisible':[('state','not in',['confirmed'])]}"/> -->
+<!--          <button name="reverse_reconcile" string="Reverse Reconcile" type="object"  -->
+<!--           attrs="{'invisible':[('state','not in',['reconciled'])]}"/> -->
+<!--           or --> 
+<!--          <button name="cancel" string="Cancel" type="object"  -->
+<!--           attrs="{'invisible':[('state','not in',['draft'])]}"/> -->
+<!--          <button name="back_to_draft" string="Back To Draft" type="object"  -->
+<!--           attrs="{'invisible':[('state','not in',['confirmed'])]}"/> -->
+
+         <button name="proceed_reconcile" string="Confirm" type="object" 
+             confirm="Are you sure you want to confirm?"
+             attrs="{'invisible':[('state','not in',['draft'])]}"
+          class="oe_highlight oe_read_only" />
+         <button name="reverse_reconcile" string="Reverse Reconcile" type="object" 
+          confirm="Are you sure you want to Reverse?If reversed, every payment data will be reversed also."
+          attrs="{'invisible':[('state','not in',['confirmed'])]}"/>
+<!--           or -->
+         <button name="cancel" string="Cancel" type="object" 
+          attrs="{'invisible':[('state','not in',['draft'])]}"
+          class="oe_highlight oe_read_only" />
+
+
+
+<!--           <button name="back_to_previous" string="Cancel" class="oe_link"/> -->
+       
+        <field name="state" widget="statusbar" readonly="1"/>
+       </header>
+       <sheet>
+       <group>
+        <field name="id" inivisible='1'/>
+       
+        <field name ="search_wiz_id" invisible='True'/>
+        
+        <field name ="search_condition_str" readonly='True'/>
+       
+        <field name ="name" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+<!--         <field name ="dep_account_id" string="Payment Jounal"/> -->
+<!--         <field name ="date" attrs="{'readonly':[('state','not in',['draft'])]}"/> -->
+        <field name ="date" readonly='True'/>
+        <field name ="is_bank_recon" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+
+<!--         <field name ="loan_detail_count" readonly="True"/> -->
+        <field name ="loan_count" readonly="True"/>
+        <field name ="member_count" readonly="True"/>
+        <field name ="amount" readonly="True"/>
+        <field name ="state"/>
+        <field name ="reversed_date"
+           attrs="{'invisible':[('state','not in',['reserved'])]}"/>
+        <field name ="note"/>
+        </group>
+        
+        <notebook>
+        <page name="recon_tmp" string="Target Bill" 
+              attrs="{'invisible':[('state','not in',['draft'])]}">
+        <group>
+        <field name="payment_reconciliation_lines_tmp" widget="many2many_widget"
+          options="{'no_create':True, 'no_edit':True, 'no_open':True}"
+          domain="[('reconcile_id_w','=',search_wiz_id)]" 
+          context="{'tree_view_ref':'wc_loan_payment_reconciliation.tree_wc_loan_pay_reconcile_line'}"> 
+         <tree>
+            <field name="member_id"/>
+	        <field name="loan_id"/>
+	        <field name="principal_due"/>
+	        <field name="interest_due"/>
+	        <field name="penalty_due"/>
+	        <field name="others_due"/>
+	        <field name="amount_due"/>
+         </tree>
+        </field>
+        
+        </group>
+        </page>
+        <page name="recon" string="Target Bill"
+              attrs="{'invisible':[('state','in',['draft'])]}">
+        <group>
+        <field name="payment_reconciliation_lines" widget="many2many_widget"
+          options="{'no_create':True, 'no_edit':True, 'no_open':True}"
+          domain="[('reconcile_id_w','=',search_wiz_id)]" 
+          context="{'tree_view_ref':'wc_loan_payment_reconciliation.tree_wc_loan_pay_reconcile_line'}"> 
+         <tree>
+            <field name="member_id"/>
+	        <field name="loan_id"/>
+	        <field name="principal_due"/>
+	        <field name="interest_due"/>
+	        <field name="penalty_due"/>
+	        <field name="others_due"/>
+	        <field name="amount_due"/>
+	        <field name="is_reversed"/>
+	        <field name="reversed_date"/>
+         </tree>
+        </field>
+        
+        </group>
+        </page>        
+        </notebook>
+        
+        <div class="oe_chatter">
+          <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+          <field name="message_ids" widget="mail_thread"/>
+        </div>
+       </sheet>
+       
+      </form>
+    </field>
+  </record>
+  
+ 
+
+
+ <record id ="action_loan_pay_reconciliation_line" model="ir.actions.act_window">
+   <field name="name">Loan Payment Reconciliation Line</field>
+   <field name="type">ir.actions.act_window</field>
+   <field name="res_model">wc.loan.pay.reconcile.line</field>
+   <field name="view_mode">tree,form</field>
+   <field name="view_type">form</field>
+ </record>
+
+
+ <record id ="action_loan_pay_reconciliation" model="ir.actions.act_window">
+   <field name="name">Loan Payment Reconciliation</field>
+   <field name="type">ir.actions.act_window</field>
+   <field name="res_model">wc.loan.payment.reconciliation</field>
+   <field name="view_mode">tree,form</field>
+   <field name="view_type">form</field>
+ </record>
+
+
+  <menuitem id="menu_action_loan_pay_reconciliation" 
+    action="action_loan_pay_reconciliation"
+    parent="wc_loan.menu_loan_main" 
+    name="Payment Reconciliation List"
+    groups="group_loan_payment_reconciliation_user"
+    sequence="20"/>
+
+
+
+</odoo>

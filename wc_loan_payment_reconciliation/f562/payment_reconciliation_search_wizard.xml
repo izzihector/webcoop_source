@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+  <record id="form_loan_pay_search_wizard" model="ir.ui.view">
+    <field name="name">form_loan_pay_search_wizard</field>
+    <field name="model">wc.loan.pay.search.wizard</field>
+    <field name="arch" type="xml">
+       <form string="Loan Payment Target Search Wizard">
+      <sheet>
+       <group>
+        <field name="company_id" invisible="True"/>
+        <field name="loan_type_id"/>
+        <field name="due_date_to" required="True"/>
+        <field name="member_id"/>
+        <field name="is_include_lumpsum"/>
+       </group>
+       <footer>
+        <button name="search_target" string="Proceed" type="object" default_focus="1" class="oe_highlight"/>
+       </footer>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+ <record id ="action_form_loan_pay_search_wizard" model="ir.actions.act_window">
+   <field name="name">Loan Payment Target Search Wizard</field>
+   <field name="type">ir.actions.act_window</field>
+   <field name="res_model">wc.loan.pay.search.wizard</field>
+   <field name="view_type">form</field>
+   <field name="view_mode">form</field>
+ </record>
+
+
+  <menuitem id="menu_form_loan_pay_search_wizard" 
+    action="action_form_loan_pay_search_wizard"
+    parent="wc_loan.menu_loan_main" 
+    name="Payment Reconciliation Target Search"
+    groups="group_loan_payment_reconciliation_user"
+    sequence="20"/>
+
+</odoo>

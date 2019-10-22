@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+ <record id="tree_wc_loan_pay_reconcile_line" model="ir.ui.view">
+    <field name="name">tree_wc_loan_pay_reconcile_line</field>
+    <field name="model">wc.loan.pay.reconcile.line</field>
+    <field name="priority">9999</field>
+    <field name="arch" type="xml">
+<!--       <tree class="wc_tree"> -->
+      <tree class="wc_tree" delete="0" create="0">
+        <field name="member_id"/>
+        <field name="loan_id"/>
+        <field name="principal_due"/>
+        <field name="interest_due"/>
+        <field name="penalty_due"/>
+        <field name="others_due"/>
+        <field name="amount_due"/>
+      </tree>
+    </field>
+  </record>
+
+
+</odoo>

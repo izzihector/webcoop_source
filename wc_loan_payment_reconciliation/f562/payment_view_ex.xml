@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+  <record id="tree_payment_distribution" model="ir.ui.view">
+    <field name="name">tree_payment_distribution</field>
+    <field name="model">wc.loan.payment.distribution</field>
+    <field name="arch" type="xml">
+      <tree delete="0" create="0" edit="0" class="wc_tree">
+        <field name="detail_id"/>
+        <field name="payment_type"/>
+        <field name="code"/>
+        <field name="amount" sum="Total Amount"/>
+        <field name="deposit_account_id"/>
+        <field name="gl_account_id"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="form_payment_distribution" model="ir.ui.view">
+    <field name="name">form_payment_distribution</field>
+    <field name="model">wc.loan.payment.distribution</field>
+    <field name="arch" type="xml">
+      <form>
+        <group>
+          <field name="detail_id" string="Loan Schedule"/>
+          <field name="payment_type"/>
+          <field name="code"/>
+          <field name="amount" sum="Total Amount"/>
+          <field name="deposit_account_id"/>
+          <field name="gl_account_id"/>
+        </group>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_loan_payment_tree" model="ir.ui.view">
+    <field name="name">view_loan_payment_tree</field>
+    <field name="model">wc.loan.payment</field>
+    <field name="arch" type="xml">
+      <tree class="wc_tree" colors="red:state=='draft';" create="0">
+        <field name="name" />
+        <field name="date" />
+        <field name="loan_id" />
+        <field name="member_id" />
+        <field name="or_number" />
+        <field name="check_number" />
+        <field name="amount" sum="Total"/>
+        <field name="posted_amount" sum="Total Posted"/>
+        <field name="unposted_amount" sum="Total Posted"/>
+        <field name="state" />
+        <field name="note" />
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_loan_payment_form_f562" model="ir.ui.view">
+    <field name="name">view_loan_payment_form_f562</field>
+    <field name="model">wc.loan.payment</field>
+    <field name="inherit_id" ref="wc_loan.view_loan_payment_form"/>
+    <field name="arch" type="xml">
+       <button name="reverse_payment" position="attributes">
+         <attribute name ="name">reverse_payment_2</attribute>
+       </button>  
+    </field>
+  </record>
+
+</odoo>
