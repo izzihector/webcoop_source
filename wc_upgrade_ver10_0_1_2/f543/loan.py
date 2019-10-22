@@ -82,8 +82,10 @@ class Loan(models.Model):
         if loan.maturity and loan.maturity_period and \
                loan.date_start and (loan.amount >0) and \
                (loan.term_payments >0) and loan.payment_schedule:
-            if (loan.payment_schedule =='xdays' and loan.payment_schedule_xdays>0) or \
-                (loan.payment_schedule !='xdays'):
+#             if (loan.payment_schedule =='xdays' and loan.payment_schedule_xdays>0) or \
+#                 (loan.payment_schedule !='xdays'):
+            if (loan.payment_schedule =='x-days' and loan.payment_schedule_xdays>0) or \
+                (loan.payment_schedule !='x-days'):
                 return {'value':{'is_necessary_making_schedule':True}}
                         
 #                 self.is_necessary_making_schedule = True   
@@ -135,8 +137,10 @@ class Loan(models.Model):
         if res.maturity and res.maturity_period and \
            res.date_start and (res.amount >0) and \
            (res.term_payments >0) and res.payment_schedule:
-           if (res.payment_schedule =='xdays' and res.payment_schedule_xdays>0) or \
-              (res.payment_schedule !='xdays'):
+#            if (res.payment_schedule =='xdays' and res.payment_schedule_xdays>0) or \
+#               (res.payment_schedule !='xdays'):
+           if (res.payment_schedule =='x-days' and res.payment_schedule_xdays>0) or \
+              (res.payment_schedule !='x-days'):
                res.is_necessary_making_schedule = False
                res.generate_schedule()
         if res.is_necessary_making_schedule:
