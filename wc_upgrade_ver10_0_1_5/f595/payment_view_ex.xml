@@ -11,6 +11,7 @@
               <label for="principal_amount" attrs="{'invisible':[('is_manual_compute','=',False)]}"/>
               <div class="o_row" attrs="{'invisible':[('is_manual_compute','=',False)]}">
                <field name="principal_amount" attrs="{'invisible':[('is_manual_compute','=',False)]}"/>
+                /
                <field name="remain_principal_at_date" 
                       attrs="{'invisible':['|',('is_manual_compute','=',False),('state','!=','draft')]}"/>
               </div>
@@ -19,6 +20,7 @@
               <label for="interest_amount" attrs="{'invisible':[('is_manual_compute','=',False)]}"/>
               <div class="o_row" attrs="{'invisible':[('is_manual_compute','=',False)]}">
                <field name="interest_amount" attrs="{'invisible':[('is_manual_compute','=',False)]}"/>
+                /
                <field name="ex_interest_at_date" 
                  attrs="{'invisible':['|',('is_manual_compute','=',False),('state','!=','draft')]}"/>
               </div>
@@ -27,7 +29,8 @@
               <label for="penalty_amount" attrs="{'invisible':[('is_manual_compute','=',False)]}"/>
               <div class="o_row" attrs="{'invisible':[('is_manual_compute','=',False)]}">
                <field name="penalty_amount" attrs="{'invisible':[('is_manual_compute','=',False)]}"/>
-               <field name="remain_penalty_at_date" 
+                /
+              <field name="remain_penalty_at_date" 
                  attrs="{'invisible':['|',('is_manual_compute','=',False),('state','!=','draft')]}"/>
               </div>
         </field>
@@ -35,6 +38,7 @@
               <label for="others_amount" attrs="{'invisible':[('is_manual_compute','=',False)]}"/>
               <div class="o_row" attrs="{'invisible':[('is_manual_compute','=',False)]}">
                <field name="others_amount" attrs="{'invisible':[('is_manual_compute','=',False)]}"/>
+                /
                <field name="remain_otherdue_at_date" 
                       attrs="{'invisible':['|',('is_manual_compute','=',False),('state','!=','draft')]}"/>
                </div>

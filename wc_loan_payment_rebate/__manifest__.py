@@ -1,5 +1,5 @@
 {
-    'name': 'Web Coop - loan bulk payment import',
+    'name': 'Web Coop - loan rebate',
     'version': "1.0",
     'category': "Generic Modules",
     'license':"Other proprietary",

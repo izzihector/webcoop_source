@@ -73,7 +73,7 @@
               <field name="is_rebate_to_member_account"/>
               <field name="deposit_account_id" 
                  options="{'no_create':True, 'no_edit':True}"
-                 attrs = "{'invisible':[('is_rebate_to_member_account','=',False)],'require':[('is_rebate_to_member_account','=',True)]}"
+                 attrs = "{'invisible':[('is_rebate_to_member_account','=',False)],'required':[('is_rebate_to_member_account','=',True)]}"
                  domain = "[('state','=','open'),'|',('member_id','=',member_id),('other_member_ids','in',member_id)]"/>
             </group>
           </group>
