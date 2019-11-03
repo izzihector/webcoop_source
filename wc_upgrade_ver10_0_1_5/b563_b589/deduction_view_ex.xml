@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================
+EzTech Software & Consultancy Inc. (c) 2017
+======================================== -->
+<odoo>
+
+  <record id="form_loan_deduction_f563" model="ir.ui.view">
+    <field name="name">form_loan_deduction_f563</field>
+    <field name="model">wc.loan.deduction</field>
+    <field name="inherit_id" ref="wc_loan.form_loan_deduction"/>
+    <field name="context" eval="{'default_is_created_by_manual':True}"/>
+    <field name="arch" type="xml">
+          <field name="member_id" position="before">
+             <field name="is_created_by_manual" invisible="1"/>
+          </field>
+
+          <field name="deposit_account_id" position="attributes">
+            <attribute name ="attrs">
+              {'invisible':[('code','not in',['cbu','sa','CBU','SA'])],
+               'required':[('code','in',['cbu','sa','CBU','SA'])]}
+            </attribute>
+          </field>
+    </field>
+  </record>
+
+
+
+  <record id="view_loan_inherit_b563" model="ir.ui.view">
+    <field name="name">view_loan_inherit_b563</field>
+    <field name="model">wc.loan</field>
+    <field name="inherit_id" ref="wc_loan.view_loan"/>
+    <field name="arch" type="xml">
+
+      <field name="deduction_ids" position="attributes">
+        <attribute name="context">{'default_is_created_by_manual':True}</attribute>
+      </field>
+
+    </field>
+  </record>
+
+
+</odoo>

@@ -34,7 +34,8 @@ class Loan(models.Model):
         self.ensure_one()
         if self.is_interest_deduction_first:
             self.is_fixed_payment_amount = False
-    
+
+#refactoring 20191101    
     @api.multi
     def calculate_total_interest_for_simple_method(self, round_to_peso=True):
         
@@ -44,63 +45,68 @@ class Loan(models.Model):
            or loan.date_start==False or loan.date_maturity==False:
             return False
 
-        tbalance = loan.amount
-        try:
-            days_in_year = float(loan.days_in_year)
-        except:
-            days_in_year = 365.0
-
-        d1 = fields.Datetime.from_string(loan.date_start)
-        d0 = d1
-        dend = fields.Datetime.from_string(loan.date_maturity)
-        i = 1
-
-        payments = loan.term_payments
-        principal_due = 0.0
-
-        default_principal_due = round(loan.amount / payments, 2)
-
-        if loan.interest_rate == 0.0:
-            c = default_principal_due
-        else:
-            d2, days = self.get_next_due(d1, loan.payment_schedule, i, d0, loan=loan)
-            r = loan.interest_rate * days / (days_in_year * 100.0)
-            c = loan.amount * r / (1.0 - 1.0 / ((1+r)**payments))
-            if round_to_peso:
-                c = math.ceil(c)
-
-        interest_total = 0
+#refactor get_loan_schedules_for_deminishing module    
+#         tbalance = loan.amount
+#         try:
+#             days_in_year = float(loan.days_in_year)
+#         except:
+#             days_in_year = 365.0
+# 
+#         d1 = fields.Datetime.from_string(loan.date_start)
+#         d0 = d1
+#         dend = fields.Datetime.from_string(loan.date_maturity)
+#         i = 1
+# 
+#         payments = loan.term_payments
+#         principal_due = 0.0
+# 
+#         default_principal_due = round(loan.amount / payments, 2)
+# 
+#         if loan.interest_rate == 0.0:
+#             c = default_principal_due
+#         else:
+#             d2, days = self.get_next_due(d1, loan.payment_schedule, i, d0, loan=loan)
+#             r = loan.interest_rate * days / (days_in_year * 100.0)
+#             c = loan.amount * r / (1.0 - 1.0 / ((1+r)**payments))
+#             if round_to_peso:
+#                 c = math.ceil(c)
+# 
+#         interest_total = 0
+#         
+#         for i in range(1, loan.term_payments):
+#             d2, dx = self.get_next_due(d1, loan.payment_schedule, i, d0, loan=loan)
+#             days = (d2 - d1).days
+#             #interest_due = round(tbalance * loan.interest_rate * days / (days_in_year * 100.0), 2)
+#             interest_due = loan.compute_interest(
+#                 tbalance,
+#                 d1.strftime(DF),
+#                 d2.strftime(DF)
+#             )
+#             #add interest_due of each schedule on interest_total
+#             interest_total += interest_due
+#             principal_due = self.compute_principal_due(default_principal_due, interest_due, c)
+# 
+#             tbalance = tbalance - principal_due
+#             d0 = d1
+#             d1 = d2
+#             i += 1
+# 
+#         days = (dend - d1).days
+#         interest_due = loan.compute_interest(
+#             tbalance,
+#             d1.strftime(DF),
+#             dend.strftime(DF)
+#         )
+#         
+#         #add interest_due of last schedule on interest_total
+#         interest_total += interest_due
+#         return interest_total        
+        lines = self.get_loan_schedules_for_deminishing(round_to_peso)
+        interest_total = 0 
+        for line in lines:
+            interest_total += line['interest_due']
         
-        for i in range(1, loan.term_payments):
-            d2, dx = self.get_next_due(d1, loan.payment_schedule, i, d0, loan=loan)
-            days = (d2 - d1).days
-            #interest_due = round(tbalance * loan.interest_rate * days / (days_in_year * 100.0), 2)
-            interest_due = loan.compute_interest(
-                tbalance,
-                d1.strftime(DF),
-                d2.strftime(DF)
-            )
-            #add interest_due of each schedule on interest_total
-            interest_total += interest_due
-            principal_due = self.compute_principal_due(default_principal_due, interest_due, c)
-
-            tbalance = tbalance - principal_due
-            d0 = d1
-            d1 = d2
-            i += 1
-
-        days = (dend - d1).days
-        interest_due = loan.compute_interest(
-            tbalance,
-            d1.strftime(DF),
-            dend.strftime(DF)
-        )
-        
-        #add interest_due of last schedule on interest_total
-        interest_total += interest_due
         return interest_total
-        
-
 
 
     @api.multi

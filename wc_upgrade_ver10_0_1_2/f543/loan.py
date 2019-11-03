@@ -292,105 +292,380 @@ class Loan(models.Model):
         super(Loan,self).compute_date_first_due()
 
 
-
-
-#performance improvement
+#refactoring on 20191101
     @api.multi
     def generate_amortization_simple_interest(self, round_to_peso=True):
-
-        for loan in self:
-            if loan.state == 'draft': # and loan.term_payments>0:
-
+ 
+         for loan in self:
+             if loan.state == 'draft': # and loan.term_payments>0:
                 _logger.debug("Simple interest: %s", loan)
                 #delete details first
                 self.details.unlink()
                 self.amortizations.unlink()
-                tbalance = loan.amount
+# refactor by  get_loan_schedules_for_deminishing module                
+#                  tbalance = loan.amount
+#  
+#                  try:
+#                      days_in_year = float(loan.days_in_year)
+#                  except:
+#                      days_in_year = 365.0
+#  
+#                  d1 = fields.Datetime.from_string(loan.date_start)
+#                  d0 = d1
+#                  dend = fields.Datetime.from_string(loan.date_maturity)
+#                  i = 1
+#  
+#                  payments = loan.term_payments
+#                  principal_due = 0.0
+#  
+#                  default_principal_due = round(loan.amount / payments, 2)
+#  
+#                  if loan.interest_rate == 0.0:
+#                      c = default_principal_due
+#                  else:
+#                      d2, days = self.get_next_due(d1, loan.payment_schedule, i, d0, loan=loan)
+#                      r = loan.interest_rate * days / (days_in_year * 100.0)
+#                      c = loan.amount * r / (1.0 - 1.0 / ((1+r)**payments))
+#                      if round_to_peso:
+#                          c = math.ceil(c)
+#  
+#                  lines=[]
+#                  
+#                  for i in range(1, loan.term_payments):
+#                      d2, dx = self.get_next_due(d1, loan.payment_schedule, i, d0, loan=loan)
+#                      days = (d2 - d1).days
+#                      #interest_due = round(tbalance * loan.interest_rate * days / (days_in_year * 100.0), 2)
+#                      interest_due = loan.compute_interest(
+#                          tbalance,
+#                          d1.strftime(DF),
+#                          d2.strftime(DF)
+#                      )
+#                      principal_due = self.compute_principal_due(default_principal_due, interest_due, c)
+#                      #if (loan.is_fixed_payment_amount):
+#                      #    principal_due = round(c - interest_due, 2)
+#                      #else:
+#                      #    principal_due = default_principal_due
+#  
+#                      if principal_due!=0.0 or interest_due!=0.0:
+#                          vals = {
+#                              'loan_id': loan.id,
+#                              'date_start': d1.strftime(DF),
+#                              'date_due': d2.strftime(DF),
+#                              'name': "Schedule %d" % i,
+#                              'days': days,
+#                              'principal_balance': tbalance,
+#                              'principal_due': principal_due,
+#                              'interest_due': interest_due,
+#                              'sequence': i,
+#                          }
+#                          _logger.debug("create vals=%s", vals)
+#                          
+#                          lines.append(vals)
+#  
+#                          tbalance = tbalance - principal_due
+#  
+#                      d0 = d1
+#                      d1 = d2
+#                      i += 1
+#  
+#                  days = (dend - d1).days
+#                  #interest_due = round(tbalance * loan.interest_rate * days / (days_in_year * 100.0), 2)
+#                  interest_due = loan.compute_interest(
+#                      tbalance,
+#                      d1.strftime(DF),
+#                      dend.strftime(DF)
+#                  )
+#  
+#                  vals = {
+#                      'loan_id': loan.id,
+#                      'date_start': d1.strftime(DF),
+#                      'date_due': dend.strftime(DF),
+#                      'name': "Schedule %d" % i,
+#                      'days': days,
+#                      'principal_balance': tbalance,
+#                      'principal_due': tbalance,
+#                      'interest_due': interest_due,
+#                      'sequence': i,
+#                  }
+#                  _logger.debug("create vals=%s", vals)
+#                  ######add#####
+#                  lines.append(vals)
+#  #                 loan.amortizations.create(vals)
 
-                try:
-                    days_in_year = float(loan.days_in_year)
-                except:
-                    days_in_year = 365.0
+                lines = self.get_loan_schedules_for_deminishing(round_to_peso)
+                loan.amortizations = lines
 
-                d1 = fields.Datetime.from_string(loan.date_start)
-                d0 = d1
-                dend = fields.Datetime.from_string(loan.date_maturity)
-                i = 1
 
-                payments = loan.term_payments
-                principal_due = 0.0
+#refactor on 20191101
+    @api.multi
+    def get_loan_schedules_for_deminishing(self, round_to_peso=True):
+        self.ensure_one()
+        loan = self
+        
+        tbalance = loan.amount
 
-                default_principal_due = round(loan.amount / payments, 2)
+        try:
+            days_in_year = float(loan.days_in_year)
+        except:
+            days_in_year = 365.0
 
-                if loan.interest_rate == 0.0:
-                    c = default_principal_due
-                else:
-                    d2, days = self.get_next_due(d1, loan.payment_schedule, i, d0, loan=loan)
-                    r = loan.interest_rate * days / (days_in_year * 100.0)
-                    c = loan.amount * r / (1.0 - 1.0 / ((1+r)**payments))
-                    if round_to_peso:
-                        c = math.ceil(c)
+        d1 = fields.Datetime.from_string(loan.date_start)
+        d0 = d1
+        dend = fields.Datetime.from_string(loan.date_maturity)
+        i = 1
 
-                lines=[]
-                
-                for i in range(1, loan.term_payments):
-                    d2, dx = self.get_next_due(d1, loan.payment_schedule, i, d0, loan=loan)
-                    days = (d2 - d1).days
-                    #interest_due = round(tbalance * loan.interest_rate * days / (days_in_year * 100.0), 2)
-                    interest_due = loan.compute_interest(
-                        tbalance,
-                        d1.strftime(DF),
-                        d2.strftime(DF)
-                    )
-                    principal_due = self.compute_principal_due(default_principal_due, interest_due, c)
-                    #if (loan.is_fixed_payment_amount):
-                    #    principal_due = round(c - interest_due, 2)
-                    #else:
-                    #    principal_due = default_principal_due
+        payments = loan.term_payments
+        principal_due = 0.0
 
-                    if principal_due!=0.0 or interest_due!=0.0:
-                        vals = {
-                            'loan_id': loan.id,
-                            'date_start': d1.strftime(DF),
-                            'date_due': d2.strftime(DF),
-                            'name': "Schedule %d" % i,
-                            'days': days,
-                            'principal_balance': tbalance,
-                            'principal_due': principal_due,
-                            'interest_due': interest_due,
-                            'sequence': i,
-                        }
-                        _logger.debug("create vals=%s", vals)
-                        
-                        lines.append(vals)
+        default_principal_due = round(loan.amount / payments, 2)
 
-                        tbalance = tbalance - principal_due
+        if loan.interest_rate == 0.0:
+            c = default_principal_due
+        else:
+            d2, days = self.get_next_due(d1, loan.payment_schedule, i, d0, loan=loan)
+            r = loan.interest_rate * days / (days_in_year * 100.0)
+            c = loan.amount * r / (1.0 - 1.0 / ((1+r)**payments))
+            if round_to_peso:
+                c = math.ceil(c)
 
-                    d0 = d1
-                    d1 = d2
-                    i += 1
+        lines=[]
+        
+        for i in range(1, loan.term_payments):
+            d2, dx = self.get_next_due(d1, loan.payment_schedule, i, d0, loan=loan)
+            days = (d2 - d1).days
+            #interest_due = round(tbalance * loan.interest_rate * days / (days_in_year * 100.0), 2)
+            interest_due = loan.compute_interest(
+                tbalance,
+                d1.strftime(DF),
+                d2.strftime(DF)
+            )
+            principal_due = self.compute_principal_due(default_principal_due, interest_due, c)
 
-                days = (dend - d1).days
-                #interest_due = round(tbalance * loan.interest_rate * days / (days_in_year * 100.0), 2)
-                interest_due = loan.compute_interest(
-                    tbalance,
-                    d1.strftime(DF),
-                    dend.strftime(DF)
-                )
-
+            if principal_due!=0.0 or interest_due!=0.0:
                 vals = {
                     'loan_id': loan.id,
                     'date_start': d1.strftime(DF),
-                    'date_due': dend.strftime(DF),
+                    'date_due': d2.strftime(DF),
                     'name': "Schedule %d" % i,
                     'days': days,
                     'principal_balance': tbalance,
-                    'principal_due': tbalance,
+                    'principal_due': principal_due,
                     'interest_due': interest_due,
                     'sequence': i,
                 }
                 _logger.debug("create vals=%s", vals)
-                ######add#####
+                
                 lines.append(vals)
-#                 loan.amortizations.create(vals)
+
+                tbalance = tbalance - principal_due
+
+            d0 = d1
+            d1 = d2
+            i += 1
+
+        days = (dend - d1).days
+        #interest_due = round(tbalance * loan.interest_rate * days / (days_in_year * 100.0), 2)
+        interest_due = loan.compute_interest(
+            tbalance,
+            d1.strftime(DF),
+            dend.strftime(DF)
+        )
+
+        vals = {
+            'loan_id': loan.id,
+            'date_start': d1.strftime(DF),
+            'date_due': dend.strftime(DF),
+            'name': "Schedule %d" % i,
+            'days': days,
+            'principal_balance': tbalance,
+            'principal_due': tbalance,
+            'interest_due': interest_due,
+            'sequence': i,
+        }
+        _logger.debug("create vals=%s", vals)
+
+        lines.append(vals)
+        return lines
+
+
+#refactoring on 20191101
+    @api.multi
+    def generate_amortization_straight_interest(self):
+        for loan in self:
+            if loan.state != 'draft':
+                continue
+
+            self.details.unlink()
+            self.amortizations.unlink()
+
+            lines = self.get_loan_schedules_for_straight()
+            if lines and len(lines)>0:
+                self.adjust_loan_schedule_for_straight(lines)
                 loan.amortizations = lines
+                
+
+#refactoring on 20191101
+    def get_loan_schedules_for_straight(self):
+        self.ensure_one()
+        loan = self
+        skip_days = [6]
+        if loan.loan_type_id.skip_saturday:
+            skip_days.append(5)
+        #get holidays
+        skip_dates = set(self.get_skip_dates(loan.date_start))
+
+        d1 = fields.Datetime.from_string(loan.date_start)
+        d0 = d1
+        dend = fields.Datetime.from_string(loan.date_maturity)
+        days = (dend - d1).days
+
+        _logger.debug("**gen straight amort 1: %s d1=%s dend=%s days=%s",
+            loan.name, d1, dend, days
+        )
+
+        lines = []
+        n = 0
+        while d1 < dend:
+            if loan.payment_schedule=='lumpsum':
+                d2 = dend
+            else:
+                d2, dx = self.get_next_due(d1, loan.payment_schedule, n+1, d0, loan=loan)
+
+            d2 = min(d2, dend)
+            d2s = d2.strftime(DF)
+
+            #skip sunday if schedule is daily
+            if not (loan.payment_schedule=="day" and (d2.weekday() in skip_days or d2s in skip_dates)):
+                days = (d2 - d1).days
+                n += 1
+                lines.append([0, 0, {
+                    'loan_id': loan.id,
+                    'date_start': d1.strftime(DF),
+                    'date_due': d2.strftime(DF),
+                    'name': "Schedule %d" % n,
+                    'days': days,
+                    #'principal_balance': 0,
+                    #'principal_due': 0,
+                    #'interest_due': 0,
+                    'sequence': n,
+                }])
+            d0 = d1
+            d1 = d2
+            
+        return lines
+
+#refactoring 20191101
+    def get_interest_for_straight(self):
+        self.ensure_one()
+        loan=self
+        d1 = fields.Datetime.from_string(loan.date_start)
+        d0 = d1
+        dend = fields.Datetime.from_string(loan.date_maturity)
+        days = (dend - d1).days
+        try:
+            days_in_year = float(loan.days_in_year)
+        except:
+            days_in_year = 365.0
+            
+        if loan.maturity_period=='months' and loan.payment_schedule in ['half-month','month','quarter','semi-annual','year']:
+            tinterest = round(loan.amount * loan.interest_rate * loan.maturity / 1200.0, 2)
+        else:
+            tinterest = round(loan.amount * loan.interest_rate * days / (days_in_year * 100.0), 2)
+
+        n = loan.term_payments
+        if loan.loan_type_id.round_to_peso:
+            linterest = math.floor(tinterest/n)
+        else:
+            linterest = math.floor(tinterest * 100 /n)/100
+        
+        linterest_last = tinterest - linterest*(n-1)
+        
+        return tinterest, linterest , linterest_last
+    
+
+#refactoring 20191101
+    def get_principal_for_straight(self):
+        self.ensure_one()
+        loan=self
+        n = loan.term_payments
+        round_to_peso = loan.loan_type_id.round_to_peso
+        
+        if round_to_peso:
+            lprincipal = math.floor(loan.amount/n)
+        else:
+            lprincipal = math.floor(loan.amount * 100 /n)/100
+
+        if loan.bulk_principal_payment:
+            lprincipal = 0.0
+        
+        lprincipal_last = loan.amount - lprincipal*(n-1)
+        
+        return lprincipal , lprincipal_last
+    
+
+#refactoring 20191101
+    def adjust_loan_schedule_for_straight(self,lines=False):
+        self.ensure_one()
+        loan =self
+        
+        tinterest, linterest , linterest_last  = self.get_interest_for_straight()
+        lprincipal , lprincipal_last  = self.get_principal_for_straight()
+        
+        if lines:
+            pbal = loan.amount
+            for ln in lines[:-1]:
+                ln[2].update({
+                    'principal_balance': pbal,
+                    'principal_due': lprincipal,
+                    'interest_due': linterest,
+                })
+                pbal -= lprincipal
+
+            lines[-1][2].update({
+                'principal_balance': pbal,
+                'principal_due': pbal,
+                'interest_due': linterest_last,
+            })
+        
+#refactoring on 20191101
+    def adjust_loan_schedule_for_advance_int(self,lines=False):
+        self.ensure_one()
+        loan = self
+        adv_interest_record = False
+        if loan.payment_schedule != "day":
+            for ded in loan.deduction_ids:
+                if ded.code.upper()[:3] == 'ADV' and ded.net_include:
+                    if adv_interest_record:
+                        raise UserError(_("Cannot define two advance interest deductions at the same time."))
+                    adv_interest_record = ded
+
+        if lines:
+            if adv_interest_record:
+                try:
+                    ns = adv_interest_record.code[3:].strip()
+                    if len(ns)==0:
+                        n = 1
+                    else:
+                        n = int(ns)
+                except:
+                    n = 1
+
+                nlines = len(lines)
+                if n>nlines:
+                    n = nlines
+                    
+                amt = 0.0
+                while n>0:
+                    line = lines[nlines-1][2]
+                    amt += line['interest_due']
+                    line.update({
+                        'interest_due': False,
+                    })
+                    nlines -=1
+                    n -= 1
+
+                adv_interest_record.factor = 0.0
+                adv_interest_record.amount = amt
+            
+            
+            

@@ -32,6 +32,8 @@ class Loan(models.Model):
        self.bulk_principal_payment = self.loan_type_id.bulk_principal_payment
        return super(Loan, self).oc_loan_type_id()
 
+#########################################
+#this module is overwritten by ver10_0_1_2 , don't use this
     @api.multi
     def generate_amortization_simple_interest(self, round_to_peso=True):
         for loan in self:
@@ -41,6 +43,7 @@ class Loan(models.Model):
                 loan.term_payments = len(loan.amortizations)
             else:
                 super(Loan, loan).generate_amortization_simple_interest(round_to_peso=round_to_peso)
+#########################################
 
     @api.multi
     @api.depends(
@@ -62,6 +65,8 @@ class Loan(models.Model):
     def get_skip_dates(self, date_start):
         return []
 
+#########################################
+#this module is overwritten by ver10_0_1_2 , don't use this
     @api.multi
     def generate_amortization_straight_interest(self):
         for loan in self:
@@ -203,7 +208,7 @@ class Loan(models.Model):
                     adv_interest_record.amount = amt
 
                 loan.amortizations = lines
-
+#####################################################
 
 
     @api.model

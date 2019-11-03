@@ -24,7 +24,7 @@ class Loan(models.Model):
         loan = self
         member = loan.member_id
         for ded in loan.deduction_ids:
-            if ded.deposit_account_id and member.id != ded.deposit_account_id.member_id:
+            if ded.deposit_account_id and member.id != ded.deposit_account_id.member_id.id:
                 raise UserError(_("Member id is unmatched with member set in deduction items account.Please correct saving or cbu account again."))
                 
     

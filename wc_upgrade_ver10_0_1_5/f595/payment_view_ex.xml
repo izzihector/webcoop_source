@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+  <record id="view_loan_payment_form_f595" model="ir.ui.view">
+    <field name="name">view_loan_payment_form_f595</field>
+    <field name="model">wc.loan.payment</field>
+    <field name="inherit_id" ref="wc_loan_manual_payment.view_loan_payment_form_inherit"/>
+    <field name="arch" type="xml">
+        <field name="principal_amount" position="replace">
+              <label for="principal_amount" attrs="{'invisible':[('is_manual_compute','=',False)]}"/>
+              <div class="o_row" attrs="{'invisible':[('is_manual_compute','=',False)]}">
+               <field name="principal_amount" attrs="{'invisible':[('is_manual_compute','=',False)]}"/>
+               <field name="remain_principal_at_date" 
+                      attrs="{'invisible':['|',('is_manual_compute','=',False),('state','!=','draft')]}"/>
+              </div>
+        </field>
+        <field name="interest_amount" position="replace">
+              <label for="interest_amount" attrs="{'invisible':[('is_manual_compute','=',False)]}"/>
+              <div class="o_row" attrs="{'invisible':[('is_manual_compute','=',False)]}">
+               <field name="interest_amount" attrs="{'invisible':[('is_manual_compute','=',False)]}"/>
+               <field name="ex_interest_at_date" 
+                 attrs="{'invisible':['|',('is_manual_compute','=',False),('state','!=','draft')]}"/>
+              </div>
+        </field>
+        <field name="penalty_amount" position="replace">
+              <label for="penalty_amount" attrs="{'invisible':[('is_manual_compute','=',False)]}"/>
+              <div class="o_row" attrs="{'invisible':[('is_manual_compute','=',False)]}">
+               <field name="penalty_amount" attrs="{'invisible':[('is_manual_compute','=',False)]}"/>
+               <field name="remain_penalty_at_date" 
+                 attrs="{'invisible':['|',('is_manual_compute','=',False),('state','!=','draft')]}"/>
+              </div>
+        </field>
+        <field name="others_amount" position="replace">
+              <label for="others_amount" attrs="{'invisible':[('is_manual_compute','=',False)]}"/>
+              <div class="o_row" attrs="{'invisible':[('is_manual_compute','=',False)]}">
+               <field name="others_amount" attrs="{'invisible':[('is_manual_compute','=',False)]}"/>
+               <field name="remain_otherdue_at_date" 
+                      attrs="{'invisible':['|',('is_manual_compute','=',False),('state','!=','draft')]}"/>
+               </div>
+        </field>
+
+    </field>
+
+  </record>
+
+</odoo>

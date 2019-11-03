@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+  <data noupdate="0">
+    <template id="report_soa">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="o">
+                <div class="page">
+
+                    <center>
+                      <h3>STATEMENT OF ACCOUNT</h3>
+                      <div class="row"><strong><span t-field="o.loan_type_id.name"/></strong></div>
+                      <div class="row"><strong><span t-field="o.code"/></strong></div>
+                    </center>
+
+                    <br/>
+
+                    <div class="row">
+                      <div class="col-xs-5">
+                        <div class="row">
+                           <div class="col-xs-4">Statement Date:</div>
+                           <div class="col-xs-8"><span t-field="o.date_soa" t-field-options='{"format": "MMMM d, yyyy"}'/></div>
+                        </div>
+                        <div class="row">
+                           <div class="col-xs-4">Maker:</div>
+                           <div class="col-xs-8"><strong><span t-field="o.member_id"/></strong></div>
+                        </div>
+                        <t t-set="i" t-value="0"/>
+                        <div class="row" t-foreach="o.comaker_ids" t-as="cm">
+                           <div class="col-xs-4"><t t-if="i==0">Co-Makers:</t></div>
+                           <div class="col-xs-8"><span t-field="cm.name"/></div>
+                           <t t-set="i" t-value="i+1"/>
+                        </div>
+                        <div class="row">
+                           <div class="col-xs-4">Loan Amount:</div>
+                           <div class="col-xs-8"><strong><span t-field="o.amount"/></strong></div>
+                        </div>
+                        <div class="row">
+                           <div class="col-xs-4">Outstanding Principal:</div>
+                           <div class="col-xs-8"><strong><span t-field="o.principal_balance"/></strong></div>
+                        </div>
+                      </div>
+
+                      <div class="col-xs-2"></div>
+
+                      <div class="col-xs-5">
+                        <div class="row">
+                           <div class="col-xs-4">Interest Rate:</div>
+                           <div class="col-xs-8"><span t-field="o.interest_rate"/>% per annum</div>
+                        </div>
+                        <div class="row">
+                           <div class="col-xs-4">Payment Schedule:</div>
+                           <div class="col-xs-8"><span t-field="o.payment_schedule"/></div>
+                        </div>
+                        <div class="row">
+                           <div class="col-xs-4">Release Date:</div>
+                           <div class="col-xs-8"><span t-field="o.date" t-field-options='{"format": "MMMM d, yyyy"}'/></div>
+                        </div>
+                        <div class="row">
+                           <div class="col-xs-4">Maturity Date:</div>
+                           <div class="col-xs-8"><span t-field="o.date_maturity" t-field-options='{"format": "MMMM d, yyyy"}'/></div>
+                        </div>
+                        <div class="row">
+                           <div class="col-xs-4">Next Due Date:</div>
+                           <div class="col-xs-8"><span t-field="o.ldate_soa" t-field-options='{"format": "MMMM d, yyyy"}'/></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <table class="table table-condensed table-compressed">
+
+                      <thead>
+                        <tr>
+                          <th>Due Date</th>
+                          <th>Payment Date</th>
+                          <th class="text-right">Amount Paid</th>
+                          <th class="text-right">Principal Due</th>
+                          <th class="text-right">Principal Paid</th>
+                          <th class="text-right">Interest Due</th>
+                          <th class="text-right">Interest Paid</th>
+                          <th class="text-right">Penalty</th>
+                          <th class="text-right">Penalty Paid</th>
+                       <!-- b590 add start-->
+                          <th class="text-right">Other</th>
+                          <th class="text-right">Other Paid</th>                     
+                       <!-- b590 add end-->
+                          <th class="text-right">Total Due<br/>Less Payments</th>
+                          <th class="text-right">Past Due Days</th>
+                        </tr>
+                      </thead>
+
+                      <t t-set="tpdue" t-value="0.0"/>
+                      <t t-set="tppaid" t-value="0.0"/>
+                      <t t-set="tidue" t-value="0.0"/>
+                      <t t-set="tipaid" t-value="0.0"/>
+                      <t t-set="tpenalty" t-value="0.0"/>
+                      <t t-set="tpenalty_paid" t-value="0.0"/>
+                      <!-- b590 add start-->
+                          <t t-set="tothers" t-value="0.0"/>
+                          <t t-set="tothers_paid" t-value="0.0"/>                       
+                      <!-- b590 add end-->
+                      <t t-set="tdue" t-value="0.0"/>
+
+                      <tbody>
+                        <tr t-foreach="o.details" t-as="a">
+
+                          <t t-set="due_date" t-value="a.date_due"/>
+                          <t t-set="tpdue" t-value="tpdue + a.principal_due"/>
+                          <t t-set="tppaid" t-value="tppaid + a.principal_paid"/>
+                          <t t-set="tidue" t-value="tidue + a.interest_due"/>
+                          <t t-set="tipaid" t-value="tipaid + a.interest_paid"/>
+                          <t t-set="tpenalty" t-value="tpenalty + a.penalty_adjusted"/>
+                          <t t-set="tpenalty_paid" t-value="tpenalty_paid + a.penalty_paid"/>
+                      <!-- b590 add start-->
+                          <t t-set="tothers" t-value="tothers + a.others_due"/>
+                          <t t-set="tothers_paid" t-value="tothers_paid + a.others_paid"/>
+                      <!-- b590 add end-->
+                          <t t-set="tdue" t-value="tdue + a.total_due"/>
+
+                          <td><span t-field="a.date_due"/></td>
+                          <td><span t-field="a.payment_date"/></td>
+                          <td class="text-right"><span t-field="a.payment_amount"/></td>
+                          <td class="text-right"><span t-field="a.principal_due"/></td>
+                          <td class="text-right"><span t-field="a.principal_paid"/></td>
+                          <td class="text-right"><span t-field="a.interest_due"/></td>
+                          <td class="text-right"><span t-field="a.interest_paid"/></td>
+                          <td class="text-right"><span t-field="a.penalty_adjusted"/></td>
+                          <td class="text-right"><span t-field="a.penalty_paid"/></td>
+                      <!-- b590 add start-->
+                          <td class="text-right"><span t-field="a.others_due"/></td>
+                          <td class="text-right"><span t-field="a.others_paid"/></td>
+                      <!-- b590 add end-->
+                          <td class="text-right"><span t-field="a.total_due"/></td>
+                          <td class="text-right"><span t-field="a.days"/></td>
+                        </tr>
+
+                         <tr class="border-box">
+                           <th colspan="3">TOTALS</th>
+                           <th class="text-right"><t t-esc="'{0:,.2f}'.format(tpdue)"/></th>
+                           <th class="text-right"><t t-esc="'{0:,.2f}'.format(tppaid)"/></th>
+                           <th class="text-right"><t t-esc="'{0:,.2f}'.format(tidue)"/></th>
+                           <th class="text-right"><t t-esc="'{0:,.2f}'.format(tipaid)"/></th>
+                           <th class="text-right"><t t-esc="'{0:,.2f}'.format(tpenalty)"/></th>
+                           <th class="text-right"><t t-esc="'{0:,.2f}'.format(tpenalty_paid)"/></th>
+                      <!-- b590 add start-->
+                           <th class="text-right"><t t-esc="'{0:,.2f}'.format(tothers)"/></th>
+                           <th class="text-right"><t t-esc="'{0:,.2f}'.format(tothers_paid)"/></th>
+                      <!-- b590 add end-->
+                           <th class="text-center" colspan="2" rowspan="2">
+<!--                              <t t-esc="'{0:,.2f}'.format(tdue)"/> -->
+                             <t t-esc="'{0:,.2f}'.format(o.total_due)"/>
+                           </th>
+                         </tr>
+                         <tr class="border-box">
+                           <th colspan="2">AMOUNT DUE ON</th>
+                           <th class="text-center">
+                             <span t-field="o.ldate_soa"/>
+                           </th>
+                           <th class="text-center" colspan="2">
+                             <t t-esc="'{0:,.2f}'.format(o.principal_due)"/>
+                           </th>
+                           <th class="text-center" colspan="2">
+                             <t t-esc="'{0:,.2f}'.format(tidue-tipaid)"/>
+                           </th>
+                           <th class="text-center" colspan="2">
+                             <t t-esc="'{0:,.2f}'.format(tpenalty-tpenalty_paid)"/>
+                           </th>
+                      <!-- b590 add start-->
+                           <th class="text-center" colspan="2">
+                             <t t-esc="'{0:,.2f}'.format(tothers-tothers_paid)"/>
+                           </th>
+                      <!-- b590 add end-->
+                         </tr>
+
+                       </tbody>
+
+                    </table>
+
+                    <div class="row mt16">
+                      <div class="col-xs-3" id="soa_prepared_by">
+                        Prepared by:<br/>
+                        <br/>
+                        <strong><span t-field="user.name"/></strong><br/>
+                      </div>
+                      <div class="col-xs-9">
+                        Received by:<br/>
+                        <br/>
+                        <strong><span t-field="o.member_id"/></strong><br/>
+                      </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+  </data>
+</odoo>

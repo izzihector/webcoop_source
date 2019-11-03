@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+  <record id="view_loan_payment_rebate_tree" model="ir.ui.view">
+    <field name="name">view_loan_payment_rebate_tree</field>
+    <field name="model">wc.loan.payment.rebate</field>
+    <field name="arch" type="xml">
+      <tree class="wc_tree" colors="red:state=='draft';" create="0">
+        <field name="name" />
+        <field name="date" />
+        <field name="loan_id" />
+        <field name="member_id" />
+<!--         <field name="or_number" /> -->
+<!--         <field name="check_number" /> -->
+        <field name="amount" sum="Total"/>
+        <field name="state" />
+        <field name="deb_gl_account_id" />
+        <field name="note" />
+      </tree>
+    </field>
+  </record>
+
+
+  <record id="view_loan_payment_rebate_form" model="ir.ui.view">
+    <field name="name">view_loan_payment_rebate_form</field>
+    <field name="model">wc.loan.payment.rebate</field>
+    <field name="arch" type="xml">
+      <form string="Loan Payment Rebate" create="0" delete="0">
+        <header>
+          <button name="confirm_payment_rebate" string="Confirm"
+            confirm="Are you sure you want to confirm this rebate?"
+            states="draft" type="object" class="oe_highlight oe_read_only"/>
+
+          <button name="cancel" string="Cancel"
+            confirm="Are you sure you want to cancel this transaction?"
+            class="oe_read_only"
+            states="draft" type="object" />
+
+          <button name="reverse_payment_rebate" string="Reverse Rebate Payment"
+            confirm="Are you sure you want to add reverse entry this rebate?"
+            attrs="{'invisible':['|',('is_reversed','=',True),('state','in',['draft','cancelled'])]}"
+            class="oe_read_only"
+            type="object" groups="wc_loan.group_loan_manager,wc.group_manager"/>
+
+          <field name="state" readonly="1" widget="statusbar"
+            statusbar_colors="{'confirmed':'blue','draft':'red','cancelled':'grey'}"/>
+        </header>
+
+        <sheet string="Rebate">
+          <div class="oe_title">
+            <h1 class="o_row">
+              <field name="name" placeholder="Rebate description..."/>
+            </h1>
+            <field name="is_reversed" invisible="1"/>
+          </div>
+          <group>
+            <group>
+              <field name="date" readonly="1"/>
+              <field name="amount" attrs="{'readonly':[('state', 'not in', ['draft'])]}"/>
+              <field name="rebatable_amount" 
+              attrs="{'invisible':[('state','!=','draft')]}" 
+              readonly="1"/>
+            </group>
+            <group>
+              <field name="loan_id" readonly="1"
+                options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+              <field name="member_id" readonly="1"
+                options="{'no_create':True, 'no_edit':True, 'no_open':True}"/>
+<!--               <field name="or_number" /> -->
+              <field name="deb_gl_account_id" 
+                 options="{'no_create':True, 'no_edit':True}"/>
+              <field name="is_rebate_to_member_account"/>
+              <field name="deposit_account_id" 
+                 options="{'no_create':True, 'no_edit':True}"
+                 attrs = "{'invisible':[('is_rebate_to_member_account','=',False)],'require':[('is_rebate_to_member_account','=',True)]}"
+                 domain = "[('state','=','open'),'|',('member_id','=',member_id),('other_member_ids','in',member_id)]"/>
+            </group>
+          </group>
+
+          <notebook>
+            <page name="note" string="Rebate Reason">
+              <field name="note" nolabel="1"/>
+            </page>
+          </notebook>
+        </sheet>
+
+        <div class="oe_chatter">
+          <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+          <field name="message_ids" widget="mail_thread"/>
+        </div>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_payment_rebate" model="ir.actions.act_window">
+    <field name="name">Rebate</field>
+    <field name="res_model">wc.loan.payment.rebate</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <menuitem id="menu_payment_rebate" action="action_payment_rebate"
+    groups="group_loan_payment_rebate_user"
+    parent="wc_loan.menu_loan_main" name="Rebate" sequence="99"/>
+
+</odoo>

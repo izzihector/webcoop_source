@@ -211,5 +211,90 @@ class AccountTransaction(models.Model):
         return trcode_csd
 
 
+#add 20191102 , create deposit transaction util
+    #[Todo]test create_and_confirm_deposit_transaction_util
+    def create_and_confirm_deposit_transaction_util(self,dep_account,amount,ref=False,loan=False):
+        vals = self.get_val_for_create_deposit_transaction(dep_account,amount,ref,loan)
+        context = {'ir_sequence_date': self.env['wc.posting'].get_new_posting_date()}
+        vals['confirm_date'] = fields.Datetime.now()
+        vals['state'] = 'confirmed'
+        vals['name'] = self.env['ir.sequence'].with_context(**context).next_by_code('wc.account.transaction'),
+        return self.create(vals)
+    
+    def create_deposit_transaction_util(self,dep_account,amount,ref=False,loan=False):
+        vals = self.get_val_for_create_deposit_transaction(dep_account,amount,ref,loan)
+        return self.create(vals)
 
-#
+    def get_val_for_create_deposit_transaction(self,dep_account,amount,ref=False,loan=False):
+        date=self.env['wc.posting'].get_new_posting_date()
+        trcode_cbu = self.get_deposit_code_cbu()
+        trcode_sa = self.get_deposit_code_sa()
+
+        if dep_account.account_type=='cbu':
+            trtype_id = trcode_cbu.id
+        else:
+            trtype_id = trcode_sa.id
+        
+        if loan:
+            loan_id = loan.id
+        else:
+            loan_id = False
+            
+        vals = {
+            'company_id': self.env.user.company_id.id,
+            'account_id': dep_account.id,
+            'date': date,
+            'deposit': amount,
+            'trcode_id': trtype_id,
+            'reference': ref,
+            'loan_id': loan_id,
+            'teller_id': self.env.user.id,
+        }
+        return vals
+
+    def create_deposit_deposit_reverse_transaction_util(self,dep_account,amount,ref=False,loan=False):
+        vals = self.get_val_for_create_deposit_reverse_transaction(dep_account,amount,ref,loan)
+        return self.create(vals)
+
+    def get_val_for_create_deposit_reverse_transaction(self,account,amount,ref=False,loan=False):
+        date=self.env['wc.posting'].get_new_posting_date()
+        trcode_cbu = self.env.ref('wc_account.tr_adjustment')
+        vals={}
+        if not trcode_cbu:
+            res = self.env['wc.tr.code'].search([
+                ('trans_type','=','cbu'),
+                ('name','ilike','Adjustment'),
+            ])
+            if not res:
+                raise Warning(_("Cannot confirm transaction. No CBU adjustment transaction type present."))
+            trcode_cbu = res[0]
+        trcode_sa = self.env.ref('wc_account.tr_cm00')
+        if not trcode_sa:
+            res = self.env['wc.tr.code'].search([
+                ('trans_type','=','sa'),
+                ('name','ilike','Memo'),
+            ])
+            if not res:
+                raise Warning(_("Cannot confirm transaction. No account adjustment transaction type present."))
+            trcode_sa = res[0]
+        if account:
+            if account.account_type=='cbu':
+                trtype_id = trcode_cbu.id
+            else:
+                trtype_id = trcode_sa.id
+            if loan:
+                loan_id = loan.id
+            else:
+                loan_id = False
+                
+            vals = {
+                'account_id': account.id,
+                'withdrawal': amount,
+                'date': date,
+                'trcode_id': trtype_id,
+                'reference': ref,
+                'loan_id': loan_id,
+                'teller_id': self.env.user.id,
+            }
+            
+        return vals

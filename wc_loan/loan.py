@@ -413,7 +413,10 @@ class Loan(models.Model):
                 if d.principal_due + 0.005 >= principal_balance:
                     is_last_bill = True
                 interest_balance += d.interest_due - d.interest_paid
-                total_due += d.total_due
+                #b590 remove(total_due incorrect 
+                #in case of advance payment of others due(only for lumpsum)
+                #total_due += d.total_due
+
                 pdue = d.principal_due - d.principal_paid
                 principal_balance -= d.principal_paid
                 if pdue > 0.0:
@@ -433,11 +436,19 @@ class Loan(models.Model):
             loan.interest_balance = interest_balance
             loan.total_balance = principal_balance + interest_balance
 
-            loan.total_due = total_due
+            #b590 remove(total_due incorrect 
+            #in case of advance payment of others due(only for lumpsum)
+            #loan.total_due = total_due
+            
             loan.principal_due = principal_due
             loan.interest_due = interest_due
             loan.penalty_due = penalty_due
             loan.others_due = others_due
+            
+            #b590 remove(total_due incorrect 
+            #in case of advance payment of others due(only for lumpsum)
+            loan.total_due = principal_due + interest_due + penalty_due + others_due
+            
             loan.interest_total = interest_total
             loan.others_total = others_total
             loan.ldate_soa = ldate_soa
@@ -756,6 +767,7 @@ class Loan(models.Model):
             principal_due = default_principal_due
         return principal_due
 
+#this module is overwritten by ver10_0_1_2
     @api.multi
     def generate_amortization_simple_interest(self, round_to_peso=True):
 
@@ -855,6 +867,7 @@ class Loan(models.Model):
                 }
                 _logger.debug("create vals=%s", vals)
                 loan.amortizations.create(vals)
+#####################################
 
     @api.multi
     def generate_schedule(self):

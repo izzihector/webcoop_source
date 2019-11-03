@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="form_loan_type_f574" model="ir.ui.view">
+    <field name="name">form_loan_type_f574</field>
+    <field name="model">wc.loan.type</field>
+    <field name="inherit_id" ref="wc_upgrade_ver10_0_1_2.form_loan_type_inherit_f538"/>
+    <field name="arch" type="xml">
+      <group name ="range1" position="after">
+        <group name ="rebate_type">
+         <field name ="rebatable_payment_type"/>
+         </group>
+        
+      </group>
+     </field>
+  </record>
+</odoo>

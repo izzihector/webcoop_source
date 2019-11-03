@@ -1,0 +1,4 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+
+loanpay_rebate_1,loanpay_rebate_1,model_wc_loan_payment_rebate,,1,0,0,0
+loanpay_rebate_m,loanpay_rebate_m,model_wc_loan_payment_rebate,wc_loan_payment_rebate.group_loan_payment_rebate_user,1,1,1,0

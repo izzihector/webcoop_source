@@ -78,7 +78,8 @@ class LoanPayments(models.Model):
                     d.principal_due = 0.0
                     d.interest_due = 0.0
                     d.penalty = 0.0
-                    d.no_others_due = True
+                    #b586
+#                     d.no_others_due = True
                     d.state = 'reversed'
 
                 if principal_paid>0.0:

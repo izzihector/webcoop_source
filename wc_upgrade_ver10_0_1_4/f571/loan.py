@@ -251,6 +251,7 @@ class Loan(models.Model):
             'member_id': self.member_id.id,
             'comaker_ids': self.comaker_ids,
             'deduction_ids': lines,
+            'penalty_rate': self.penalty_rate,#add this line b596
             'payment_schedule_xdays': self.payment_schedule_xdays,#add this line f561
             
         })

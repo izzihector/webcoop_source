@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+  <report
+    id="wc_loan.loan_soa"
+    model="wc.loan"
+    string="Statement of Account"
+    report_type="qweb-pdf"
+    attachment_use="False"
+    name="wc_upgrade_ver10_0_1_5.report_soa"
+    file="wc_upgrade_ver10_0_1_5.report_soa"
+    paperformat="wc.letter_landscape"
+  />
+
+
+</odoo>
