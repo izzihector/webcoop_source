@@ -7,10 +7,11 @@
     'description': """
                     1.Allow Bulk import and approve for account transaction,
                     2.Add custom field on membership form,
+                    3.Allow Bulk import for payment (actual logic is in wc_loan_payment_bulkimport)
                    """,
     'author': 'Esupportlink.',
     'depends': [
-        'wc_account','wc','wc_posting','wc_member'
+        'wc_account','wc','wc_posting','wc_member','wc_loan_payment_bulkimport'
     ],
     'init_xml': [],
     'data': [
