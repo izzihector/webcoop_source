@@ -64,10 +64,17 @@ class Loan(models.Model):
                 amt = sum(a.interest_paid+a.penalty_paid for a in loan.details)
             else:
                 amt = sum(a.interest_paid for a in loan.details)
+        
+        #add upfront advance interest 20191105
+        for ded in loan.deduction_ids:
+            if ded.code == "ADV-INT":
+                amt += ded.amount 
             
         for a in loan.payment_rebate_ids:
             if a.state =="confirmed":
                 amt -= a.amount
+
+        
         return amt
     
 
