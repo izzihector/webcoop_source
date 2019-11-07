@@ -164,6 +164,17 @@ class Loan(models.Model):
     @api.multi
     def generate_schedule(self):
         for loan in self:
+            if loan.state=='draft':
+                ndate = self.get_first_open_date()
+                if loan.date!=ndate:
+                    if loan.editable_date and loan.date:
+                        if loan.date>=self.env.user.company_id.start_date:
+                            loan.date = ndate
+                            #raise ValidationError(_("Approval date should be equal to open posting date or prior to beginning date."))
+                    else:
+                        loan.date = ndate
+                _logger.debug("gen sched: date=%s", loan.date)        
+
             if loan.is_interest_epr:
                 loan.generate_amortization_straight_interest()
 #                 loan.term_payments = len(loan.amortizations)
