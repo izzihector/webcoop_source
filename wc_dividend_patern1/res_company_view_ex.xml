@@ -7,10 +7,12 @@
     <field name="inherit_id" ref="base.view_company_form"/>
     <field name="arch" type="xml">
 <!--       <xpath expr="//group[field[@name='cbu_deposit_account_id']]" position="after"> -->
-      <xpath expr="//notebook/page[2]" >
+      <xpath expr="//notebook">
+        <page name = "other_settings" string ="Other">
           <group name="other_accounting" string="Other">
             <field name="date_parameter_for_cbu_balance"/>
           </group>
+        </page>
       </xpath>
     </field>
   </record>
