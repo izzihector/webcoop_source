@@ -179,9 +179,12 @@ class Loan(models.Model):
                 'net_include': True,
                 'factor': 0.0,
                 'amount': penalty_amount,
-                'gl_account_id': self.company_id.penalty_account_id.id,
+                #fix for bug fouond at 20191125 
+#                 'gl_account_id': self.company_id.penalty_account_id.id,
+                'gl_account_id': self.get_penalty_account_id(),
             }
             lines.append( (0, False, val) )
+   
         
         #refactoring 20191018, for future modify.In order to minimize affection in case of adding new field on loan.
         #in case of new field add,only [copy_and_create_restructured_loan] module need to be modified.
@@ -239,6 +242,7 @@ class Loan(models.Model):
             'restructured_from_id': self.id,
             'loan_type_id': self.loan_type_id.id,
             'maturity': self.maturity,
+            'maturity_period': self.maturity_period, #add 20191125 for fixing found bug on 20191125
             'payment_schedule': self.payment_schedule,
             'term_payments': self.term_payments,
             'term_payments_for_input':self.term_payments_for_input,#add this line f571
@@ -253,7 +257,9 @@ class Loan(models.Model):
             'deduction_ids': lines,
             'penalty_rate': self.penalty_rate,#add this line b596
             'payment_schedule_xdays': self.payment_schedule_xdays,#add this line f561
-            
+            'is_interest_deduction_first':self.is_interest_deduction_first, #add 20191125 for fixing found bug on 20191125
+            'days_in_year':self.days_in_year, #add 20191125 for fixing found bug on 20191125
+            'bulk_principal_payment': self.bulk_principal_payment, #add 20191125 for fixing found bug on 20191125
         })
         
         return res
