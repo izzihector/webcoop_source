@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+  <record id="form_loan_type_deduction_f597" model="ir.ui.view">
+    <field name="name">form_loan_type_deduction_f597</field>
+    <field name="model">wc.loan.type.deduction</field>
+    <field name="inherit_id" ref="wc_loan.form_loan_type_deduction"/>
+    <field name="arch" type="xml">
+      <field name ="code" position="before">
+         <field name ="deduction_type" />
+      </field>
+      <field name ="code" position="attributes">
+         <attribute name="attrs">{'invisible':[('deduction_type','!=',False)]}</attribute>
+      </field>
+      <field name ="code" position="after">
+          <field name="code_disp" attrs ="{'invisible':[('deduction_type','=',False)]}"/>
+      </field>
+      
+      <field name ="gl_account_id" position="before">
+	      <field name ="deduction_target_account_type" 
+	          domain="[('category','=','sa')]"
+              options="{'no_create':True, 'no_edit':True, 'no_open':True}"
+	          string="Target Account Type"
+	          attrs="{'invisible':[('deduction_type','!=','sa')],'required':[('deduction_type','=','sa')]}"/>
+      </field>
+      <field name ="gl_account_id" position="attributes">
+		 <attribute name="attrs">{'invisible':[('deduction_type','!=',False)]}</attribute>
+      </field>
+      <field name ="gl_account_id" position="after">
+          <field name="gl_account_id_disp" attrs ="{'invisible':[('deduction_type','=',False)]}"/>
+      </field>
+     </field>
+   </record>
+</odoo>

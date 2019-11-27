@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="form_members_inherit_f599" model="ir.ui.view">
+    <field name="name">form_members_inherit_f599</field>
+    <field name="model">wc.member</field>
+    <field name="inherit_id" ref="wc_member.form_members"/>
+    <field name="arch" type="xml">
+        <field name="total_cbu" position="attributes">
+          <attribute name="invisible">True</attribute>
+        </field>
+        <field name="total_sa" position="attributes">
+          <attribute name="invisible">True</attribute>
+        </field>
+        
+        
+        <field name="account_officer_id" position="before">
+           <field name="account_ids" string="Account Balance">
+            <tree>
+		        <field name="account_type_id"/>
+		        <field name="balance"/>
+		        <field name="state"/>
+		     </tree>
+		   </field>
+        </field>
+      
+      
+
+    </field>
+  </record>
+
+
+
+</odoo>
