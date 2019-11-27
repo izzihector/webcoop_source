@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="form_dividend_patern1" model="ir.ui.view">
+    <field name="name">form_dividend_patern1</field>
+    <field name="model">wc.dividend.patern1</field>
+    <field name="arch" type="xml">
+      <form>
+
+        <header>
+          <button name="confirm" string="Confirm"
+            states="calc"
+            class="oe_highlight oe_read_only"
+            type="object"/>
+
+          <button name="search_and_create_lines" string="Calculate"
+            states="draft,calc"
+            class="oe_read_only"
+            type="object"/>
+
+          <button name="download_as_excel" string="Download as Excel"
+            class="oe_read_only"
+            type="object"/>
+
+          <button name="back_to_draft" string="Back to Draft"
+            states="confirmed"
+            class="oe_read_only"
+            type="object"/>
+
+          <field name="state" widget="statusbar" readonly="1"/>
+        </header>
+
+        <sheet>
+          <div class="oe_title">
+            <label for="name" class="oe_edit_only"/>
+            <h1>
+              <field name="name"/>
+            </h1>
+          </div>
+ 
+            <group>
+              <group>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="is_calculate_dividend"/>
+                <field name="total_amt_for_dividend" string="Total Dividend" 
+                       attrs="{'invisible':[('is_calculate_dividend','=',False)],'required':[('is_calculate_dividend','=',True)]}"/>
+                <field name="is_calculate_patronage_refund"/>
+                <field name="total_amt_for_patronage" string="Total Patronage" 
+                       attrs="{'invisible':[('is_calculate_patronage_refund','=',False)],'required':[('is_calculate_patronage_refund','=',True)]}"/>
+                <field name="date_from" string="Date from" required='1'/>
+                <field name="date_to" string="Date To" required='1'/>
+              </group>
+              <group>
+                <field name="dividend_pct" string="Dividend rate %" readonly="1"/>
+                <field name="patronage_pct" string="Patronage refund rate %" readonly="1"/>
+                <field name="total_average_share" string="TASM" readonly="1"/>
+                <field name="total_int_on_loan" string="Total Int on Loan" readonly="1"/>                  
+              </group>
+            </group>
+              
+          <notebook>
+            <page name="info" string="Details">
+            <field name="line_ids">
+             <tree class="wc_tree">
+              <field name="is_calculate_dividend" invisible='1'/>
+              <field name="member_id"/>
+              <field name="cbu_amount_1" string="JAN" 
+                  attrs="{'invisible':[('is_calculate_dividend','=',False)]}"/>
+              <field name="cbu_amount_2" string="FEB" attrs="{'invisible':[('is_calculate_dividend','=',False)]}"/>                  
+              <field name="cbu_amount_3" string="MAR" attrs="{'invisible':[('is_calculate_dividend','=',False)]}"/>
+              <field name="cbu_amount_4" string="APR" attrs="{'invisible':[('is_calculate_dividend','=',False)]}"/>
+              <field name="cbu_amount_5" string="MAY" attrs="{'invisible':[('is_calculate_dividend','=',False)]}"/>
+              <field name="cbu_amount_6" string="JUN" attrs="{'invisible':[('is_calculate_dividend','=',False)]}"/>
+              <field name="cbu_amount_7" string="JUL" attrs="{'invisible':[('is_calculate_dividend','=',False)]}"/>
+              <field name="cbu_amount_8" string="AUG" attrs="{'invisible':[('is_calculate_dividend','=',False)]}"/>
+              <field name="cbu_amount_9" string="SEP" attrs="{'invisible':[('is_calculate_dividend','=',False)]}"/>
+              <field name="cbu_amount_10" string="OCT" attrs="{'invisible':[('is_calculate_dividend','=',False)]}"/>
+              <field name="cbu_amount_11" string="NOV" attrs="{'invisible':[('is_calculate_dividend','=',False)]}"/>
+              <field name="cbu_amount_12" string="DEC" attrs="{'invisible':[('is_calculate_dividend','=',False)]}"/>
+              <field name="cbu_amount_calc_total" string="TSM" attrs="{'invisible':[('is_calculate_dividend','=',False)]}"/>
+              <field name="cbu_amount_calc_average" string="ASM" sum="TASM" attrs="{'invisible':[('is_calculate_dividend','=',False)]}"/>
+              <field name="dividend_on_cbu" string="Int.on S/C" sum="Total Dividend" attrs="{'invisible':[('is_calculate_dividend','=',False)]}"/>
+              <field name="loan_interest_income" string="Loan Int" sum="Total Loan Int"/>
+              <field name="patronage_refund" string="PR" sum="Total Patronage"/>
+              <field name="total_dividend_and_refund" string="Total" sum="Total Distribution"/>
+             </tree>
+          </field>
+          </page>
+          </notebook>
+          <separator string="Notes"/>
+          <field name="note" nolabel="1"/>
+        </sheet>
+        <div class="oe_chatter">
+          <field name="message_follower_ids" widget="mail_followers"/>
+          <field name="message_ids" widget="mail_thread"/>
+        </div>
+
+      </form>
+    </field>
+  </record>
+
+
+  <record id="tree_dividend_patern1" model="ir.ui.view">
+    <field name="name">tree_dividend_patern1</field>
+    <field name="model">wc.dividend.patern1</field>
+    <field name="arch" type="xml">
+      <tree class="wc_tree">
+        <field name="company_id" groups="base.group_multi_company"/>
+        <field name="name"/>
+        <field name="state"/>
+        <field name="note"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="search_dividend_patern1" model="ir.ui.view">
+    <field name="name">search_dividend_patern1</field>
+    <field name="model">wc.dividend.patern1</field>
+    <field name="arch" type="xml">
+      <search>
+        <field name="state" invisible="1"/>
+        <field name="name"/>
+      </search>
+    </field>
+  </record>
+
+
+  <record id="action_dividend_patern1" model="ir.actions.act_window">
+    <field name="name">Dividend and Patronage Distribution</field>
+    <field name="res_model">wc.dividend.patern1</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+<!--  overwrite menu_dividend  -->
+  <menuitem id="wc_dividend.menu_dividend"
+    sequence="5"
+    action="action_dividend_patern1"
+    parent="account.menu_finance_entries"
+  />
+  
+  
+
+</odoo>

@@ -1,0 +1,2 @@
+import dividend_patern1
+import res_company
