@@ -23,18 +23,20 @@ class Loan(models.Model):
     
     @api.depends('is_restructured_target_loan','company_id.is_allow_restructure_again')
     def compute_is_allowed_restructure(self):
-        if self.is_restructured_target_loan:
-            if self.company_id.is_allow_restructure_again:
-                self.is_allowed_restructure = True
+        for loan in self:
+            if loan.is_restructured_target_loan:
+                if loan.company_id.is_allow_restructure_again:
+                    loan.is_allowed_restructure = True
+                else:
+                    loan.is_allowed_restructure = False
             else:
-                self.is_allowed_restructure = False
-        else:
-            self.is_allowed_restructure = True
+                loan.is_allowed_restructure = True
             
 
     @api.depends('restructured_from_ids')
     def compute_is_restructured_target(self):
-        if len(self.restructured_from_ids) >= 1:
-            self.is_restructured_target_loan = True
-        else:
-            self.is_restructured_target_loan = False
+        for loan in self:
+            if len(loan.restructured_from_ids) >= 1:
+                loan.is_restructured_target_loan = True
+            else:
+                loan.is_restructured_target_loan = False

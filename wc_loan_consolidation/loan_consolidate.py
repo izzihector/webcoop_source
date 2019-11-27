@@ -114,7 +114,9 @@ class LoanConsolidate(models.TransientModel):
             #check if the company allow restructure
             if not loan.is_allowed_restructure:
                 raise UserError(_("Cannot restructure this loan [%s]. This loan may be already restructured. If you allow second term restructure, modify company setting.") % (loan.name))
-                        
+
+            int_amount = 0.0
+            penalty_amount = 0.0
             pcp_amount = loan.principal_balance
             for d in loan.details:
                 int_amount += d.interest_due - d.interest_paid
@@ -155,7 +157,7 @@ class LoanConsolidate(models.TransientModel):
                     'amount': penalty_amount,
                     #fix for bug fouond at 20191125 
     #                 'gl_account_id': self.company_id.penalty_account_id.id,
-                    'gl_account_id': self.get_penalty_account_id(),
+                    'gl_account_id': loan.get_penalty_account_id(),
                 }
                 lines.append( (0, False, val) )
         #
@@ -186,6 +188,7 @@ class LoanConsolidate(models.TransientModel):
         self.ensure_one()
         #modify start b561  ,f571
         loan_type = self.consolidated_new_loan_type
+        
         res = self.env['wc.loan'].create({
 #             'restructured_from_id': self.id,
             'loan_type_id': loan_type.id,
