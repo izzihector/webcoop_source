@@ -46,7 +46,8 @@ Process for Diviend and Patronage
         'wc_account',
         'wc_loan',
         'account_accountant',
-        'wc_dividend'
+        'wc_dividend',
+        'wc_loan_consolidation'
     ],
     'init_xml': [],
     'data': [
