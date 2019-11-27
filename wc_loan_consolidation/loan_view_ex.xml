@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+  <record id="form_loan_inherit_consolicate" model="ir.ui.view">
+    <field name="name">form_loan_inherit_consolicate</field>
+    <field name="model">wc.loan</field>
+    <field name="inherit_id" ref="wc_upgrade_ver10_0_1_2.form_loan_inherit_f548"/>
+    <field name="arch" type="xml">
+      <button name="unlink_recreate_deduction" position="attributes">
+          <attribute name ="attrs">
+            {'invisible':['|',('is_restructured_target_loan','=',True),('state','not in',['draft'])]}
+          </attribute>
+      </button>
+      <button name="move_to_restructured" position="attributes">
+       <attribute name ="attrs">
+ 			{'invisible':['|',('is_allowed_restructure','=',False),('state','not in',['approved','past-due'])]}
+		</attribute>
+      </button>
+      <field name="restructured_from_id" position ="attributes">
+          <attribute name ="invisible">True</attribute>
+      </field>
+      <field name="restructured_from_id" position ="after">
+          <field name ="is_allowed_restructure" invisible ='1'/>
+          <field name ="is_restructured_target_loan" invisible ='1'/>
+	      <field name="restructured_from_ids" readonly='1' 
+	          attrs="{'invisible':[('is_restructured_target_loan','=',False)]}"
+	          options="{'no_create':True, 'no_edit':True }">
+	          <tree>
+	             <field name="name"/>
+	          </tree>
+	      </field>
+      </field>                                                
+	                              	            	  
+    </field>
+  </record>
+
+</odoo>
