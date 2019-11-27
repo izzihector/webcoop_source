@@ -132,14 +132,22 @@ class Loan(models.Model):
 
             elif d.code in ['sa','SA']:
                 for dacct in loan.member_id.account_ids:
-                    if dacct.account_type == 'sa' and dacct.state in ['open','dormant']:
-                        acct_id = dacct.id
-                        break
+                    #add f597 start, if deduction_target_account_type is existing in wc.loan.type.deduction model
+                    if 'deduction_target_account_type' in self.env['wc.loan.type.deduction']._fields:
+                        if dacct.account_type == 'sa' \
+                           and dacct.state in ['open','dormant'] \
+                           and dacct.account_type_id == d.deduction_target_account_type:
+                            acct_id = dacct.id
+                            break
+                    else:
+                    #add f597 end
+                        if dacct.account_type == 'sa' and dacct.state in ['open','dormant']:
+                            acct_id = dacct.id
+                            break
                 if not acct_id:
                     #raise Warning(_("No member savings account found."))
                     #fix #258: skip deduction if no deposit account found
                     continue
-
             val.update({
                 'deposit_account_id': acct_id
             })
