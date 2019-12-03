@@ -11,6 +11,7 @@ from odoo.tools.misc import xlwt
 import logging
 import time
 import base64
+from lib2to3.pgen2.token import ISEOF
 try:
     from cStringIO import StringIO
 except ImportError:
@@ -230,10 +231,14 @@ class Dividend(models.Model):
 
         #1.get total interest income amount from each member      
         for line in self.line_ids:
+            
             member = line.member_id
+            _logger.debug("**create patronage line start** %s" % (member.code))
             debit, credit = member.get_loan_int_summary_4member(date_from_dt,date_to_dt)
             each_int = credit - debit
             line.write({'loan_interest_income' :each_int })
+            _logger.debug("**create patronage line end** %s" % (member.code))
+            
 
         #2 get total and calculate rate
         self.total_int_on_loan = sum(line.loan_interest_income for line in self.line_ids)
@@ -248,13 +253,19 @@ class Dividend(models.Model):
     def search_and_create_dividend_line(self,date_from_dt,date_to_dt):
         #1.get each month cbu balance 
         for line in self.line_ids:
+
+            
             member = line.member_id
             month_bal , is_existing = member.get_monthly_balance_per_member_by_fromTo(date_from_dt,date_to_dt)
+            _logger.debug("**create dividend line start** %s" % (member.code))
+            
 #             month_bal , is_existing = member.get_monthly_balance_per_member(year)
             val = {}
             for i in range(1,13):
                 val['cbu_amount_' + str(i)] = month_bal[i-1]
             line.write(val)
+            _logger.debug("**create dividend line end**")
+            
             
         #2.get [ASM] (total share month)  
                #> auto calculate when updating line data
@@ -286,10 +297,17 @@ class Dividend(models.Model):
 #         year = self.name
         members = self.env['wc.member'].search([('company_id','=',self.company_id.id)])
         
+
         #create every member's line
         for member in members:
-            val = {'member_id':member.id }
-            self.line_ids = [(0,0,val)]
+            _logger.debug("**create member line start** %s" % member.id)
+
+            val = {'member_id':member.id ,'dividend_id':self.id}
+#improve performance 20191203
+            self.env['wc.dividend.patern1.line'].create(val)
+#             self.line_ids = [(0,0,val)]
+            _logger.debug("**create member line end** %s" % member.id)
+
 
         #dividend
         if self.is_calculate_dividend:
@@ -400,9 +418,44 @@ class Dividend(models.Model):
             if d.state=='calc':
 #                 d.search_and_create_divident_line()
                 d.state = 'confirmed'
-                for line in d.line_ids:
-                    if line.total_dividend_and_refund == False or line.total_dividend_and_refund == 0:
-                        line.unlink()
+                sql = """
+                    delete 
+                     FROM wc_dividend_patern1_line
+                    where
+                    dividend_id = %s and 
+                    COALESCE(loan_interest_income,0)
+                    +COALESCE(cbu_amount_1,0)
+                    +COALESCE(cbu_amount_2,0)
+                    +COALESCE(cbu_amount_3,0)
+                    +COALESCE(cbu_amount_4,0)
+                    +COALESCE(cbu_amount_5,0)
+                    +COALESCE(cbu_amount_6,0)
+                    +COALESCE(cbu_amount_7,0)
+                    +COALESCE(cbu_amount_8,0)
+                    +COALESCE(cbu_amount_9,0)
+                    +COALESCE(cbu_amount_10,0)
+                    +COALESCE(cbu_amount_11,0)
+                    +COALESCE(cbu_amount_12,0)
+                    =0
+                """
+                self._cr.execute(sql, (d.id,))
+
+                
+                self.env['wc.dividend.patern1.line'].invalidate_cache()
+#                 rec = self.env['wc.dividend.patern1.line'].search(
+#                     [('dividend_id','=',self.id),
+#                      '|',('loan_interest_income','=',0),('loan_interest_income','=',False),
+#                      '|',()
+#                      ]
+#                     )
+#                 rec.unlink()
+# #                 for line in d.line_ids:
+#                     if line.total_dividend_and_refund == False or line.total_dividend_and_refund == 0:
+#                         line.unlink()
+
+
+
+
 
     @api.multi
     def back_to_draft(self):

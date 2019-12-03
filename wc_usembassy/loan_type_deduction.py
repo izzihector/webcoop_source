@@ -31,7 +31,8 @@ class Deductions(models.Model):
         for ded in self:
             if ded.deduction_type == 'interest':
                 ded.code = 'BASE-INT'
-                if ded.loan_type_id==False or ded.loan_type_id.interest_income_account_id==False:
+#                 if ded.loan_type_id==False or ded.loan_type_id.interest_income_account_id==False:
+                if ded.loan_type_id==False or ded.loan_type_id.interest_income_account_id==False or ded.loan_type_id.interest_income_account_id.id==False:
                     ded.gl_account_id = self.env.user.company_id.interest_income_account_id.id
                 else:
                     ded.gl_account_id = self.loan_type_id.interest_income_account_id.id
