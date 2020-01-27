@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
-###############################################
-# EzTech Software & Consultancy Inc. (c) 2017
-###############################################
+
 {
     'name': 'Web Coop - Admin Edit',
     'version': "1.0",
     'category': "Generic Modules",
+    'author': 'Esupportlink',
     'summary': "Admin transaction editing module for Web Coop System",
     'description': "Admin transaction editing module for Web Coop System",
-    'author': 'EzTech Software & Consultancy Inc.',
-    'website': 'http://www.eztechsoft.com',
     'depends': [
         'wc_posting',
     ],

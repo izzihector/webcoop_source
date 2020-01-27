@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
-###############################################
-# EzTech Software & Consultancy Inc. (c) 2017
-###############################################
 {
     'name': 'Web Coop - Security Enhancements',
     'version': "1.0",
     'category': "Generic Modules",
+    'author': 'Esupportlink',
     'summary': "Web Coop security enhancements to Odoo framework.",
     'description': "Web Coop security enhancements to Odoo framework.",
-    'author': 'EzTech Software & Consultancy Inc.',
-    'website': 'http://www.eztechsoft.com',
     'depends': [
         'base',
         'document',

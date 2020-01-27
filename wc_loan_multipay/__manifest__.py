@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
-###############################################
-# EzTech Software & Consultancy Inc. (c) 2017
-###############################################
 {
     'name': 'Web Coop - Loans Multi-Payment',
     'version': "1.0",
     'category': "Generic Modules",
+    'author': 'Esupportlink',
     'summary': "Multi-Payment Loan Module for Web Coop System",
     'description': "Multi-Payment Loan Module for Web Coop System",
-    'author': 'EzTech Software & Consultancy Inc.',
-    'website': 'http://www.eztechsoft.com',
     'depends': [
         'wc_posting',
     ],

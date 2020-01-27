@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
-###############################################
-# EzTech Software & Consultancy Inc. (c) 2017
-###############################################
 {
     'name': 'Web Coop - Savings Hold',
     'version': "1.0",
     'category': "Generic Modules",
     'summary': "Hold amount feature for savings module",
     'description': "Hold amount feature for savings module",
-    'author': 'EzTech Software & Consultancy Inc.',
-    'website': 'http://www.eztechsoft.com',
+    'author': 'Esupportlink',
     'depends': [
         'wc_account'
     ],

@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
-###############################################
-# EzTech Software & Consultancy Inc. (c) 2017
-###############################################
 {
     'name': 'Web Coop - Base',
     'version': "1.0",
     'category': "Generic Modules",
     'summary': "Base module for Online Cooperative Information System",
+    'author': 'Esupportlink',
     'description': "Base module for Online Cooperative Information System",
-    'author': 'EzTech Software & Consultancy Inc.',
-    'website': 'http://www.eztechsoft.com',
     'depends': [
         'base', 'mail', 'document',
     ],

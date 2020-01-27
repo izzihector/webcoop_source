@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
-###############################################
-# EzTech Software & Consultancy Inc. (c) 2017
-###############################################
 {
     'name': 'Web Coop - Loans Straight Interest (EPR)',
     'version': "1.0",
     'category': "Generic Modules",
+    'author': 'Esupportlink',
     'summary': "Straight (EPR) interest rate computation.",
     'description': "Enables loan types with straight (EPR) interest rate computation.",
-    'author': 'EzTech Software & Consultancy Inc.',
-    'website': 'http://www.eztechsoft.com',
     'depends': [
         'wc_loan',
     ],

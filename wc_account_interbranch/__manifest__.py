@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
-###############################################
-# EzTech Software & Consultancy Inc. (c) 2017
-###############################################
 {
     'name': 'Web Coop - Interbranch Deposit and Withdrawal',
     'version': "1.0",
     'category': "Generic Modules",
     'summary': "Inter-branch deposit account entry module.",
+    'author': 'Esupportlink',
     'description': "Inter-branch deposit account entry module.",
-    'author': 'EzTech Software & Consultancy Inc.',
-    'website': 'http://www.eztechsoft.com',
     'depends': [
         'wc_account',
         'wc_account_hold',

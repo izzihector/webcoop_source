@@ -1,7 +1,7 @@
 {'name': 'migration for webcoop', 
    'summary': 'tool for inital data migration.Approve every unapproved member,account,loan', 
-   'author': 'suzuki daisuke (ESL)', 
    'category': 'Tools', 
+    'author': 'Esupportlink',
    'depends': ['wc_account','wc_loan'], 
    'init_xml': [], 
     'data': [

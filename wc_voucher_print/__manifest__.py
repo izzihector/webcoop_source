@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
-###############################################
-# EzTech Software & Consultancy Inc. (c) 2017
-###############################################
 {
     'name': 'Web Coop - Voucher Printing',
-    'author': 'EzTech Software & Consultancy Inc.',
-    'website': 'http://www.eztechsoft.com',
     'category': 'Localization',
+    'author': 'Esupportlink',
     'summary': "Printing of GL account voucher.",
     'description': "Printing of GL account voucher.",
     'depends': [

@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
-###############################################
-# EzTech Software & Consultancy Inc. (c) 2017
-###############################################
 {
     'name': 'Web Coop - Other Collection',
     'version': "1.0",
     'category': "Generic Modules",
+    'author': 'Esupportlink',
     'summary': "Extension collection entry that include other miscellaneous payments.",
     'description': "Extension collection entry that include other miscellaneous payments.",
-    'author': 'EzTech Software & Consultancy Inc.',
-    'website': 'http://www.eztechsoft.com',
     'depends': [
         'wc_collection',
         'account',

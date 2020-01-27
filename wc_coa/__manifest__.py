@@ -3,9 +3,8 @@
 
 {
     'name': 'Chart of Account - Web Coop',
-    'author': 'EzTech Software & Consultancy Inc.',
-    'website': 'http://www.eztechsoft.com',
     'category': 'Localization',
+    'author': 'Esupportlink',
     'description': "Chart of Account for Web Coop",
     'depends': [
         'account',
