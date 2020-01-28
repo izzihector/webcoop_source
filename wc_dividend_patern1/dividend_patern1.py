@@ -21,6 +21,34 @@ _logger = logging.getLogger(__name__)
 DF = "%Y-%m-%d"
 EPS = 0.00001
 
+#f605 add start
+class Loan(models.Model):
+    _inherit = "wc.loan"
+    
+    interest_total_usemb = fields.Float("Total Interest", digits=(12,2),
+        compute="_compute_total_interest_usemb")
+    
+    @api.depends('details.interest_paid',
+                 'deduction_ids',
+                 'deduction_ids.amount',
+                 'deduction_ids.code')
+    def _compute_total_interest_usemb(self):
+        for loan in self:
+            amt=0.0
+            if len(loan.details) > 0:
+                amt = sum(a.interest_paid for a in loan.details)
+    
+            check_module = self.env['ir.module.module'].search([('name', '=', 'wc_usembassy')])
+            for ded in loan.deduction_ids:
+                if ded.code == "ADV-INT" or ded.code.upper()[:3] == 'ADV':
+                    amt += ded.amount 
+                if check_module and check_module.state == "installed":
+                    if ded.code == "BASE-INT":
+                        amt += ded.amount
+            
+            loan.interest_total_usemb = amt
+#f605 add end
+
 class Account(models.Model):
     _inherit = "wc.account"
     
@@ -126,6 +154,27 @@ class Member(models.Model):
 #         if not res:
 #             raise Warning(_("Interest income GL account is not set in Companies/Branch/Account Settings or Loan Type."))
 #         return res
+
+
+    #f605 add get interest amount during certain period of loan    
+    #MEMO 20200107
+    #actually ,transaction date of interest income is depending on payment date of each amortization schedule
+    # But in this module , we regard transaction date of interest income is same as loan approve date 
+    # because in usemb case, every interest amount is deducted at the begining of loan(upfront interest).
+    def get_loan_int_summary_4member_usemb(self, date_from=False, date_to=False):
+        self.ensure_one()
+        member = self
+        int_total = 0.00
+        loans = self.env['wc.loan'].search([('member_id','=',member.id),
+                                            ('date','>=',date_from),
+                                            ('date','<=',date_to),
+                                            ('state','!=','draft')])
+        for loan in loans:
+            int_total += loan.interest_total_usemb
+        
+        return int_total
+
+
 
 
 class AccountMoveLine(models.Model):
@@ -234,8 +283,12 @@ class Dividend(models.Model):
             
             member = line.member_id
             _logger.debug("**create patronage line start** %s" % (member.code))
-            debit, credit = member.get_loan_int_summary_4member(date_from_dt,date_to_dt)
-            each_int = credit - debit
+            #f605 mod start
+#             debit, credit = member.get_loan_int_summary_4member(date_from_dt,date_to_dt)
+#             each_int = credit - debit
+            each_int = member.get_loan_int_summary_4member_usemb(date_from_dt,date_to_dt)            
+            #f605 mod end
+
             line.write({'loan_interest_income' :each_int })
             _logger.debug("**create patronage line end** %s" % (member.code))
             
@@ -243,7 +296,7 @@ class Dividend(models.Model):
         #2 get total and calculate rate
         self.total_int_on_loan = sum(line.loan_interest_income for line in self.line_ids)
         if self.total_int_on_loan == False or self.total_int_on_loan <= 0:
-            raise ValidationError(_("No interest amount summary is less than 0"))
+            raise ValidationError(_("No interest amount Or summary is less than 0"))
         
         r2 = round(self.total_amt_for_patronage / self.total_int_on_loan , 7)
         self.patronage_pct = r2 * 100
@@ -460,7 +513,7 @@ class Dividend(models.Model):
     @api.multi
     def back_to_draft(self):
         for d in self:
-            if d.state=='confirmed':
+            if d.state!='draft':
                 d.state = 'draft'
                 d.line_ids.unlink()
 

@@ -22,7 +22,7 @@
             type="object"/>
 
           <button name="back_to_draft" string="Back to Draft"
-            states="confirmed"
+            states="calc"
             class="oe_read_only"
             type="object"/>
 
