@@ -117,10 +117,13 @@ class Loan(models.Model):
         if loan.state != 'draft':
             return
 
+        #b606 add start 20191218
+        loan.adjust_loan_schedule_for_advance_int()
+        #b606 add end 20191218
+
         for ded in loan.deduction_ids:
             if ded.code.upper()[:7] == 'ADV-INT':
                ded.unlink()
-
 
         if not loan.is_interest_deduction_first:
             return
@@ -178,12 +181,16 @@ class Loan(models.Model):
             if loan.is_interest_epr:
                 loan.generate_amortization_straight_interest()
 #                 loan.term_payments = len(loan.amortizations)
-                if loan.is_interest_deduction_first:
-                    loan.recompute_update_advance_interest()
+                #b606 del 20191218
+                #if loan.is_interest_deduction_first:
+                #    loan.recompute_update_advance_interest()
             else:
 #                 super(Loan, loan).generate_amortization_simple_interest(round_to_peso=True)
                 loan.generate_amortization_simple_interest(round_to_peso=True)
-                #f567
-                if loan.is_interest_deduction_first:
-                    loan.recompute_update_advance_interest()
-       
+                #b606 del 20191218
+                ##f567
+                #if loan.is_interest_deduction_first:
+                #    loan.recompute_update_advance_interest()
+            #b606 add 20191218
+            loan.recompute_update_advance_interest()
+            

@@ -135,7 +135,8 @@ class Loan(models.Model):
             if 'is_necessary_making_schedule' in vals and vals['is_necessary_making_schedule']:
                 loan.is_necessary_making_schedule = False
                 loan.generate_schedule()
-                loan.recompute_update_advance_interest()
+                #b606 del 20191218
+                #loan.recompute_update_advance_interest()
             if loan.is_necessary_making_schedule:
                 loan.is_necessary_making_schedule = False
 
@@ -639,18 +640,29 @@ class Loan(models.Model):
             })
         
 #refactoring on 20191101
-    def adjust_loan_schedule_for_advance_int(self,lines=False):
+#[b606] 
+    def adjust_loan_schedule_for_advance_int(self):
         self.ensure_one()
         loan = self
+        if not loan.is_interest_epr:
+            return
+        
         adv_interest_record = False
         if loan.payment_schedule != "day":
             for ded in loan.deduction_ids:
-                if ded.code.upper()[:3] == 'ADV' and ded.net_include:
+                if ded.code.upper()[:7] != 'ADV-INT' and \
+                   ded.code.upper()[:3] == 'ADV' and ded.net_include:
                     if adv_interest_record:
                         raise UserError(_("Cannot define two advance interest deductions at the same time."))
                     adv_interest_record = ded
 
-        if lines:
+        if not adv_interest_record:
+            return
+        
+        tinterest, linterest , linterest_last  = loan.get_interest_for_straight()
+        
+        lines = loan.amortizations
+        if len(lines) > 0:
             if adv_interest_record:
                 try:
                     ns = adv_interest_record.code[3:].strip()
@@ -666,17 +678,45 @@ class Loan(models.Model):
                     n = nlines
                     
                 amt = 0.0
+                current_line = nlines
                 while n>0:
-                    line = lines[nlines-1][2]
-                    amt += line['interest_due']
-                    line.update({
-                        'interest_due': False,
-                    })
-                    nlines -=1
+                    line = lines[current_line-1]
+                    amt += linterest_last if current_line==nlines else linterest
+                    
+                    line.interest_due = False
+                    current_line -=1
                     n -= 1
-
+                
                 adv_interest_record.factor = 0.0
                 adv_interest_record.amount = amt
-            
+
+#         if lines:
+#             if adv_interest_record:
+#                 try:
+#                     ns = adv_interest_record.code[3:].strip()
+#                     if len(ns)==0:
+#                         n = 1
+#                     else:
+#                         n = int(ns)
+#                 except:
+#                     n = 1
+# 
+#                 nlines = len(lines)
+#                 if n>nlines:
+#                     n = nlines
+#                     
+#                 amt = 0.0
+#                 while n>0:
+#                     line = lines[nlines-1][2]
+#                     amt += line['interest_due']
+#                     line.update({
+#                         'interest_due': False,
+#                     })
+#                     nlines -=1
+#                     n -= 1
+# 
+#                 adv_interest_record.factor = 0.0
+#                 adv_interest_record.amount = amt
+            # mod end 20191218
             
             

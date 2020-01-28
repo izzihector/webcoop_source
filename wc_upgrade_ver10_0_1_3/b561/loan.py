@@ -37,6 +37,10 @@ class Loan(models.Model):
             if deductions:
                 _logger.debug("**all_deductions: %s", deductions)
                 loan.deduction_ids = deductions
+
+            #[b606]add 20191218
+            loan.recompute_update_advance_interest()
+            
  
     #overwrite this module because of the bug of b561 and xdays schedule
     #system error happens when create restructured if xdays schedule

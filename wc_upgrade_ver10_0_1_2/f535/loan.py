@@ -73,8 +73,11 @@ class Loan(models.Model):
     @api.model
     def get_deductions(self, loan):
         deductions = super(Loan, self).get_deductions(loan)
-        loan.recompute_update_advance_interest()
+        #b604 delete 20191218
+#         loan.recompute_update_advance_interest()
         return deductions
+
+
 
 
     def calculate_total_interest_for_straight_method(self):
