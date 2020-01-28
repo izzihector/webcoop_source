@@ -18,5 +18,5 @@ class Company(models.Model):
     _inherit = "res.company"
 
     #loan
-    loan_payment_debate_account_id = fields.Many2one('account.account', string='Loan payment debate', ondelete="restrict")
+    loan_payment_debate_account_id = fields.Many2one('account.account', string='Loan payment rebate', ondelete="restrict")
 
