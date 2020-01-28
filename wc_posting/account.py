@@ -264,6 +264,15 @@ class Account(models.Model):
         for acct in self:
             months = acct.account_type_id.dormant_months
             if months>0:
+                #20191213 b603 start check if there is at least one transaction
+                trans = self.env['wc.account.transaction'].sudo().search([
+                    ('account_id','=',acct.id),
+                    ('state','!=','draft'),
+                ],limit=1)
+                if not trans:
+                    continue
+                #20191213 b603 end
+
                 mdate = fields.Datetime.from_string(date) - relativedelta(months=months)
                 #get last transaction:
                 trans = self.env['wc.account.transaction'].sudo().search([
