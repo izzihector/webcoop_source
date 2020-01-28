@@ -91,44 +91,57 @@ class Posting(models.Model):
     @api.multi
     def open_date(self):
 
-        interest_id = self.env.ref('wc_account.tr_int')
-        if not interest_id:
-            res = self.env['wc.tr.code'].sudo().search([
-                ('code','=','INT'),
-                ('trans_type','=','sa')
-            ], limit=1)
-            if not res:
-                raise Warning(_("No INT transaction code defined."))
-            interest_id = res[0]
+        #[del]start 20191213 refactoring
+        #
+        #interest_id = self.env.ref('wc_account.tr_int')
+        #if not interest_id:
+        #    res = self.env['wc.tr.code'].sudo().search([
+        #        ('code','=','INT'),
+        #        ('trans_type','=','sa')
+        #    ], limit=1)
+        #    if not res:
+        #        raise Warning(_("No INT transaction code defined."))
+        #    interest_id = res[0] 
+        #
+        #[del]end 20191213 refactoring
 
         account_ids = False
 
         for rec in self:
             rec.state = 'open'
-            #compute interest
-            if (not account_ids) and (not rec.interest_computed):
-                account_ids = self.env['wc.account'].sudo().search([
-                    ('company_id','=',rec.company_id.id),
-                    ('state','in',['open','dormant']),
-                    ('account_type','!=','cbu'),
-                ])
-                account_ids.compute_deposit_interest(rec.name, interest_id, posting=rec)
-                rec.interest_computed = True
 
-            #TODO: use sql to optimize dormancy check
-            #check for dormant accounts
-            trcode_id = self.env['wc.tr.code'].search([
-                ('code','=','A->D')
-            ], limit=1)
-            if not trcode_id:
-                raise Warning(_("No transaction type defined for active to dormant (A->D)."))
+            # [del]start 20191213 refactoring
+            ##compute interest
+            #if (not account_ids) and (not rec.interest_computed):
+            #    account_ids = self.env['wc.account'].sudo().search([
+            #        ('company_id','=',rec.company_id.id),
+            #        ('state','in',['open','dormant']),
+            #        ('account_type','!=','cbu'),
+            #    ])
+            #    account_ids.compute_deposit_interest(rec.name, interest_id, posting=rec)
+            #    rec.interest_computed = True
 
-            account_ids = self.env['wc.account'].sudo().search([
-                ('company_id','=',rec.company_id.id),
-                ('state','=','open'),
-                ('account_type','=','sa'),
-            ])
-            account_ids.check_if_dormant(rec.name, trcode_id.id)
+            ##TODO: use sql to optimize dormancy check
+            ##check for dormant accounts
+            #trcode_id = self.env['wc.tr.code'].search([
+            #    ('code','=','A->D')
+            #], limit=1)
+            #if not trcode_id:
+            #    raise Warning(_("No transaction type defined for active to dormant (A->D)."))
+            #account_ids = self.env['wc.account'].sudo().search([
+            #    ('company_id','=',rec.company_id.id),
+            #    ('state','=','open'),
+            #    ('account_type','=','sa'),
+            #])
+            #account_ids.check_if_dormant(rec.name, trcode_id.id)
+            # [del]end 20191213 refactoring
+            
+            # [add]start 20191213
+            self.open_date_sub_interest_computation_sa()
+            self.open_date_sub_interest_computation_td()
+            self.open_date_sub_dormant_check()
+            # [add]end 20191213
+            
 
     @api.multi
     def add_details(self):
@@ -343,4 +356,51 @@ class Posting(models.Model):
             return
 
 
-#
+    def open_date_sub_interest_computation_sa(self):
+        self.ensure_one()
+        self.open_date_sub_interest_computation('sa')
+
+    def open_date_sub_interest_computation_td(self):
+        self.ensure_one()
+        self.open_date_sub_interest_computation('td')
+
+    #[add]20191213 for refactoring of date_open function
+    def open_date_sub_interest_computation(self,account_type='sa'):
+        self.ensure_one()
+        interest_id = self.env.ref('wc_account.tr_int')
+        if not interest_id:
+            res = self.env['wc.tr.code'].sudo().search([
+                ('code','=','INT'),
+                ('trans_type','=','sa')
+            ], limit=1)
+            if not res:
+                raise Warning(_("No INT transaction code defined."))
+            interest_id = res[0]
+        
+        #compute interest
+        if (not self.interest_computed):
+            account_ids = self.env['wc.account'].sudo().search([
+                ('company_id','=',self.company_id.id),
+                ('state','in',['open','dormant']),
+                ('account_type','=',account_type),
+            ])
+            account_ids.compute_deposit_interest(self.name, interest_id, posting=self)
+            self.interest_computed = True
+
+
+    #[add]20191213 for refactoring of date_open function        
+    def open_date_sub_dormant_check(self):
+        self.ensure_one()
+        #check for dormant accounts
+        trcode_id = self.env['wc.tr.code'].search([
+            ('code','=','A->D')
+        ], limit=1)
+        if not trcode_id:
+            raise Warning(_("No transaction type defined for active to dormant (A->D)."))
+
+        account_ids = self.env['wc.account'].sudo().search([
+            ('company_id','=',self.company_id.id),
+            ('state','=','open'),
+            ('account_type','=','sa'),
+        ])
+        account_ids.check_if_dormant(self.name, trcode_id.id)
