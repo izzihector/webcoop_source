@@ -35,14 +35,14 @@ class Posting(models.Model):
         self.set_draft()
         for r in self:
             _logger.debug("posting rebate: search for draft.")
-            if 0:
-                recs = self.env['wc.loan.payment.rebate'].sudo().search([
-                    ('company_id','=',r.company_id.id),
-                    ('state','=','draft'),
-                ])
-                if recs:
-                    s = "\n".join(["%s" % l.name for l in recs])
-                    raise Warning(_("Cannot continue! There are still pending unconfirmed rebate entry.\n%s") % s)
+
+            recs = self.env['wc.loan.payment.rebate'].sudo().search([
+                ('company_id','=',r.company_id.id),
+                ('state','=','draft'),
+            ])
+            if recs:
+                s = "\n".join(["%s" % l.name for l in recs])
+                raise Warning(_("Cannot continue! There are still pending unconfirmed rebate entry.\n%s") % s)
 
             recs = self.env['wc.loan.payment.rebate'].sudo().search([
                 ('company_id','=',r.company_id.id),
