@@ -16,7 +16,7 @@
         
         <field name="account_officer_id" position="before">
            <field name="account_ids" string="Account Balance">
-            <tree>
+            <tree create="0" delete="0">
 		        <field name="account_type_id"/>
 		        <field name="balance"/>
 		        <field name="state"/>
