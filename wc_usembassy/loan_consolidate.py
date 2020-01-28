@@ -6,7 +6,6 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import math
 import logging
-from data.webcoop.wc_account.ctd import num2amt
 
 _logger = logging.getLogger(__name__)
 DF = "%Y-%m-%d"
