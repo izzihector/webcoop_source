@@ -103,11 +103,21 @@ class LoanPaymentRebate(models.Model):
             else:
                 amt = sum(a.interest_paid for a in loan.details)
             
-        #add upfront advance interest 20191105
+        #[b604] del ADVx,BASE-INT advance interest
+        ##add upfront advance interest 20191105
+        #for ded in loan.deduction_ids:
+        #    if ded.code == "ADV-INT":
+        #        amt += ded.amount 
+
+        #[b604] add ADVx,BASE-INT advance interest
+        check_module = self.env['ir.module.module'].search([('name', '=', 'wc_usembassy')])
         for ded in loan.deduction_ids:
-            if ded.code == "ADV-INT":
+            if ded.code == "ADV-INT" or ded.code.upper()[:3] == 'ADV':
                 amt += ded.amount 
-    
+            if check_module and check_module.state == "installed":
+                if ded.code == "BASE-INT":
+                    amt += ded.amount
+
             
         for a in loan.payment_rebate_ids:
 #             if a.state =="confirmed":
@@ -126,12 +136,16 @@ class LoanPaymentRebate(models.Model):
     
     @api.constrains('amount','rebatable_amount','state')
     def check_if_amount_possible(self):
-        if self.amount > self.get_rebatable_amount_without_self():
+
+        #20200123 mode
+#         if self.amount > self.get_rebatable_amount_without_self():
+        if not self.is_reversed and self.amount > self.get_rebatable_amount_without_self():
             raise ValidationError(_("Cannot input amount over rebatable amount."))
         if self.amount <EPS and not self.is_reversed and self.state != 'cancelled':
             raise ValidationError(_("Please input the amount more than zero."))
-        if -self.amount <EPS and self.is_reversed:
-            raise ValidationError(_("Cannot reverse."))
+        #20200123 del
+#         if -self.amount <EPS and self.is_reversed:
+#             raise ValidationError(_("Cannot reverse."))
 
         
 #todo: test simultanously update of payment
@@ -160,7 +174,7 @@ class LoanPaymentRebate(models.Model):
         self.ensure_one()
 
         if self.state != "confirmed" or self.is_reversed:
-            return
+            return 
         else:
             self.is_reversed = True
         
@@ -199,7 +213,10 @@ class LoanPaymentRebate(models.Model):
         self.do_reverse_payment_rebate()
 
         vals = self.get_copy_val_for_reverse_rebate()
-        rec = self.create(vals)
+        
+        #20200123 mod 
+#         rec = self.create(vals)
+        rec = self.env['wc.loan.payment.rebate'].create(vals)
         
 
 #when confirm ,
