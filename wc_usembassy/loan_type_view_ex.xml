@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+  <record id="form_loan_type_deduction_4usemb" model="ir.ui.view">
+    <field name="name">form_loan_type_deduction_4usemb</field>
+    <field name="model">wc.loan.type.deduction</field>
+    <field name="inherit_id" ref="wc_upgrade_ver10_0_1_6.form_loan_type_deduction_f597"/>
+    <field name="arch" type="xml">
+      
+      <field name ="deduction_type" position="after">
+          <field name ="is_lgf_type" invisible="1" />
+      </field>
+        
+      <field name ="factor" position="attributes">
+          <attribute name="attrs">{'invisible':[('deduction_type','=','lgf')]}</attribute>
+      </field>
+      <field name ="amount" position="attributes">
+          <attribute name="attrs">{'invisible':[('deduction_type','=','lgf')]}</attribute>
+      </field>
+      <field name ="recurring" position="attributes">
+          <attribute name="attrs">{'invisible':[('deduction_type','=','lgf')]}</attribute>
+      </field>
+      <field name ="net_include" position="attributes">
+          <attribute name="attrs">{'invisible':[('deduction_type','=','lgf')]}</attribute>
+      </field>      
+      <field name ="deduction_target_account_type" position="replace">
+	      <field name ="deduction_target_account_type" 
+	          domain="[('category','=','sa'),('is_lgf','=',is_lgf_type)]"
+              options="{'no_create':True, 'no_edit':True, 'no_open':True}"
+	          string="Target Account Type"
+	          attrs="{'invisible':[('deduction_type','not in',['sa','lgf'])],'required':[('deduction_type','in',['sa','lgf'])]}"/>
+      </field>
+     </field>
+   </record>
+</odoo>

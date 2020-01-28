@@ -10,8 +10,11 @@
 			<field name="other_member_ids" position ="attributes">
 				<attribute name="invisible">1</attribute>
 			</field>
+			<field name="interest_rate" position ="attributes">
+			    <attribute name="attrs">{'invisible': [('account_type','!=','td')]}</attribute>
+			</field>
           </field>
         </record>
-
+      
 </odoo>
 

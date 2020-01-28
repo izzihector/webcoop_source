@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+  <!-- savings product type -->
+  <record id="form_acc_type_ex4usemb" model="ir.ui.view">
+    <field name="name">form_acc_type_ex4usemb</field>
+    <field name="inherit_id" ref="wc_account.form_acc_type"/>
+    <field name="model">wc.account.type</field>
+    <field name="arch" type="xml">
+        <!--hide for usembassy's special saving interest calculation style-->
+         <field name="interest_rate" position="attributes">
+             <attribute name="invisible">1</attribute>
+         </field>
+        <!--add for usembassy's loan guarantee fund type saving account-->
+         <field name="category" position="after">
+           <field name="is_lgf" 
+               attrs="{'invisible':[('category','not in',['sa'])]}"/>
+           <field name="lgf_rate_1" 
+               attrs="{'invisible':['|',('is_lgf','=',False),('category','not in',['sa'])],
+               'required':[('is_lgf','=','1'),('category', 'in',['sa'])]}"/>
+           <field name="lgf_rate_2" 
+               attrs="{'invisible':['|',('is_lgf','=',False),('category','not in',['sa'])],
+               'required':[('is_lgf','=','1'),('category', 'in',['sa'])]}"/>
+           <field name="lgf_rate_change_balance" 
+               attrs="{'invisible':['|',('is_lgf','=',False),('category','not in',['sa'])],
+               'required':[('is_lgf','=','1'),('category', 'in',['sa'])]}"/>
+         </field>
+         <field name="posting_schedule" position="attributes">
+           <attribute name="invisible">True</attribute>
+         </field>
+    </field>
+  </record>
+</odoo>
+	
+   

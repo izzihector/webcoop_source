@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+  <record id="view_loan_payment_rebate_form_4usemb" model="ir.ui.view">
+    <field name="name">view_loan_payment_rebate_form_4usemb</field>
+    <field name="model">wc.loan.payment.rebate</field>
+    <field name="inherit_id" ref="wc_loan_payment_rebate.view_loan_payment_rebate_form" />
+    <field name="arch" type="xml">
+        <field name="amount" position="attributes">
+            <attribute name="invisible">True</attribute>
+        </field>
+        <field name="amount" position="after">
+	        <field name="amount_disp" />
+        </field>
+    </field>
+  </record>
+
+</odoo>

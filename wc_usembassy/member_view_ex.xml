@@ -92,9 +92,22 @@
 				<attribute name="invisible">0</attribute>
 				<attribute name="string">Office Email</attribute>
 			</field>
+			
           </field>
         </record>
    
+         <record id="form_members_inherit_f599_ex" model="ir.ui.view">
+          <field name="name">form_members_inherit_f599_ex</field>
+          <field name="model">wc.member</field>
+          <field name="inherit_id" ref="wc_upgrade_ver10_0_1_6.form_members_inherit_f599" />
+          <field name="arch" type="xml">
+
+			<xpath expr="//field[@name='account_ids']//tree" position ="attributes">
+			  <attribute name ="create">0</attribute>
+			  <attribute name ="delete">0</attribute>
+		    </xpath>
+	      </field>
+         </record>
 
 </odoo>
 

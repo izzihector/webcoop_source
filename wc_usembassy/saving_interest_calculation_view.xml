@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="form_saving_interest" model="ir.ui.view">
+    <field name="name">form_saving_interest</field>
+    <field name="model">wc.usemb.saving.interest.header</field>
+    <field name="arch" type="xml">
+      <form>
+        <header>
+          <button name="confirm" string="Confirm"
+            states="calc"
+            class="oe_highlight oe_read_only"
+            type="object"/>
+
+          <button name="search_and_create_lines" string="Calculate"
+            states="draft,calc"
+            class="oe_read_only"
+            type="object"/>
+
+          <button name="download_as_excel" string="Download as Excel"
+            class="oe_read_only"
+            type="object"/>
+
+          <button name="back_to_draft" string="Back to Draft"
+            states="calc"
+            class="oe_read_only"
+            type="object"/>
+
+          <field name="state" widget="statusbar" readonly="1"/>
+        </header>
+
+        <sheet>
+<!--           <div class="oe_title"> -->
+<!--             <label for="name" class="oe_edit_only"/> -->
+<!--             <h1> -->
+<!--               <field name="year"/> -->
+<!--             </h1> -->
+<!--           </div> -->
+ 
+            <group>
+              <group>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="year" />
+                <field name="account_type_id"/>
+                <field name="rate"/>
+              </group>
+              <group>
+              </group>
+            </group>
+              
+          <notebook>
+           <page name="info" string="Details">
+            <field name="line_ids">
+             <tree class="wc_tree">
+              <field name="member_id"/>
+              <field name="account_id"/>
+              <field name="q1_average"/>
+              <field name="q2_average"/>
+              <field name="q3_average"/>
+              <field name="q4_average"/>
+              <field name="q_average_total"/>
+              <field name="interest_amount"/>
+             </tree>
+          </field>
+          </page>
+          </notebook>
+
+          <separator string="Notes"/>
+          <field name="note" nolabel="1"/>
+        </sheet>
+        <div class="oe_chatter">
+          <field name="message_follower_ids" widget="mail_followers"/>
+          <field name="message_ids" widget="mail_thread"/>
+        </div>
+
+      </form>
+    </field>
+  </record>
+
+
+  <record id="tree_saving_interest" model="ir.ui.view">
+    <field name="name">tree_saving_interest</field>
+    <field name="model">wc.usemb.saving.interest.header</field>
+    <field name="arch" type="xml">
+      <tree class="wc_tree">
+        <field name="company_id" groups="base.group_multi_company"/>
+        <field name="year" />
+        <field name="account_type_id"/>
+        <field name="state"/>
+        <field name="note"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="search_saving_interest" model="ir.ui.view">
+    <field name="name">search_saving_interest</field>
+    <field name="model">wc.usemb.saving.interest.header</field>
+    <field name="arch" type="xml">
+      <search>
+        <field name="state" invisible="1"/>
+        <field name="year"/>
+        <field name="account_type_id"/>
+      </search>
+    </field>
+  </record>
+
+
+  <record id="action_saving_interest" model="ir.actions.act_window">
+    <field name="name">Saving Interest Calculation</field>
+    <field name="res_model">wc.usemb.saving.interest.header</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+<!--  overwrite menu_dividend  -->
+  <menuitem id="menu_saving_interest"
+    sequence="5"
+    action="action_saving_interest"
+    parent="account.menu_finance_entries"
+  />
+  
+  
+
+</odoo>

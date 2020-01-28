@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="wizard_loan_consolidate_4usemb" model="ir.ui.view">
+    <field name="name">wizard_loan_consolidate_4usemb</field>
+    <field name="model">wc.loan.consolidate</field>
+    <field name="inherit_id" ref="wc_loan_consolidation.wizard_loan_consolidate" />
+    <field name="arch" type="xml">
+        <field name="line_ids" position="after">
+           <group name="rebate" string="Total Rebate">
+               <group>
+               		<field name="total_rebate" string="Total Rebate Amount" />
+               		<field name="deb_gl_account_id" required="1" />
+               </group>
+               <field name="rebate_memo" />
+           </group>
+        </field>
+        <xpath expr="//field[@name='line_ids']/tree[1]" position="replace">
+            <tree>
+              <field name="loan_name" />
+              <field name="principal_balance" />
+              <field name="interest_balance"/>
+              <field name="penalty_due"/>
+              <field name="date_start"/>
+              <field name="rebate_amount" string="Rebate Amount"/>
+            </tree>
+        </xpath>
+        
+    </field>
+  </record>
+  
+  
+</odoo>

@@ -17,6 +17,7 @@ EPS = 0.00001
 
 class LoanDeduction(models.Model):
     _inherit = "wc.loan.deduction"
-    
+        
+        
 
             

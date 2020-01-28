@@ -1,0 +1,42 @@
+<!-- <?xml version="1.0" encoding="utf-8"?> -->
+
+<odoo>
+  <record id="view_loan_for_usemb" model="ir.ui.view">
+    <field name="name">view_loan_for_usemb</field>
+    <field name="model">wc.loan</field>
+    <field name="inherit_id" ref="wc_loan_payment_rebate.view_loan_f574"/>
+    <field name="arch" type="xml">
+      <!--add these fields for lgf feature -->
+      <field name="check_number" position ="after">
+          <field name ="cbu_balance"/>
+          <field name ="loanable_base_on_cbu"/>
+          <field name ="outstanding_loan_amount"/>
+          <field name ="loanable_amount"/>
+          <field name ="uncollateralized_amount" invisible="1"/>
+      </field>
+      
+      <!--add these fields for concolidated rebate feature -->
+      <page name="payment_rebate" position="after">
+<!--           <field name="consolidate_rebate_ref_count" invisible ="1"/> -->
+<!--           <page name="consolidated_rebate" string="Consolidated Rebate Ref." -->
+<!--                attrs="{'invisible':[('consolidate_rebate_ref_count','&gt;',0)]}"> -->
+          <page name="consolidated_rebate" string="Consolidated Rebate Ref."
+              attrs="{'invisible':[('consolidate_rebate_ref_count','=',0)]}">
+              <field name="consolidate_rebate_ref_count" invisible="1"/>
+              
+              <field name ="consolidate_rebate_ids">
+                <tree class="wc_tree" default_order="date asc" create="0" delete="0"
+                  colors="red:state=='draft';">
+<!-- 			20200127        <field name="name" /> -->
+                    <field name="loan_id" />
+			        <field name="date" />
+			        <field name="state" />
+			        <field name="amount" sum="Total"/>
+                </tree>
+              </field>
+          </page>
+       </page>
+    </field>
+  </record>
+  
+</odoo>
