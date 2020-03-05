@@ -29,6 +29,7 @@ yum install -y docker-ce
 systemctl start docker
 chkconfig docker on
 pip install docker-compose
+
 (Note: if you failed the install of docker-compose ,you cannot execute [docker-compose] command.maybe error message of [Command not found] will be shown in this case.
 In this case ,you can follow below step.
 1.downgrade pip to version 9.0.3
@@ -37,6 +38,13 @@ sudo pip install --upgrade --force-reinstall pip==9.0.3
 sudo pip install docker-compose
 (please refer to https://github.com/docker/compose/issues/5883 for more details.)
 )
+
+(Note(20200305) :you may fail again by above. In this case, install [docker-compose] by following steps.
+1.$ sudo curl -L https://github.com/docker/compose/releases/download/1.17.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+2.$ sudo chmod +x /usr/local/bin/docker-compose
+#then, check docker-compose version by below. If the virsion appers , the install is successed.
+3.$ docker-compose --version
+docker-compose version 1.17.1, build 6d101fb
 ```
 ##### Create the installation directory.
 ```
@@ -167,6 +175,7 @@ EOF
 ```
 cat <<EOF > /opt/webcoop/data/server.conf
 [options]
+#addons_path = /mnt/extra-addons,/usr/lib/python2.7/dist-packages/odoo/addons
 addons_path = /mnt/extra-addons,/var/lib/odoo/webcoop,/usr/lib/python2.7/dist-packages/odoo/addons
 
 admin_passwd = [admin-password>]
@@ -177,30 +186,43 @@ db_user = [db-username]
 db_password = [db-password]
 db_template = template0
 
-#db-filter = ^%d.*$
-dbfilter = ^%d.*$
+db-filter = ^%d.*$
 
 xmlrpc = True
 
 ;Log Settings
 logfile = /var/lib/odoo/logs/odoo.log
+;log_level = info
 log_level = debug
 #logrotate = True
 #this logrotate doesn't work in case of multiporcess , so change it to using os's logrotate (20190827)
 
-#proxy-mode = True
-proxy_mode = True
+proxy-mode = True
+;proxy-mode = False
 
 ;1048576 * 768 * workers
-limit_memory_hard = 4831838208
+;limit_memory_hard = 4831838208
 ;1048576 * 640 * workers
-limit_memory_soft = 4026531840
+;limit_memory_soft = 4026531840
+
+;2G
+limit_memory_hard = 2147483648
+;1.2G
+limit_memory_soft = 1288490189
 
 limit_request = 8192
 limit_time_cpu = 600
 limit_time_real = 1200
 max_cron_threads = 1
-workers = 5
+;workers = 5
+
+;worker number = cpu number * 2 + 1 - cron thread
+workers = 4
+
+;(1+workers+max_cron_threads)* db_maxconn < max_connections(of postgres)
+;max_connections of postgres is about 110 per 1G memory, in case of AWS
+;So in case of 1G memory on postgres now, db_maxcon should be about 16
+db_maxconn = 16
 
 EOF
 ```
@@ -222,10 +244,13 @@ usermod -aG docker centos
 1.Diable selinux
 In case of centos7 on AWS,Selinux is enabled by default.But if selinux is enabled , system logrotate by cron will be failed , inspite  logrotate configuration is correct.reference:https://qiita.com/2no553/items/ac951b988d03cf520966).And selinux is not used and not necessary for current, so it need to be disabled for avoiding this logrotation problem and for avoiding too much security checking.Note:incase you need selinux, need to consider to create manual logrotation script on cron instead of using system logrotate.
 
+```
 sudo sed -i -e 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+```
 
 2.Add config
 
+```
 sudo cat <<EOF > /etc/logrotate.d/odoo
 /opt/webcoop/data/logs/odoo.log
 {
@@ -239,18 +264,26 @@ sudo cat <<EOF > /etc/logrotate.d/odoo
     dateext
 }
 EOF
-
+```
+```
 sudo logrotate /etc/logrotate.conf
+```
 
 3.system re-start
 
+```
 sudo shutdown now -r
+```
 (And wait about 5 minutes)
 
 
 ##### Re-login to server, then run docker compose script.
+
+access the server again by ssh 
+(ex. ssh -i private_key.pem centos@[app-server-address])
+then start docker
+
 ```
-ssh -i private_key.pem centos@[app-server-address]
 cd /opt/webcoop
 docker-compose up -d
 ```
@@ -280,7 +313,13 @@ chmod 777 /mnt/share/filestore
 ```
 ##### Add NFS IP address rights in [/etc/exports] The IP addresses are the local VPC addresses of the app servers.
 ```
+#install nano
+yum -y install nano
 
+#open /etc/exports for edit
+nano /etc/exports
+
+#add NFS IP iddress ( add below line on the opened file /etc/exports)
 /mnt/share/filestore        172.31.8.240(rw,sync,no_subtree_check)
 /mnt/share/filestore        172.31.9.197(rw,sync,no_subtree_check)
 (note: change 172.31.8.240 part to application server's private ip address)
@@ -292,6 +331,12 @@ exportfs -a
 
 ##### Add the following line in /etc/fstab on the app server to connect to the NFS share. The IP address is the NFS server address.
 ```
+#exit from file server , and ssh login in app server first
+#then open [/etc/fstab] on the app server
+sudo su
+nano /etc/fstab
+
+
 172.31.25.176:/mnt/share/filestore /opt/webcoop/data/.local/share/ nfs rsize=8192,wsize=8192,timeo=14,intr
 172.31.25.176:/mnt/share/filestore/odoolog/server1 /opt/webcoop/data/logs/ nfs rsize=8192,wsize=8192,timeo=14,intr
 (172.31.25.176 is file server's ip)
