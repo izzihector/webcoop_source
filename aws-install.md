@@ -42,8 +42,9 @@ sudo pip install docker-compose
 (Note(20200305) :you may fail again by above. In this case, install [docker-compose] by following steps.
 1.$ sudo curl -L https://github.com/docker/compose/releases/download/1.17.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 2.$ sudo chmod +x /usr/local/bin/docker-compose
-#then, check docker-compose version by below. If the virsion appers , the install is successed.
-3.$ docker-compose --version
+#then, check docker-compose version by below. If the virsion appers , the install is successed.first exit from root , then docker-compose --version
+3.$ exit
+4.$ docker-compose --version
 docker-compose version 1.17.1, build 6d101fb
 ```
 ##### Create the installation directory.
