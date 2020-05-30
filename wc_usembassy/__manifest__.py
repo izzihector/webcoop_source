@@ -9,11 +9,12 @@
                     2.Add custom field on membership form,
                     3.special deduction type for base interest
                     4.special loan disclosure layout
-                    5.special saving calculation
+                    5.special saving interest calculation
                     6.loan gurantee fund type saving account
                     7.consolidate rebate feature
+                    8.loan disbursement feature
                    """,
-    'author': 'Esupportlink.',
+    'author': 'Esupportlink',
     'depends': [
         'wc_account','wc','wc_posting','wc_member','wc_upgrade_ver10_0_1_6','wc_dividend_patern1'
     ],
@@ -32,6 +33,8 @@
         'member_view_ex.xml',
         'payment_rebate_view_ex.xml',
         'saving_interest_calculation_view.xml',
+        'disbursement_view.xml',
+        
     ],
     'demo': [],
     'installable': True,

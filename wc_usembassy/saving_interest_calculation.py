@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models
-# from odoo import tools, _
+from odoo import tools, _
 from odoo.exceptions import ValidationError, Warning
 # from odoo.modules.module import get_module_resource
 from datetime import datetime,date
@@ -123,7 +123,7 @@ class UsembSavingInterest(models.Model):
            ri = 0
            ci = 0
            ws.write(ri, 0, "SAVING INTEREST COMPUTATION", fmt_bold_left)
-           ws.write(ri, 18, d.company_id.name, fmt_bold_left)
+#           ws.write(ri, 18, d.company_id.name, fmt_bold_left)
    
            ri += 1
            ws.write(ri, 0, "Year:", fmt_bold_left)
@@ -135,12 +135,12 @@ class UsembSavingInterest(models.Model):
            headers = [
                ["Member", fmt_bold_left],
                ["Account", fmt_bold_left],
-               ["Q1",  fmt_bold_right],
-               ["Q2",  fmt_bold_right],
-               ["Q3",  fmt_bold_right],
-               ["Q4",  fmt_bold_right],
-               ["Q1+Q2+Q3+Q4",  fmt_bold_right],
-               ["Interest",  fmt_bold_right],
+               ["Q1 Average",  fmt_bold_right],
+               ["Q2 Average",  fmt_bold_right],
+               ["Q3 Average",  fmt_bold_right],
+               ["Q4 Average",  fmt_bold_right],
+               ["Total",  fmt_bold_right],
+               ["Int",  fmt_bold_right],
            ]
    
            ri += 3
@@ -178,8 +178,7 @@ class UsembSavingInterest(models.Model):
                      FROM wc_usemb_saving_interest_detail
                     where
                     header_id = %s and 
-                    (COALESCE(q_average_total,0) = 0 
-                    or COALESCE(interest_amount,0) = 0 )
+                    (COALESCE(q_average_total,0) = 0 and COALESCE(interest_amount,0) = 0 )
                 """
                 self._cr.execute(sql, (d.id,))
                 
@@ -228,13 +227,13 @@ class DividendLines(models.Model):
     
     account_id = fields.Many2one('wc.account',
         required=True)
-    q1_average = fields.Float("Q1 Average",compute="compute_q_average")
-    q2_average = fields.Float("Q2 Average",compute="compute_q_average")
-    q3_average = fields.Float("Q3 Average",compute="compute_q_average")
-    q4_average = fields.Float("Q4 Average",compute="compute_q_average")
-    q_average_total = fields.Float("Q4 Average",compute="compute_total_average")
+    q1_average = fields.Float("Q1 Average",compute="compute_q_average",store=True)
+    q2_average = fields.Float("Q2 Average",compute="compute_q_average",store=True)
+    q3_average = fields.Float("Q3 Average",compute="compute_q_average",store=True)
+    q4_average = fields.Float("Q4 Average",compute="compute_q_average",store=True)
+    q_average_total = fields.Float("Total Average",compute="compute_total_average",store=True)
     rate = fields.Float("wc.usemb.saving.interest.header",related="header_id.rate")
-    interest_amount = fields.Float("Int amount",compute="compute_individual_int")
+    interest_amount = fields.Float("Int amount",compute="compute_individual_int",store=True)
     member_code = fields.Char("Member ID", related="member_id.code")
 #    membership_date = fields.Date("Membership Date", related="member_id.membership_date")
 
@@ -276,9 +275,15 @@ class DividendLines(models.Model):
             ('deposit','>',0),('withdrawal','>',0),
             ])
         
-        for tran in trans:
-            balance_at_date = account_id.get_balance_at_date(account_id.id,tran.date)
-            balance.append(balance_at_date)
+        ####20200527
+        balance_at_the_tran = balance_forward
+        for tran in sorted(trans , key=lambda x:x.date):
+            balance_at_the_tran += tran.deposit - tran.withdrawal
+            balance.append(balance_at_the_tran)
+        
+#        for tran in trans:
+#            balance_at_date = account_id.get_balance_at_date(account_id.id,tran.date)
+#            balance.append(balance_at_date)
         
         if len(balance) > 0:
             average = sum(balance) / len(balance)

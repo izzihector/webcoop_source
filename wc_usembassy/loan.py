@@ -23,8 +23,11 @@ class Loan(models.Model):
                         ,compute="compute_cbu_loan_balance",store=True)
 #     loanable_base_on_cbu_att = fields.Float('Loanable Base on Capital Investment')
     
-    outstanding_loan_amount = fields.Float('Outstanding Loans'
-                        ,compute="compute_cbu_loan_balance",store=True)
+
+###20200527 change autocalculaton to usual input field (according to client request)
+    outstanding_loan_amount = fields.Float('Outstanding Loans', readonly=True, states={'draft': [('readonly', False)]})
+#    outstanding_loan_amount = fields.Float('Outstanding Loans'
+#                        ,compute="compute_cbu_loan_balance",store=True)
 #     outstanding_loan_amount_att = fields.Float('Outstanding Loans')
 
     loanable_amount = fields.Float('Loanable Amount'
@@ -41,7 +44,15 @@ class Loan(models.Model):
 #         for loan in self:
 #             a = self.amount - self.cbu_balance
 #             self.uncollateralized_amount = a if a >0 else 0
+
+    ##20200527 
+    @api.onchange('outstanding_loan_amount')
+    def onchange_outstanding(self):
+        for loan in self:
+            loan.compute_cbu_loan_balance()
+            
     
+        
     @api.depends('consolidate_rebate_ids')
     def compute_consolidate_rebate_cnt(self):
         for loan in self:
@@ -54,17 +65,24 @@ class Loan(models.Model):
             if loan.member_id:
                 src_member_id = loan.member_id.id
                 cbus = self.env['wc.account'].search([('account_type','=','cbu'),('member_id','=',src_member_id)])
-                oloans = self.env['wc.loan'].search([('member_id','=',src_member_id),('state','in',['approved','past-due'])])
+                #####20200527
+                #oloans = self.env['wc.loan'].search([('member_id','=',src_member_id),('state','in',['approved','past-due'])])
                 cbu_bal = 0
                 oloan_bal = 0
                 if len(cbus) > 0:
                     bal = cbus[0].balance
-                if len(oloans) > 0:
-                    oloan_bal = sum(oloan.principal_balance for oloan in oloans)
+                #####20200527
+#                if len(oloans) > 0:
+#                    oloan_bal = sum(oloan.principal_balance for oloan in oloans)
                     
                 loan.cbu_balance = bal if bal > 0 else 0
                 loan.loanable_base_on_cbu = bal*3 if bal>0 else 0
-                loan.outstanding_loan_amount = oloan_bal if oloan_bal >0 else 0
+                
+                #####20200527
+#                loan.outstanding_loan_amount = oloan_bal if oloan_bal >0 else 0
+                if not loan.outstanding_loan_amount:
+                    loan.outstanding_loan_amount = 0
+                
                 loan.loanable_amount = (bal*3 - loan.outstanding_loan_amount) if bal*3>loan.outstanding_loan_amount else 0
 
                 a = loan.outstanding_loan_amount / 3 + loan.amount - loan.cbu_balance

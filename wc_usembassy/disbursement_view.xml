@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="form_usemb_disbursement" model="ir.ui.view">
+    <field name="name">form_usemb_disbursement</field>
+    <field name="model">wc.usemb.disbursement</field>
+    <field name="arch" type="xml">
+     <form delete ="0">
+         <header> 
+           <button name="search_target" string="Search Approved Loans" states="draft"
+            class="oe_highlight_oe_edit_only"  type="object"/>
+           <button name="download_as_excel" string="Generate" states="draft"
+            class="oe_highlight"  type="object" confirm="Are you sure you want to generate disbursement report?"/>
+           <button name="back_to_draft" string="Back to Draft" states="gen"
+            class="oe_highlight oe_read_only"  type="object" confirm="Are you sure you want to go back to draft?"/>
+           <button name ="cancel" string="Cancel" states="draft"
+            class="oe_highlight oe_read_only"  type="object"  confirm="If cancelled, remove selected loans?"/>
+           <field name="state" widget="statusbar" readonly="1"/> 
+         </header> 
+        <sheet>
+             <separator string="Loan Disbursement"  style="border: 1;"/>
+              <group col="4">
+                <field name="bank" colspan="2" required="1" attrs="{'readonly':[('state','not in',['draft'])]}"/>  
+                <div colspan="2"/>
+                <field name="date" colspan="2" required="1" attrs="{'readonly':[('state','in',['gen'])]}"/>
+                <field name="bank_account_no" colspan="2" required="1" attrs="{'readonly':[('state','in',['gen'])]}"/>
+                <field name="company_id" required="1" attrs="{'readonly':[('state','not in',['draft'])]}"/>  
+                <field name="company_simple" colspan="2" nolabel="1" placeholder="Short Name" attrs="{'readonly':[('state','in',['gen'])]}"/>
+              </group>
+
+              <group string="">
+                <field name="subject" attrs="{'readonly':[('state','in',['gen'])]}"/>
+                <field name="total_amount" attrs="{'readonly':[('state','in',['gen'])]}"/>
+                <field name="wordings" attrs="{'readonly':[('state','in',['gen'])]}"/>
+             </group>
+             
+              <group col="4">
+                    <field name="prepared_by" placeholder="Name" attrs="{'readonly':[('state','in',['gen'])]}"/>  
+                    <field name="prepared_by_position" placeholder="Position" attrs="{'readonly':[('state','in',['gen'])]}"/>
+                    <field name="reviewed_by" placeholder="Name" attrs="{'readonly':[('state','in',['gen'])]}"/>  
+                    <field name="reviewed_by_position" placeholder="Position" attrs="{'readonly':[('state','in',['gen'])]}"/>
+                    <field name="approved_by1" placeholder="Name" attrs="{'readonly':[('state','in',['gen'])]}"/>  
+                    <field name="approved_by1_position" placeholder="Position" attrs="{'readonly':[('state','in',['gen'])]}"/>
+                    <field name="approved_by2" placeholder="Name" attrs="{'readonly':[('state','in',['gen'])]}"/>  
+                    <field name="approved_by2_position" placeholder="Position" attrs="{'readonly':[('state','in',['gen'])]}"/>
+             </group>
+
+	          <notebook>
+ 	           <page name="info" string="Loans">
+ 	            <field name="loan_ids" attrs="{'readonly':[('state','in',['gen'])]}">
+ 	             <tree class="wc_tree" create="false" delete="false" editable="bottom">
+	              <field name="state" invisible="1"/> 
+	              <field name="member_id" readonly="1"/> 
+	              <field name="fund_transfer_type" readonly="1"/>
+	              <field name="fund_transfer" readonly="1"/>
+ 	              <field name="amount" readonly="1"/>  
+	              <field name="total_deduction" readonly="1"/> 
+	              <field name="net_amount" readonly="1"/>  
+	              <field name="date" string="Approved Date" readonly="1"/> 
+	              <field name="is_generated_disbursement" string="Selected" help="In case you need remove several lines from here, check off thie flag and tap[Remove checked-off loans]"/>
+	             </tree> 
+	             <form readonly="1">
+	               <group>
+       	              <field name="state" invisible="1"/> 
+		              <field name="member_id"/> 
+		              <field name="fund_transfer_type"/>
+		              <field name="fund_transfer"/>
+	 	              <field name="amount"/>  
+		              <field name="total_deduction"/> 
+		              <field name="net_amount"/>  
+		              <field name="date" string="Approved Date"/> 
+		              <field name="is_generated_disbursement"/>
+	               </group>
+	             </form>
+	            
+	            </field> 
+	           </page> 
+	          </notebook>
+
+			 </sheet>
+			 </form>
+			 
+			 </field>
+	</record>
+			 
+
+
+  <record id="tree_usemb_disbursement" model="ir.ui.view">
+    <field name="name">tree_usemb_disbursement</field>
+    <field name="model">wc.usemb.disbursement</field>
+    <field name="arch" type="xml">
+      <tree delete ="0" class="wc_tree" colors="red:state=='draft';grey:state=='canceled';brown:state=='searched';green:state=='searched'">
+        <field name="company_id" groups="base.group_multi_company"/>
+        <field name="bank" />
+        <field name="date"/>
+        <field name="total_amount"/>
+        <field name="state"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="search_usemb_disbursement" model="ir.ui.view">
+    <field name="name">search_usemb_disbursement</field>
+    <field name="model">wc.usemb.disbursement</field>
+    <field name="arch" type="xml">
+      <search>
+        <field name="date"/>
+        <field name="bank"/>
+      </search>
+    </field>
+  </record>
+
+
+  <record id="action_usemb_disbursement" model="ir.actions.act_window">
+    <field name="name">Loan Disbursement</field>
+    <field name="res_model">wc.usemb.disbursement</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="context">{'default_company_simple' : 'USEFECC'}</field> 
+    
+  </record>
+  <!-- 
+       Confirmation wizard
+       <record model="ir.ui.view" id="confirm_if_remove_link">
+            <field name="name">confirm_if_remove_link</field>
+            <field name="model">wc.usemb.disbursement_con_if_removelink</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Confirm dialog">
+                    <field name="yes_no" readonly="1" />
+                    <footer>
+                        <button class="oe_highlight" name="yes" string="Yes" />
+                        <button class="oe_highlight" name="no" string="No" />
+                    </footer>
+                </form>
+            </field>
+        </record>  -->
+  
+
+  <menuitem id="menu_usemb_disbursement"
+    sequence="9999"
+    action="action_usemb_disbursement"
+    parent="account.menu_finance_payables"
+  />
+  
+  
+
+</odoo>

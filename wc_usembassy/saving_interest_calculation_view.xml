@@ -4,7 +4,7 @@
     <field name="name">form_saving_interest</field>
     <field name="model">wc.usemb.saving.interest.header</field>
     <field name="arch" type="xml">
-      <form>
+      <form delete="0">
         <header>
           <button name="confirm" string="Confirm"
             states="calc"
@@ -21,7 +21,7 @@
             type="object"/>
 
           <button name="back_to_draft" string="Back to Draft"
-            states="calc"
+            states="calc,confirmed"
             class="oe_read_only"
             type="object"/>
 
@@ -81,7 +81,7 @@
     <field name="name">tree_saving_interest</field>
     <field name="model">wc.usemb.saving.interest.header</field>
     <field name="arch" type="xml">
-      <tree class="wc_tree">
+      <tree class="wc_tree" delete="0">
         <field name="company_id" groups="base.group_multi_company"/>
         <field name="year" />
         <field name="account_type_id"/>
