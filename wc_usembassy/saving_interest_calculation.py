@@ -277,7 +277,8 @@ class DividendLines(models.Model):
         
         ####20200527
         balance_at_the_tran = balance_forward
-        for tran in sorted(trans , key=lambda x:x.date):
+        for tran in sorted(trans , key=lambda x:"%s-%s" % (x.date,x.id)):
+            
             balance_at_the_tran += tran.deposit - tran.withdrawal
             balance.append(balance_at_the_tran)
         
