@@ -197,8 +197,10 @@ class Disbursement(models.Model):
             
         self.state = 'gen'
         return
+
             
-    def gen_excel_file_citi(self):
+#     def gen_excel_file_citi(self):
+    def gen_excel_file_pnb(self):
        for d in self:
            wb = xlwt.Workbook()
            ws = wb.add_sheet(str(d.bank))
@@ -271,7 +273,8 @@ class Disbursement(models.Model):
        return           
 
 
-    def gen_excel_file_pnb(self):
+#     def gen_excel_file_pnb(self):
+    def gen_excel_file_citi(self):
     
        for d in self:
            wb = xlwt.Workbook()
