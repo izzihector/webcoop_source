@@ -18,7 +18,11 @@ class Member(models.Model):
 
     employee_code = fields.Char('Employee ID',track_visibility='onchange',old_name='employee_id')
     member_age = fields.Float(compute="_get_member_age", digits=(12,2))
-    fund_transfer_type = fields.Selection([('citi','CITI Bank'),('pnb','PNG'),
+    ###20200530
+#     fund_transfer_type = fields.Selection([('citi','CITI Bank'),('pnb','PNG'),
+#                                            ('check','Check Account Number'),
+#                                            ('coop','Cooperative Savings')],string="Fund Transfer")
+    fund_transfer_type = fields.Selection([('citi','CITI Bank'),('pnb','PNB'),
                                            ('check','Check Account Number'),
                                            ('coop','Cooperative Savings')],string="Fund Transfer")
     fund_transfer = fields.Char()
