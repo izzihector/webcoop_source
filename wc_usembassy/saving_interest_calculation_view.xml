@@ -105,7 +105,7 @@
 
 
   <record id="action_saving_interest" model="ir.actions.act_window">
-    <field name="name">Saving Interest Calculation</field>
+    <field name="name">Interest on Savings</field>
     <field name="res_model">wc.usemb.saving.interest.header</field>
     <field name="view_type">form</field>
     <field name="view_mode">tree,form</field>
@@ -113,7 +113,7 @@
 
 <!--  overwrite menu_dividend  -->
   <menuitem id="menu_saving_interest"
-    sequence="5"
+    sequence="999"
     action="action_saving_interest"
     parent="account.menu_finance_entries"
   />
