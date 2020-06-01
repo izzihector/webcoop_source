@@ -336,7 +336,9 @@ class Disbursement(models.Model):
            for loan in d.loan_ids:
                ri+=1
                num += 1
-               ws.write(ri, 1, ri ,fmt_center_with_border)
+               ##fix 20200601
+#               ws.write(ri, 1, ri ,fmt_center_with_border)
+               ws.write(ri, 1, num ,fmt_center_with_border)
                ws.write(ri, 2, loan.member_id.fund_transfer or "",fmt_center_with_border)
                ws.write(ri, 3, "" ,fmt_border)
                ws.write(ri, 4, "" ,fmt_border)
