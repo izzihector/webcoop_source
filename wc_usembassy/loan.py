@@ -69,6 +69,10 @@ class Loan(models.Model):
                 #oloans = self.env['wc.loan'].search([('member_id','=',src_member_id),('state','in',['approved','past-due'])])
                 cbu_bal = 0
                 oloan_bal = 0
+                
+                ##bug fix 20200604
+                bal =0
+                
                 if len(cbus) > 0:
                     bal = cbus[0].balance
                 #####20200527
