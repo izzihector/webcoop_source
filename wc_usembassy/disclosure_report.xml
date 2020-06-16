@@ -127,6 +127,26 @@
               </div>
             </div>
 
+             <!--  Added -->
+            <div class="row">
+              <div class="col-xs-8" style="padding-left:100px;">
+                # of Pay Period
+              </div>
+              <div class="col-xs-2 text-right bborder">
+                <span t-field="o.term_payments"/>
+              </div>
+              <div class="col-xs-2"/>
+            </div>
+            <div class="row">
+              <div class="col-xs-8" style="padding-left:100px;">
+                Allotment
+              </div>
+              <div class="col-xs-2 text-right bborder">
+                <span t-field="o.principal_due"/>
+              </div>
+              <div class="col-xs-2"/>
+            </div>
+
             <div class="row mt16">
               <div class="col-xs-12">B. LESS Charges:</div>
             </div>

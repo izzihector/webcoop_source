@@ -393,7 +393,7 @@ class Disbursement(models.Model):
         
         return {
             'type': 'ir.actions.act_url',
-            'url':base_url + '/web/content/wc.usemb.disbursement/%s/excel_data/output.xls?download=true' % self.id,
+            'url':base_url + 'web/content/wc.usemb.disbursement/%s/excel_data/output.xls?download=true' % self.id,
 #             'target':'self'
         }
        

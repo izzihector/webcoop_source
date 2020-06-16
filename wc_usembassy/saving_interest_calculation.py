@@ -209,7 +209,7 @@ class UsembSavingInterest(models.Model):
         base_url = irconfig_obj.get_param('report.url') or irconfig_obj.get_param('web.base.url')
         return {
             'type': 'ir.actions.act_url',
-            'url':base_url + '/web/content/wc.usemb.saving.interest.header/%s/excel_data/output.xls?download=true' % self.id,
+            'url':base_url + 'web/content/wc.usemb.saving.interest.header/%s/excel_data/output.xls?download=true' % self.id,
 #             'target':'self'
         }
          
