@@ -30,8 +30,10 @@ class Loan(models.Model):
 #                        ,compute="compute_cbu_loan_balance",store=True)
 #     outstanding_loan_amount_att = fields.Float('Outstanding Loans')
 
-    loanable_amount = fields.Float('Loanable Amount'
-                        ,compute="compute_cbu_loan_balance",store=True)
+
+     loanable_amount = fields.Float('Loanable Amount')
+#    loanable_amount = fields.Float('Loanable Amount'
+#                        ,compute="compute_cbu_loan_balance",store=True)
 #     loanable_amount_att = fields.Float('Loanable Amount')
 
     uncollateralized_amount = fields.Float(compute="compute_cbu_loan_balance")
