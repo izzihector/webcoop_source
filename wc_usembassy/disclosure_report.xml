@@ -142,7 +142,7 @@
                 Allotment
               </div>
               <div class="col-xs-2 text-right bborder">
-                <span t-field="o.principal_due"/>
+                <span t-esc="o.amortizations[0].principal_due"/> 
               </div>
               <div class="col-xs-2"/>
             </div>
