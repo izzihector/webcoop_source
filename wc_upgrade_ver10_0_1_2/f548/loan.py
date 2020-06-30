@@ -31,8 +31,8 @@ class Loan(models.Model):
     def unlink_recreate_deduction(self):
         self.ensure_one()
         loan = self
-        if loan.restructured_from_id:
-            raise UserError(_("This is restructured loan , you need to manually add deduction items."))
+        #if loan.restructured_from_id:
+        #    raise UserError(_("This is restructured loan , you need to manually add deduction items."))
         
         if loan.state=='draft' and loan.loan_type_id and loan.amount>0.0:
             loan.deduction_ids.unlink()
