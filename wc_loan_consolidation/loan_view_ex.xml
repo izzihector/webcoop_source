@@ -6,11 +6,11 @@
     <field name="model">wc.loan</field>
     <field name="inherit_id" ref="wc_upgrade_ver10_0_1_2.form_loan_inherit_f548"/>
     <field name="arch" type="xml">
-      <button name="unlink_recreate_deduction" position="attributes">
+      <!-- <button name="unlink_recreate_deduction" position="attributes">
           <attribute name ="attrs">
             {'invisible':['|',('is_restructured_target_loan','=',False),('state','not in',['draft'])]}
           </attribute>
-      </button>
+      </button> -->
       <button name="move_to_restructured" position="attributes">
        <attribute name ="attrs">
  			{'invisible':['|',('is_allowed_restructure','=',False),('state','not in',['approved','past-due'])]}
