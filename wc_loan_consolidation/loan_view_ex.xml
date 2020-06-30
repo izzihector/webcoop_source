@@ -8,7 +8,7 @@
     <field name="arch" type="xml">
       <button name="unlink_recreate_deduction" position="attributes">
           <attribute name ="attrs">
-            {'invisible':['|',('is_restructured_target_loan','=',True),('state','not in',['draft'])]}
+            {'invisible':['|',('is_restructured_target_loan','=',False),('state','not in',['draft'])]}
           </attribute>
       </button>
       <button name="move_to_restructured" position="attributes">
