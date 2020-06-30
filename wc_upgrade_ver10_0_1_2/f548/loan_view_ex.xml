@@ -10,10 +10,11 @@
 	  <button name="generate_deductions" position ="attributes">
 	     <attribute name="invisible">True</attribute>
 	  </button>
+		<!--attrs="{'invisible':['|',('restructured_from_id','!=',False),('state','not in',['draft'])]}" -->
 	  <button name="generate_deductions" position ="after">
 	      <button name="unlink_recreate_deduction" class="oe_read_only" 
 	            confirm="Warning! Deduction items will be removed and re-create by using configuration data. Is it ok to proceed?" 
-	            attrs="{'invisible':['|',('restructured_from_id','!=',False),('state','not in',['draft'])]}" 
+	            attrs="{'invisible':('state','not in',['draft'])]}" 
 	            string="Re-Create Deduction from Configuration" 
 	            type="object" 
 	            help="If clicked, the deduction items registered loan currently will be remove , 
