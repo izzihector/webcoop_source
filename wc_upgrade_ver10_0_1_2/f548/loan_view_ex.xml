@@ -11,11 +11,10 @@
 	     <attribute name="invisible">True</attribute>
 	  </button>
 	  <button name="generate_deductions" position ="after">
-	      <button name="unlink_recreate_deduction" class="oe_read_only" 
+	      <button name="unlink_recreate_deduction" class="oe_read_only" string="Re-Create Deduction from Configuration" 
 	            confirm="Warning! Deduction items will be removed and re-create by using configuration data. Is it ok to proceed?" 
-	            attrs="{'invisible':[('state','not in',['draft'])]}" 
-	            string="Re-Create Deduction from Configuration" 
 	            type="object" 
+	            attrs="{'invisible':[('state','not in',['draft'])]}" 
 	            help="If clicked, the deduction items registered loan currently will be remove , 
 	               and re-generate deduction items again from related loan type configuration "/>
 	      <button name="recompute_deduction" class="oe_read_only" string="Recompute Deduction"  
