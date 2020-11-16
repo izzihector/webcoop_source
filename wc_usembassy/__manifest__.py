@@ -13,7 +13,7 @@
                     6.loan gurantee fund type saving account
                     7.consolidate rebate feature
                     8.loan disbursement feature
-                    9. This is a test
+                    9. This is a jerome test
                    """,
     'author': 'Esupportlink',
     'depends': [
